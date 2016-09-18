@@ -1,0 +1,17 @@
+group 'com.cli.drs'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+    maven { url "http://tomp2p.net/dev/mvn" }
+}
+
+dependencies {
+    compile("net.tomp2p:TomP2P:4.4")
+    compile group: 'com.google.guava', name: 'guava', version: '19.0'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
