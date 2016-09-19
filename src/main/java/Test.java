@@ -25,14 +25,14 @@ public class Test {
 
         if (!isBootStrap) {
             peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).makeAndListen();
-            InetAddress address = Inet4Address.getByName("134.117.26.133");
+            InetAddress address = Inet4Address.getByName("192.168.101.12");
             FutureDiscover futureDiscover = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
             System.out.println(futureDiscover.toString());
             FutureBootstrap fb = peer.bootstrap().setInetAddress(address).setPorts(4000).start();
             fb.awaitUninterruptibly();
 
-            boolean isRe = isReachable("134.117.26.133", 4000, 1000);
+            boolean isRe = isReachable("192.168.101.12", 4000, 1000);
             System.out.println("is Reachabled " + isRe);
             System.out.println(fb.toString());
             if (futureDiscover.isSuccess()) {
