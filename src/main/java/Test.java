@@ -10,6 +10,8 @@ import net.tomp2p.storage.Data;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 /**
  * Created by cli on 9/18/2016.
@@ -29,6 +31,9 @@ public class Test {
             System.out.println(futureDiscover.toString());
             FutureBootstrap fb = peer.bootstrap().setInetAddress(address).setPorts(4000).start();
             fb.awaitUninterruptibly();
+
+            boolean isRe = isReachable("134.117.26.133", 4000, 1000);
+            System.out.println("is Reachabled " + isRe);
             System.out.println(fb.toString());
             if (futureDiscover.isSuccess()) {
                 System.out.println();
@@ -62,6 +67,19 @@ public class Test {
 //            }
         }
         System.out.println("Peer " + peerId + " out, but " + peer.isRunning() + " and " + peer.isListening());
+    }
+
+    private boolean isReachable(String addr, int openPort, int timeOutMillis) {
+        // Any Open port on other machine
+        // openPort =  22 - ssh, 80 or 443 - webserver, 25 - mailserver etc.
+        try {
+            try (Socket soc = new Socket()) {
+                soc.connect(new InetSocketAddress(addr, openPort), timeOutMillis);
+            }
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
     }
 
     private String get(String name) throws ClassNotFoundException, IOException {
