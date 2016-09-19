@@ -67,37 +67,7 @@ public class Test {
             }
         } else {
             System.out.println("Bootstrap node up.");
-            while (true) {
-                System.out.println(peer.peerBean().peerMap().all());
-                for (PeerAddress pa : peer.peerBean().peerMap().all()) {
-                    System.out.println("PeerAddress: " + pa);
-                    FutureChannelCreator fcc = peer.peer().connectionBean().reservation().create(1, 1);
-                    fcc.awaitUninterruptibly();
 
-                    ChannelCreator cc = fcc.channelCreator();
-
-                    FutureResponse fr1 = peer.peer().pingRPC().pingTCP(pa, cc, new DefaultConnectionConfiguration());
-                    fr1.awaitUninterruptibly();
-
-                    if (fr1.isSuccess()) {
-                        System.out.println("peer online T:" + pa);
-                    } else {
-                        System.out.println("offline " + pa);
-                    }
-
-                    FutureResponse fr2 = peer.peer().pingRPC().pingUDP(pa, cc, new DefaultConnectionConfiguration());
-                    fr2.awaitUninterruptibly();
-
-                    cc.shutdown();
-
-                    if (fr2.isSuccess()) {
-                        System.out.println("peer online U:" + pa);
-                    } else {
-                        System.out.println("offline " + pa);
-                    }
-                }
-                Thread.sleep(1500);
-            }
         }
         System.out.println("Peer " + peerId + " out, and is down: " + peer.peer().isShutdown());
     }
@@ -115,13 +85,47 @@ public class Test {
         }
     }
 
+    public void poll() {
+        while (true) {
+            System.out.println(peer.peerBean().peerMap().all());
+            for (PeerAddress pa : peer.peerBean().peerMap().all()) {
+                System.out.println("PeerAddress: " + pa);
+                FutureChannelCreator fcc = peer.peer().connectionBean().reservation().create(1, 1);
+                fcc.awaitUninterruptibly();
+
+                ChannelCreator cc = fcc.channelCreator();
+
+                FutureResponse fr1 = peer.peer().pingRPC().pingTCP(pa, cc, new DefaultConnectionConfiguration());
+                fr1.awaitUninterruptibly();
+
+                if (fr1.isSuccess()) {
+                    System.out.println("peer online T:" + pa);
+                } else {
+                    System.out.println("offline " + pa);
+                }
+
+                FutureResponse fr2 = peer.peer().pingRPC().pingUDP(pa, cc, new DefaultConnectionConfiguration());
+                fr2.awaitUninterruptibly();
+
+                cc.shutdown();
+
+                if (fr2.isSuccess()) {
+                    System.out.println("peer online U:" + pa);
+                } else {
+                    System.out.println("offline " + pa);
+                }
+            }
+            Thread.sleep(1500);
+        }
+    }
+
     private String get(String name) throws ClassNotFoundException, IOException {
         System.out.println("Looked for hash: " + Number160.createHash(name));
 
         FutureGet futureDHT = peer.get(Number160.createHash(name)).start();
         futureDHT.awaitUninterruptibly();
         if (futureDHT.isSuccess()) {
-            System.out.println(futureDHT.data().object());
+            System.out.println(futureDHT.data());
             return futureDHT.data().object().toString();
         }
         return "not found";
@@ -138,6 +142,7 @@ public class Test {
             if (args.length == 3) {
                 Test dns = new Test(Integer.parseInt(args[0]), true);
                 dns.store(args[1], args[2]);
+                dns.poll();
             }
             if (args.length == 2) {
                 Test dns = new Test(Integer.parseInt(args[0]), false);
