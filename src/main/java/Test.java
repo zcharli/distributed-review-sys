@@ -1,3 +1,4 @@
+import net.tomp2p.connection.Bindings;
 import net.tomp2p.futures.FutureBootstrap;
 import net.tomp2p.futures.FutureDHT;
 import net.tomp2p.futures.FutureDiscover;
@@ -18,20 +19,34 @@ public class Test {
     final private Peer peer;
 
     public Test(int peerId, boolean isBootStrap) throws Exception {
-        peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).makeAndListen();
+
 
         if (!isBootStrap) {
+            peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).makeAndListen();
             InetAddress address = Inet4Address.getByName("134.117.26.133");
             FutureDiscover futureDiscover = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
-            FutureBootstrap fb = peer.bootstrap().setInetAddress(address).start();
+            System.out.println(futureDiscover.toString());
+            FutureBootstrap fb = peer.bootstrap().setInetAddress(address).setPorts(4000).start();
             fb.awaitUninterruptibly();
+            System.out.println(fb.toString());
             if (fb.getBootstrapTo() != null) {
                 System.out.println("got bootstrap");
                 peer.discover().setPeerAddress(fb.getBootstrapTo().iterator().next()).start().awaitUninterruptibly();
             }
         } else {
+            Bindings b = new Bindings();
+            peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).setBindings(b).makeAndListen();
+            peer.getConfiguration().setBehindFirewall(true);
             System.out.println("Bootstrap node up.");
+            FutureDiscover fd = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
+            fd.awaitUninterruptibly();
+            if (fd.isSuccess()) {
+                System.out.println();
+                System.out.println("found that my outside address is "+ fd.getPeerAddress());
+            } else {
+                System.out.println("failed " + fd.getFailedReason());
+            }
 //            FutureBootstrap fb = peer.bootstrap().setBroadcast().setPorts(4001).start();
 //            fb.awaitUninterruptibly();
 //            if (fb.getBootstrapTo() != null) {
