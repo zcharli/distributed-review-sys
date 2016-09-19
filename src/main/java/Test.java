@@ -1,35 +1,51 @@
 import net.tomp2p.connection.Bindings;
+import net.tomp2p.connection.DiscoverNetworks;
+import net.tomp2p.connection.PeerCreator;
+import net.tomp2p.dht.FutureGet;
+import net.tomp2p.dht.PeerBuilderDHT;
+import net.tomp2p.dht.PeerDHT;
 import net.tomp2p.futures.FutureBootstrap;
-import net.tomp2p.futures.FutureDHT;
 import net.tomp2p.futures.FutureDiscover;
 import net.tomp2p.p2p.Peer;
-import net.tomp2p.p2p.PeerMaker;
+import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
+import net.tomp2p.peers.PeerAddress;
 import net.tomp2p.storage.Data;
+import net.tomp2p.dht.FuturePut;
 
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Random;
 
 /**
  * Created by cli on 9/18/2016.
  */
 public class Test {
 
-    final private Peer peer;
+    private PeerDHT peer;
 
     public Test(int peerId, boolean isBootStrap) throws Exception {
 
+        Bindings b = new Bindings().listenAny();
+        Random r = new Random(42L);
+        peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
+        if (peer == null) {
+            System.out.println("Fuck");
+            return;
+        }
+        System.out.println("Client started and Listening to: " + DiscoverNetworks.discoverInterfaces(b));
+        System.out.println("address visible to outside is " + peer.peerAddress());
 
         if (!isBootStrap) {
-            peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).makeAndListen();
             InetAddress address = Inet4Address.getByName("192.168.101.12");
-            FutureDiscover futureDiscover = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
+            FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
             System.out.println(futureDiscover.toString());
-            FutureBootstrap fb = peer.bootstrap().setInetAddress(address).setPorts(4000).start();
+
+            FutureBootstrap fb = peer.peer().bootstrap().inetAddress(address).ports(4000).start();
             fb.awaitUninterruptibly();
 
             boolean isRe = isReachable("192.168.101.12", 4000, 1000);
@@ -37,36 +53,20 @@ public class Test {
             System.out.println(fb.toString());
             if (futureDiscover.isSuccess()) {
                 System.out.println();
-                System.out.println("found that my outside address is "+ futureDiscover.getPeerAddress());
+                System.out.println("found that my outside address is "+ futureDiscover.peerAddress());
             } else {
-                System.out.println("failed " + futureDiscover.getFailedReason());
+                System.out.println("failed " + futureDiscover.failedReason());
             }
-            if (fb.getBootstrapTo() != null) {
+            if (fb.bootstrapTo() != null) {
                 System.out.println("got bootstrap");
-                peer.discover().setPeerAddress(fb.getBootstrapTo().iterator().next()).start().awaitUninterruptibly();
+                System.out.println("peer"+ peerId+" knows: " + peer.peerBean().peerMap().all());
             } else {
-                System.out.println(fb.getFailedReason());
+                System.out.println(fb.failedReason());
             }
         } else {
-            Bindings b = new Bindings();
-            peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).setBindings(b).makeAndListen();
-//            peer.getConfiguration().setBehindFirewall(true);
             System.out.println("Bootstrap node up.");
-//            FutureDiscover fd = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
-//            fd.awaitUninterruptibly();
-//            if (fd.isSuccess()) {
-//                System.out.println();
-//                System.out.println("found that my outside address is "+ fd.getPeerAddress());
-//            } else {
-//                System.out.println("failed " + fd.getFailedReason());
-//            }
-//            FutureBootstrap fb = peer.bootstrap().setBroadcast().setPorts(4001).start();
-//            fb.awaitUninterruptibly();
-//            if (fb.getBootstrapTo() != null) {
-//                peer.discover().setPeerAddress(fb.getBootstrapTo().iterator().next()).start().awaitUninterruptibly();
-//            }
         }
-        System.out.println("Peer " + peerId + " out, but " + peer.isRunning() + " and " + peer.isListening());
+        System.out.println("Peer " + peerId + " out, and is down: " + peer.shutdown());
     }
 
     private boolean isReachable(String addr, int openPort, int timeOutMillis) {
@@ -83,16 +83,17 @@ public class Test {
     }
 
     private String get(String name) throws ClassNotFoundException, IOException {
-        FutureDHT futureDHT = peer.get(Number160.createHash(name)).start();
+        FutureGet futureDHT = peer.get(new Number160()).start();
         futureDHT.awaitUninterruptibly();
         if (futureDHT.isSuccess()) {
-            return futureDHT.getData().getObject().toString();
+            return futureDHT.data().object().toString();
         }
         return "not found";
     }
 
     private void store(String name, String ip) throws IOException {
-        peer.put(Number160.createHash(name)).setData(new Data(ip)).start().awaitUninterruptibly();
+        FuturePut fp = peer.put(Number160.createHash(name)).data(new Data(ip)).start();
+        fp.awaitUninterruptibly();
     }
 
     public static void main(String[] args) {
