@@ -116,7 +116,7 @@ public class Test {
     }
 
     private String get(String name) throws ClassNotFoundException, IOException {
-        FutureGet futureDHT = peer.get(new Number160()).start();
+        FutureGet futureDHT = peer.get(Number160.createHash(name)).start();
         futureDHT.awaitUninterruptibly();
         if (futureDHT.isSuccess()) {
             return futureDHT.data().object().toString();
