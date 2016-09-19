@@ -132,6 +132,7 @@ public class Test {
         String inLine = "";
         try {
             inLine = in.readLine();
+            System.out.println("The line you entered is: " + inLine);
         } catch (Exception e) {
             System.err.println("Error reading input.");
             e.printStackTrace();
