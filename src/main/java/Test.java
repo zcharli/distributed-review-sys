@@ -39,14 +39,14 @@ public class Test {
             peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).setBindings(b).makeAndListen();
             peer.getConfiguration().setBehindFirewall(true);
             System.out.println("Bootstrap node up.");
-            FutureDiscover fd = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
-            fd.awaitUninterruptibly();
-            if (fd.isSuccess()) {
-                System.out.println();
-                System.out.println("found that my outside address is "+ fd.getPeerAddress());
-            } else {
-                System.out.println("failed " + fd.getFailedReason());
-            }
+//            FutureDiscover fd = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
+//            fd.awaitUninterruptibly();
+//            if (fd.isSuccess()) {
+//                System.out.println();
+//                System.out.println("found that my outside address is "+ fd.getPeerAddress());
+//            } else {
+//                System.out.println("failed " + fd.getFailedReason());
+//            }
 //            FutureBootstrap fb = peer.bootstrap().setBroadcast().setPorts(4001).start();
 //            fb.awaitUninterruptibly();
 //            if (fb.getBootstrapTo() != null) {
