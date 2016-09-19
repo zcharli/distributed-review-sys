@@ -32,7 +32,7 @@ import java.util.Random;
  * Created by cli on 9/18/2016.
  */
 public class Test {
-
+    private static int keyStore = 543453049;
     private PeerDHT peer;
     InetAddress address = Inet4Address.getByName("192.168.101.12");
 
@@ -57,7 +57,7 @@ public class Test {
             System.out.println("peer started.");
             for (;;) {
                 Thread.sleep(5000);
-                FutureGet fg = peer.get(new Number160("shit")).all().start();
+                FutureGet fg = peer.get(new Number160(keyStore)).all().start();
                 fg.awaitUninterruptibly();
                 int size = fg.dataMap().size();
                 System.out.println("size " + size);
@@ -97,7 +97,7 @@ public class Test {
         String inLine = null;
         while ((inLine = getLine()) != null) {
             if (inLine.equals("show")) {
-                FutureGet fget = peer.get(new Number160("shit")).all().start();
+                FutureGet fget = peer.get(new Number160(keyStore)).all().start();
                 fget.awaitUninterruptibly();
                 Iterator<Data> iterator = fget.dataMap().values().iterator();
                 StringBuffer allString = new StringBuffer();
@@ -116,7 +116,7 @@ public class Test {
             } else {
                 int r2 = new Random().nextInt();
                 System.out.println("Storing DHT address (" + r2 + ") in DHT");
-                peer.add(new Number160("shit")).data(new Data(r2)).start().awaitUninterruptibly();
+                peer.add(new Number160(keyStore)).data(new Data(r2)).start().awaitUninterruptibly();
                 System.out.println("Adding (" + inLine + ") to DHT");
                 peer.put(new Number160(r2)).data(new Data(inLine)).start().awaitUninterruptibly();
             }
