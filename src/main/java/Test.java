@@ -18,11 +18,14 @@ import net.tomp2p.relay.tcp.TCPRelayClientConfig;
 import net.tomp2p.storage.Data;
 import net.tomp2p.dht.FuturePut;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -31,77 +34,110 @@ import java.util.Random;
 public class Test {
 
     private PeerDHT peer;
+    InetAddress address = Inet4Address.getByName("192.168.101.12");
+
+//    Random r;
+//    Bindings b;
 
     public Test(int peerId, boolean isBootStrap) throws Exception {
+//        b = new Bindings().listenAny();
+//        r = new Random(42L);
+    }
 
-        Bindings b = new Bindings().listenAny();
-        Random r = new Random(42L);
-
-
-        if (!isBootStrap) {
-//
-            //peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
-            InetAddress address = Inet4Address.getByName("192.168.101.12");
-//            boolean isRe = isReachable("192.168.101.12", 4000, 1000);
-//            System.out.println("Trying to connect to client " + pa);
-//            FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
-//            futureDiscover.awaitUninterruptibly();
-//            System.out.println(futureDiscover.toString());
-//
-//            FutureBootstrap fb = peer.peer().bootstrap().inetAddress(address).ports(4000).start();
-//            fb.awaitUninterruptibly();
-//
-//            System.out.println("is Reachabled " + isRe);
-//
-//            if (futureDiscover.isSuccess()) {
-//                System.out.println();
-//                System.out.println("found that my outside address is "+ futureDiscover.peerAddress());
-//            } else {
-//                System.out.println("failed " + futureDiscover.failedReason());
-//            }
-//            if (fb.bootstrapTo() != null) {
-//                System.out.println("got bootstrap");
-//                System.out.println("peer"+ peerId+" knows: " + peer.peerBean().peerMap().all());
-//            } else {
-//                System.out.println(fb.failedReason());
-//            }
-
-            PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000 );
-
-            Peer peer = new PeerBuilder(new Number160(r)).ports(4000).behindFirewall().start();
-            PeerNAT peerNAT = new PeerBuilderNAT(peer).start();
-
-            FutureDiscover fd = peer.discover().peerAddress(pa).start();
-            FutureNAT fn = peerNAT.startSetupPortforwarding(fd);
-            FutureRelayNAT frn = peerNAT.startRelay(new TCPRelayClientConfig(), fd, fn);
-
-            frn.awaitUninterruptibly();
-            if (fd.isSuccess()) {
-                System.out.println("found that my outside address is " + fd.peerAddress());
-            } else {
-                System.out.println("failed " + fd.failedReason());
+    public void startServer(String addr) throws Exception {
+        PeerDHT peer = null;
+        try {
+            Random r = new Random(42L);
+            // peer.getP2PConfiguration().setBehindFirewall(true);
+            Bindings b = new Bindings();
+            // b.addInterface("eth0");
+            b.addAddress(address);
+            // b.addAddress(InetAddress.getByAddress(addr));
+            peer = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).bindings(b).ports(4000).start()).start();
+            System.out.println("peer started.");
+            for (;;) {
+                Thread.sleep(5000);
+                FutureGet fg = peer.get(new Number160("shit")).all().start();
+                fg.awaitUninterruptibly();
+                int size = fg.dataMap().size();
+                System.out.println("size " + size);
+                Iterator<Data> iterator = fg.dataMap().values().iterator();
+                while (iterator.hasNext()) {
+                    Data d = iterator.next();
+                    System.out.println("got: " + d.object().toString());
+                }
             }
-
-            if (fn.isSuccess()) {
-                System.out.println("NAT success: " + fn.peerAddress());
-            } else {
-                System.out.println("failed " + fn.failedReason());
-            }
-
-            if (frn.isSuccess()) {
-                System.out.println("FutureRelay success");
-            } else {
-                System.out.println("failed " + frn.failedReason());
-            }
-
-        } else {
-            peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
-
-            System.out.println("Bootstrap started and Listening to: " + DiscoverNetworks.discoverInterfaces(b));
-            System.out.println("address visible to outside is " + peer.peerAddress());
-
+        } finally {
+            peer.shutdown();
         }
-        System.out.println("Peer " + peerId + " out, and is down: " + peer.peer().isShutdown());
+    }
+
+    public void startClientNAT(String ip) throws Exception {
+        Random r = new Random(43L);
+        PeerDHT peer = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(4000).behindFirewall().start()).start();
+        PeerAddress bootStrapServer = new PeerAddress(Number160.ZERO, address, 4000, 4000, 4000 + 1);
+        FutureDiscover fd = peer.peer().discover().peerAddress(bootStrapServer).start();
+        System.out.println("About to wait...");
+        fd.awaitUninterruptibly();
+        if (fd.isSuccess()) {
+            System.out.println("*** FOUND THAT MY OUTSIDE ADDRESS IS " + fd.peerAddress());
+        } else {
+            System.out.println("*** FAILED " + fd.failedReason());
+        }
+
+        bootStrapServer = fd.reporter();
+        FutureBootstrap bootstrap = peer.peer().bootstrap().peerAddress(bootStrapServer).start();
+        bootstrap.awaitUninterruptibly();
+        if (!bootstrap.isSuccess()) {
+            System.out.println("*** COULD NOT BOOTSTRAP!");
+        } else {
+            System.out.println("*** SUCCESSFUL BOOTSTRAP");
+        }
+
+        String inLine = null;
+        while ((inLine = getLine()) != null) {
+            if (inLine.equals("show")) {
+                FutureGet fget = peer.get(new Number160("shit")).all().start();
+                fget.awaitUninterruptibly();
+                Iterator<Data> iterator = fget.dataMap().values().iterator();
+                StringBuffer allString = new StringBuffer();
+                FutureGet fg;
+                while (iterator.hasNext()) {
+                    Data d = iterator.next();
+                    fg = peer.get(new Number160(((Integer) d.object()).intValue())).start();
+                    fg.awaitUninterruptibly();
+                    if (fg.data() != null) {
+                        allString.append(fg.data().object().toString()).append("\n");
+                    } else {
+                        System.err.println("Could not find key for val: " + d.object());
+                    }
+                }
+                System.out.println("got: " + allString.toString());
+            } else {
+                int r2 = new Random().nextInt();
+                System.out.println("Storing DHT address (" + r2 + ") in DHT");
+                peer.add(new Number160("shit")).data(new Data(r2)).start().awaitUninterruptibly();
+                System.out.println("Adding (" + inLine + ") to DHT");
+                peer.put(new Number160(r2)).data(new Data(inLine)).start().awaitUninterruptibly();
+            }
+        }
+        System.out.println("Shutting down...");
+        // peer.halt();
+    }
+
+    static String getLine() {
+        System.out.print("Please enter a short line of text: ");
+        InputStreamReader converter = new InputStreamReader(System.in);
+        BufferedReader in = new BufferedReader(converter);
+        String inLine = "";
+        try {
+            inLine = in.readLine();
+        } catch (Exception e) {
+            System.err.println("Error reading input.");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return inLine;
     }
 
     private boolean isReachable(String addr, int openPort, int timeOutMillis) {
@@ -177,14 +213,14 @@ public class Test {
         try {
             if (args.length == 3) {
                 Test dns = new Test(Integer.parseInt(args[0]), true);
-                dns.store(args[1], args[2]);
-                System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
-
-                dns.poll();
+//                dns.store(args[1], args[2]);
+//                System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
+                dns.startServer("");
+                //dns.poll();
             }
             if (args.length == 2) {
                 Test dns = new Test(Integer.parseInt(args[0]), false);
-                System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
+                dns.startClientNAT("");
             }
         } catch (Exception e) {
             e.printStackTrace();
