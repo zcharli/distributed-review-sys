@@ -23,6 +23,7 @@ public class Test {
 
         if (!isBootStrap) {
             peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).makeAndListen();
+            peer.
             InetAddress address = Inet4Address.getByName("134.117.26.133");
             FutureDiscover futureDiscover = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
@@ -30,14 +31,22 @@ public class Test {
             FutureBootstrap fb = peer.bootstrap().setInetAddress(address).setPorts(4000).start();
             fb.awaitUninterruptibly();
             System.out.println(fb.toString());
+            if (futureDiscover.isSuccess()) {
+                System.out.println();
+                System.out.println("found that my outside address is "+ futureDiscover.getPeerAddress());
+            } else {
+                System.out.println("failed " + futureDiscover.getFailedReason());
+            }
             if (fb.getBootstrapTo() != null) {
                 System.out.println("got bootstrap");
                 peer.discover().setPeerAddress(fb.getBootstrapTo().iterator().next()).start().awaitUninterruptibly();
+            } else {
+                System.out.println(fb.getFailedReason());
             }
         } else {
             Bindings b = new Bindings();
             peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).setBindings(b).makeAndListen();
-            peer.getConfiguration().setBehindFirewall(true);
+//            peer.getConfiguration().setBehindFirewall(true);
             System.out.println("Bootstrap node up.");
 //            FutureDiscover fd = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
 //            fd.awaitUninterruptibly();
@@ -53,7 +62,7 @@ public class Test {
 //                peer.discover().setPeerAddress(fb.getBootstrapTo().iterator().next()).start().awaitUninterruptibly();
 //            }
         }
-        System.out.println("Peer " + peerId + " out.");
+        System.out.println("Peer " + peerId + " out, but " + peer.isRunning() + " and " + peer.isListening());
     }
 
     private String get(String name) throws ClassNotFoundException, IOException {
@@ -73,12 +82,10 @@ public class Test {
         try {
             if (args.length == 3) {
                 Test dns = new Test(Integer.parseInt(args[0]), true);
-                System.out.println("First arg is " + args[0]);
                 dns.store(args[1], args[2]);
             }
             if (args.length == 2) {
                 Test dns = new Test(Integer.parseInt(args[0]), false);
-                System.out.println("First arg is " + args[0]);
                 System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
             }
         } catch (Exception e) {
