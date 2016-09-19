@@ -38,8 +38,10 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            Test dns = new Test(Integer.parseInt(args[0]));
-            if (args.length == 3) {
+            
+	    Test dns = new Test(Integer.parseInt(args[0]));
+            System.out.println("First arg is "+args[0]);
+	    if (args.length == 3) {
                 dns.store(args[1], args[2]);
             }
             if (args.length == 2) {

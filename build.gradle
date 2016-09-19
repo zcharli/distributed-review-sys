@@ -12,6 +12,14 @@ repositories {
     maven { url "http://tomp2p.net/dev/mvn" }
 }
 
+task(runTest, dependsOn: 'classes', type: JavaExec) {
+    main='Test'
+    classpath = sourceSets.main.runtimeClasspath
+    args ('1 shit master'.split(' '))
+}
+
+defaultTasks 'runTest'
+
 dependencies {
     compile 'net.tomp2p:TomP2P:4.4'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
