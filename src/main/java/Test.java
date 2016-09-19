@@ -94,39 +94,38 @@ public class Test {
             System.out.println("*** SUCCESSFUL BOOTSTRAP");
         }
 
-        String inLine = "hello";
-
-        int r2 = new Random().nextInt();
-        System.out.println("Storing DHT address (" + r2 + ") in DHT");
-        peer.add(new Number160(keyStore)).data(new Data(r2)).start().awaitUninterruptibly();
-        System.out.println("Adding (" + inLine + ") to DHT");
-        peer.put(new Number160(r2)).data(new Data(inLine)).start().awaitUninterruptibly();
-
-        FutureGet fget = peer.get(new Number160(keyStore)).all().start();
-        fget.awaitUninterruptibly();
-        Iterator<Data> iterator = fget.dataMap().values().iterator();
-        StringBuffer allString = new StringBuffer();
-        FutureGet fg;
-        while (iterator.hasNext()) {
-            Data d = iterator.next();
-            fg = peer.get(new Number160(((Integer) d.object()).intValue())).start();
-            fg.awaitUninterruptibly();
-            if (fg.data() != null) {
-                allString.append(fg.data().object().toString()).append("\n");
+        String inLine = null;
+        while ((inLine = getLine()) != null) {
+            if (inLine.equals("show")) {
+                FutureGet fget = peer.get(new Number160(keyStore)).all().start();
+                fget.awaitUninterruptibly();
+                Iterator<Data> iterator = fget.dataMap().values().iterator();
+                StringBuffer allString = new StringBuffer();
+                FutureGet fg;
+                while (iterator.hasNext()) {
+                    Data d = iterator.next();
+                    fg = peer.get(new Number160(((Integer) d.object()).intValue())).start();
+                    fg.awaitUninterruptibly();
+                    if (fg.data() != null) {
+                        allString.append(fg.data().object().toString()).append("\n");
+                    } else {
+                        System.err.println("Could not find key for val: " + d.object());
+                    }
+                }
+                System.out.println("got: " + allString.toString());
             } else {
-                System.err.println("Could not find key for val: " + d.object());
+                int r2 = new Random().nextInt();
+                System.out.println("Storing DHT address (" + r2 + ") in DHT");
+                peer.add(new Number160(keyStore)).data(new Data(r2)).start().awaitUninterruptibly();
+                System.out.println("Adding (" + inLine + ") to DHT");
+                peer.put(new Number160(r2)).data(new Data(inLine)).start().awaitUninterruptibly();
             }
         }
-        System.out.println("got: " + allString.toString());
-
-
-
-
         System.out.println("Shutting down...");
         // peer.halt();
     }
 
-    static String getLine() {
+    public String getLine() {
         System.out.print("Please enter a short line of text: ");
         InputStreamReader converter = new InputStreamReader(System.in);
         BufferedReader in = new BufferedReader(converter);
