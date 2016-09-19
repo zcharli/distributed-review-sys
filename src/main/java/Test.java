@@ -10,6 +10,7 @@ import net.tomp2p.nat.FutureNAT;
 import net.tomp2p.nat.FutureRelayNAT;
 import net.tomp2p.nat.PeerBuilderNAT;
 import net.tomp2p.nat.PeerNAT;
+import net.tomp2p.p2p.Peer;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.PeerAddress;
@@ -38,36 +39,39 @@ public class Test {
 
 
         if (!isBootStrap) {
-            peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
+//
+            //peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
             InetAddress address = Inet4Address.getByName("192.168.101.12");
-            boolean isRe = isReachable("192.168.101.12", 4000, 1000);
+//            boolean isRe = isReachable("192.168.101.12", 4000, 1000);
+//            System.out.println("Trying to connect to client " + pa);
+//            FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
+//            futureDiscover.awaitUninterruptibly();
+//            System.out.println(futureDiscover.toString());
+//
+//            FutureBootstrap fb = peer.peer().bootstrap().inetAddress(address).ports(4000).start();
+//            fb.awaitUninterruptibly();
+//
+//            System.out.println("is Reachabled " + isRe);
+//
+//            if (futureDiscover.isSuccess()) {
+//                System.out.println();
+//                System.out.println("found that my outside address is "+ futureDiscover.peerAddress());
+//            } else {
+//                System.out.println("failed " + futureDiscover.failedReason());
+//            }
+//            if (fb.bootstrapTo() != null) {
+//                System.out.println("got bootstrap");
+//                System.out.println("peer"+ peerId+" knows: " + peer.peerBean().peerMap().all());
+//            } else {
+//                System.out.println(fb.failedReason());
+//            }
+
             PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000 );
-            System.out.println("Trying to connect to client " + pa);
-            FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
-            futureDiscover.awaitUninterruptibly();
-            System.out.println(futureDiscover.toString());
 
-            FutureBootstrap fb = peer.peer().bootstrap().inetAddress(address).ports(4000).start();
-            fb.awaitUninterruptibly();
+            Peer peer = new PeerBuilder(new Number160(r)).ports(4000).behindFirewall().start();
+            PeerNAT peerNAT = new PeerBuilderNAT(peer).start();
 
-            System.out.println("is Reachabled " + isRe);
-
-            if (futureDiscover.isSuccess()) {
-                System.out.println();
-                System.out.println("found that my outside address is "+ futureDiscover.peerAddress());
-            } else {
-                System.out.println("failed " + futureDiscover.failedReason());
-            }
-            if (fb.bootstrapTo() != null) {
-                System.out.println("got bootstrap");
-                System.out.println("peer"+ peerId+" knows: " + peer.peerBean().peerMap().all());
-            } else {
-                System.out.println(fb.failedReason());
-            }
-
-            PeerNAT peerNAT = new PeerBuilderNAT(peer.peer()).start();
-
-            FutureDiscover fd = peer.peer().discover().peerAddress(pa).start();
+            FutureDiscover fd = peer.discover().peerAddress(pa).start();
             FutureNAT fn = peerNAT.startSetupPortforwarding(fd);
             FutureRelayNAT frn = peerNAT.startRelay(new TCPRelayClientConfig(), fd, fn);
 
@@ -176,7 +180,7 @@ public class Test {
                 dns.store(args[1], args[2]);
                 System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
 
-                //dns.poll();
+                dns.poll();
             }
             if (args.length == 2) {
                 Test dns = new Test(Integer.parseInt(args[0]), false);
