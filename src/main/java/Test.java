@@ -1,11 +1,11 @@
-import net.tomp2p.connection.Bindings;
-import net.tomp2p.connection.DiscoverNetworks;
-import net.tomp2p.connection.PeerCreator;
+import net.tomp2p.connection.*;
 import net.tomp2p.dht.FutureGet;
 import net.tomp2p.dht.PeerBuilderDHT;
 import net.tomp2p.dht.PeerDHT;
 import net.tomp2p.futures.FutureBootstrap;
+import net.tomp2p.futures.FutureChannelCreator;
 import net.tomp2p.futures.FutureDiscover;
+import net.tomp2p.futures.FutureResponse;
 import net.tomp2p.p2p.Peer;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
@@ -65,6 +65,36 @@ public class Test {
             }
         } else {
             System.out.println("Bootstrap node up.");
+            while (true) {
+                for (PeerAddress pa : peer.peerBean().peerMap().all()) {
+                    System.out.println("PeerAddress: " + pa);
+                    FutureChannelCreator fcc = peer.peer().connectionBean().reservation().create(1, 1);
+                    fcc.awaitUninterruptibly();
+
+                    ChannelCreator cc = fcc.channelCreator();
+
+                    FutureResponse fr1 = peer.peer().pingRPC().pingTCP(pa, cc, new DefaultConnectionConfiguration());
+                    fr1.awaitUninterruptibly();
+
+                    if (fr1.isSuccess()) {
+                        System.out.println("peer online T:" + pa);
+                    } else {
+                        System.out.println("offline " + pa);
+                    }
+
+                    FutureResponse fr2 = peer.peer().pingRPC().pingUDP(pa, cc, new DefaultConnectionConfiguration());
+                    fr2.awaitUninterruptibly();
+
+                    cc.shutdown();
+
+                    if (fr2.isSuccess()) {
+                        System.out.println("peer online U:" + pa);
+                    } else {
+                        System.out.println("offline " + pa);
+                    }
+                }
+                Thread.sleep(1500);
+            }
         }
         System.out.println("Peer " + peerId + " out, and is down: " + peer.shutdown());
     }
