@@ -41,7 +41,7 @@ public class Test {
             peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
             InetAddress address = Inet4Address.getByName("192.168.101.12");
             boolean isRe = isReachable("192.168.101.12", 4000, 1000);
-            PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000, 4000 );
+            PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000 );
             System.out.println("Trying to connect to client " + pa);
             FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
@@ -66,7 +66,6 @@ public class Test {
             }
 
             PeerNAT peerNAT = new PeerBuilderNAT(peer.peer()).start();
-            PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000);
 
             FutureDiscover fd = peer.peer().discover().peerAddress(pa).start();
             FutureNAT fn = peerNAT.startSetupPortforwarding(fd);
