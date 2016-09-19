@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile("net.tomp2p:TomP2P:4.4")
+    compile 'net.tomp2p:TomP2P:4.4'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
     compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.+'
     compile group: 'org.eclipse.jetty.aggregate', name: 'jetty-all', version: '9.4.0.M1'
