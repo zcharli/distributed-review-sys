@@ -86,36 +86,40 @@ public class Test {
     }
 
     public void poll() {
-        while (true) {
-            System.out.println(peer.peerBean().peerMap().all());
-            for (PeerAddress pa : peer.peerBean().peerMap().all()) {
-                System.out.println("PeerAddress: " + pa);
-                FutureChannelCreator fcc = peer.peer().connectionBean().reservation().create(1, 1);
-                fcc.awaitUninterruptibly();
+        try {
+            while (true) {
+                System.out.println(peer.peerBean().peerMap().all());
+                for (PeerAddress pa : peer.peerBean().peerMap().all()) {
+                    System.out.println("PeerAddress: " + pa);
+                    FutureChannelCreator fcc = peer.peer().connectionBean().reservation().create(1, 1);
+                    fcc.awaitUninterruptibly();
 
-                ChannelCreator cc = fcc.channelCreator();
+                    ChannelCreator cc = fcc.channelCreator();
 
-                FutureResponse fr1 = peer.peer().pingRPC().pingTCP(pa, cc, new DefaultConnectionConfiguration());
-                fr1.awaitUninterruptibly();
+                    FutureResponse fr1 = peer.peer().pingRPC().pingTCP(pa, cc, new DefaultConnectionConfiguration());
+                    fr1.awaitUninterruptibly();
 
-                if (fr1.isSuccess()) {
-                    System.out.println("peer online T:" + pa);
-                } else {
-                    System.out.println("offline " + pa);
+                    if (fr1.isSuccess()) {
+                        System.out.println("peer online T:" + pa);
+                    } else {
+                        System.out.println("offline " + pa);
+                    }
+
+                    FutureResponse fr2 = peer.peer().pingRPC().pingUDP(pa, cc, new DefaultConnectionConfiguration());
+                    fr2.awaitUninterruptibly();
+
+                    cc.shutdown();
+
+                    if (fr2.isSuccess()) {
+                        System.out.println("peer online U:" + pa);
+                    } else {
+                        System.out.println("offline " + pa);
+                    }
                 }
-
-                FutureResponse fr2 = peer.peer().pingRPC().pingUDP(pa, cc, new DefaultConnectionConfiguration());
-                fr2.awaitUninterruptibly();
-
-                cc.shutdown();
-
-                if (fr2.isSuccess()) {
-                    System.out.println("peer online U:" + pa);
-                } else {
-                    System.out.println("offline " + pa);
-                }
+                Thread.sleep(1500);
             }
-            Thread.sleep(1500);
+        } catch(Exception e) {
+
         }
     }
 
