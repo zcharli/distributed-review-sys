@@ -23,7 +23,6 @@ public class Test {
 
         if (!isBootStrap) {
             peer = new PeerMaker(Number160.createHash(peerId)).setPorts(4000).makeAndListen();
-            peer.
             InetAddress address = Inet4Address.getByName("134.117.26.133");
             FutureDiscover futureDiscover = peer.discover().setInetAddress(address).setPorts( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
