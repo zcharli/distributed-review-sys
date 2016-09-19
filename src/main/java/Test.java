@@ -6,10 +6,14 @@ import net.tomp2p.futures.FutureBootstrap;
 import net.tomp2p.futures.FutureChannelCreator;
 import net.tomp2p.futures.FutureDiscover;
 import net.tomp2p.futures.FutureResponse;
-import net.tomp2p.p2p.Peer;
+import net.tomp2p.nat.FutureNAT;
+import net.tomp2p.nat.FutureRelayNAT;
+import net.tomp2p.nat.PeerBuilderNAT;
+import net.tomp2p.nat.PeerNAT;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.PeerAddress;
+import net.tomp2p.relay.tcp.TCPRelayClientConfig;
 import net.tomp2p.storage.Data;
 import net.tomp2p.dht.FuturePut;
 
@@ -31,20 +35,15 @@ public class Test {
 
         Bindings b = new Bindings().listenAny();
         Random r = new Random(42L);
-        peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
-        if (peer == null) {
-            System.out.println("Fuck");
-            return;
-        }
-        System.out.println("Client started and Listening to: " + DiscoverNetworks.discoverInterfaces(b));
-        System.out.println("address visible to outside is " + peer.peerAddress());
+
 
         if (!isBootStrap) {
+            peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
             InetAddress address = Inet4Address.getByName("192.168.101.12");
             boolean isRe = isReachable("192.168.101.12", 4000, 1000);
             PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000, 4000 );
             System.out.println("Trying to connect to client " + pa);
-            FutureDiscover futureDiscover = peer.peer().discover().expectManualForwarding().inetAddress(address).ports( 4000 ).start();
+            FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
             System.out.println(futureDiscover.toString());
 
@@ -52,7 +51,7 @@ public class Test {
             fb.awaitUninterruptibly();
 
             System.out.println("is Reachabled " + isRe);
-            System.out.println(fb.toString());
+
             if (futureDiscover.isSuccess()) {
                 System.out.println();
                 System.out.println("found that my outside address is "+ futureDiscover.peerAddress());
@@ -65,8 +64,38 @@ public class Test {
             } else {
                 System.out.println(fb.failedReason());
             }
+
+            PeerNAT peerNAT = new PeerBuilderNAT(peer.peer()).start();
+            PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000);
+
+            FutureDiscover fd = peer.peer().discover().peerAddress(pa).start();
+            FutureNAT fn = peerNAT.startSetupPortforwarding(fd);
+            FutureRelayNAT frn = peerNAT.startRelay(new TCPRelayClientConfig(), fd, fn);
+
+            frn.awaitUninterruptibly();
+            if (fd.isSuccess()) {
+                System.out.println("found that my outside address is " + fd.peerAddress());
+            } else {
+                System.out.println("failed " + fd.failedReason());
+            }
+
+            if (fn.isSuccess()) {
+                System.out.println("NAT success: " + fn.peerAddress());
+            } else {
+                System.out.println("failed " + fn.failedReason());
+            }
+
+            if (frn.isSuccess()) {
+                System.out.println("FutureRelay success");
+            } else {
+                System.out.println("failed " + frn.failedReason());
+            }
+
         } else {
-            System.out.println("Bootstrap node up.");
+            peer =  new PeerBuilderDHT(new PeerBuilder(new Number160( r )).ports(4000).bindings(b).start()).start();
+
+            System.out.println("Bootstrap started and Listening to: " + DiscoverNetworks.discoverInterfaces(b));
+            System.out.println("address visible to outside is " + peer.peerAddress());
 
         }
         System.out.println("Peer " + peerId + " out, and is down: " + peer.peer().isShutdown());
@@ -146,7 +175,9 @@ public class Test {
             if (args.length == 3) {
                 Test dns = new Test(Integer.parseInt(args[0]), true);
                 dns.store(args[1], args[2]);
-                dns.poll();
+                System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
+
+                //dns.poll();
             }
             if (args.length == 2) {
                 Test dns = new Test(Integer.parseInt(args[0]), false);
