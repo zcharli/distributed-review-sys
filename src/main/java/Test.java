@@ -116,15 +116,19 @@ public class Test {
     }
 
     private String get(String name) throws ClassNotFoundException, IOException {
+        System.out.println("Looked for hash: " + Number160.createHash(name));
+
         FutureGet futureDHT = peer.get(Number160.createHash(name)).start();
         futureDHT.awaitUninterruptibly();
         if (futureDHT.isSuccess()) {
+            System.out.println(futureDHT.data().object());
             return futureDHT.data().object().toString();
         }
         return "not found";
     }
 
     private void store(String name, String ip) throws IOException {
+        System.out.println("Put " + ip + " with hash " + Number160.createHash(name));
         FuturePut fp = peer.put(Number160.createHash(name)).data(new Data(ip)).start();
         fp.awaitUninterruptibly();
     }
