@@ -41,14 +41,16 @@ public class Test {
 
         if (!isBootStrap) {
             InetAddress address = Inet4Address.getByName("192.168.101.12");
-            FutureDiscover futureDiscover = peer.peer().discover().inetAddress(address).ports( 4000 ).start();
+            boolean isRe = isReachable("192.168.101.12", 4000, 1000);
+            PeerAddress pa = new PeerAddress(Number160.ZERO, address, 4000, 4000, 4000 );
+            System.out.println("Trying to connect to client " + pa);
+            FutureDiscover futureDiscover = peer.peer().discover().expectManualForwarding().inetAddress(address).ports( 4000 ).start();
             futureDiscover.awaitUninterruptibly();
             System.out.println(futureDiscover.toString());
 
             FutureBootstrap fb = peer.peer().bootstrap().inetAddress(address).ports(4000).start();
             fb.awaitUninterruptibly();
 
-            boolean isRe = isReachable("192.168.101.12", 4000, 1000);
             System.out.println("is Reachabled " + isRe);
             System.out.println(fb.toString());
             if (futureDiscover.isSuccess()) {
@@ -66,6 +68,7 @@ public class Test {
         } else {
             System.out.println("Bootstrap node up.");
             while (true) {
+                System.out.println(peer.peerBean().peerMap().all());
                 for (PeerAddress pa : peer.peerBean().peerMap().all()) {
                     System.out.println("PeerAddress: " + pa);
                     FutureChannelCreator fcc = peer.peer().connectionBean().reservation().create(1, 1);
@@ -96,7 +99,7 @@ public class Test {
                 Thread.sleep(1500);
             }
         }
-        System.out.println("Peer " + peerId + " out, and is down: " + peer.shutdown());
+        System.out.println("Peer " + peerId + " out, and is down: " + peer.peer().isShutdown());
     }
 
     private boolean isReachable(String addr, int openPort, int timeOutMillis) {
