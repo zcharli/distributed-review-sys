@@ -6,15 +6,9 @@ import net.tomp2p.futures.FutureBootstrap;
 import net.tomp2p.futures.FutureChannelCreator;
 import net.tomp2p.futures.FutureDiscover;
 import net.tomp2p.futures.FutureResponse;
-import net.tomp2p.nat.FutureNAT;
-import net.tomp2p.nat.FutureRelayNAT;
-import net.tomp2p.nat.PeerBuilderNAT;
-import net.tomp2p.nat.PeerNAT;
-import net.tomp2p.p2p.Peer;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.PeerAddress;
-import net.tomp2p.relay.tcp.TCPRelayClientConfig;
 import net.tomp2p.storage.Data;
 import net.tomp2p.dht.FuturePut;
 
@@ -34,17 +28,14 @@ import java.util.Random;
 public class Test {
     private static int keyStore = 543453049;
     private PeerDHT peer;
-    InetAddress address = Inet4Address.getByName("134.117.26.133");
+    InetAddress address = Inet4Address.getByName("192.168.101.12");
 
-//    Random r;
-//    Bindings b;
 
-    public Test(int peerId, boolean isBootStrap) throws Exception {
-//        b = new Bindings().listenAny();
-//        r = new Random(42L);
+    public Test() throws Exception {
+
     }
 
-    public void startServer(String addr) throws Exception {
+    public void startServer() throws Exception {
         PeerDHT peer = null;
         try {
             Random r = new Random(42L);
@@ -67,12 +58,14 @@ public class Test {
                     System.out.println("got: " + d.object().toString());
                 }
             }
+        } catch(Exception e){
+            e.printStackTrace();
         } finally {
             peer.shutdown();
         }
     }
 
-    public void startClientNAT(String ip) throws Exception {
+    public void startClientNAT() throws Exception {
         Random r = new Random(43L);
         PeerDHT peer = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(4000).behindFirewall().start()).start();
         PeerAddress bootStrapServer = new PeerAddress(Number160.ZERO, address, 4000, 4000, 4000 + 1);
@@ -212,16 +205,15 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            if (args.length == 3) {
-                Test dns = new Test(Integer.parseInt(args[0]), true);
+            if (args.length == 1) {
+                Test dns = new Test();
 //                dns.store(args[1], args[2]);
 //                System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
-                dns.startServer("");
+                dns.startServer();
                 //dns.poll();
-            }
-            if (args.length == 2) {
-                Test dns = new Test(Integer.parseInt(args[0]), false);
-                dns.startClientNAT("");
+            }else {
+                Test dns = new Test();
+                dns.startClientNAT();
             }
         } catch (Exception e) {
             e.printStackTrace();
