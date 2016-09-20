@@ -34,7 +34,7 @@ import java.util.Random;
 public class Test {
     private static int keyStore = 543453049;
     private PeerDHT peer;
-    InetAddress address = Inet4Address.getByName("192.168.101.12");
+    InetAddress address = Inet4Address.getByName("134.117.26.133");
 
 //    Random r;
 //    Bindings b;

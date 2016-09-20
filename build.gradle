@@ -3,7 +3,11 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'application'
+
 apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
+
+mainClassName = "Test"
 
 repositories {
     mavenCentral()
@@ -16,7 +20,7 @@ task(runTest, dependsOn: 'classes', type: JavaExec) {
     args ('1 shit'.split(' '))
 }
 
-defaultTasks 'runTest'
+//defaultTasks 'runTest'
 
 dependencies {
     compile 'net.tomp2p:tomp2p-all:5.0-Beta8'
@@ -44,5 +48,11 @@ buildscript {
     }
     dependencies {
         classpath "org.akhikhl.gretty:gretty:1.4.0"
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Test'
     }
 }
