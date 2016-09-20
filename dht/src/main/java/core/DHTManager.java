@@ -20,7 +20,7 @@ public class DHTManager {
         initializeProfile();
     }
 
-    private void initializeProfile() {
+    private void initializeProfile() throws InitializationFailedException {
         DHTProfile.init(isBootstrap);
     }
 }

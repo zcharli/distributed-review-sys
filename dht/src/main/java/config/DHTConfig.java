@@ -1,6 +1,8 @@
 package config;
 
 
+import net.tomp2p.peers.Number160;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,6 +17,9 @@ public class DHTConfig {
 
     public static final InetAddress BOOTSRAP_ADDR;
     public static final int DRS_PORT;
+
+    private String domainKey = "default";
+    private Number160 domainHash;
 
     private static DHTConfig INSTANCE;
     private DHTConfig() {}
@@ -31,7 +36,7 @@ public class DHTConfig {
         }
     }
 
-    public static DHTConfig getInstance() {
+    public static DHTConfig instance() {
 
         if (INSTANCE == null) {
             INSTANCE = new DHTConfig();
@@ -39,4 +44,16 @@ public class DHTConfig {
         return INSTANCE;
     }
 
+    public DHTConfig domainKey(String key) {
+        domainKey = key;
+        domainHash = Number160.createHash(domainKey);
+        return this;
+    }
+
+    public Number160 domainKey() {
+        if (domainHash == null) {
+            domainHash = Number160.createHash(domainKey);
+        }
+        return domainHash;
+    }
 }

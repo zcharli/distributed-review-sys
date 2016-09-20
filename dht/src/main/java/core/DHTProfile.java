@@ -10,6 +10,7 @@ import net.tomp2p.futures.FutureDiscover;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.PeerAddress;
+import sun.nio.cs.ext.ISCII91;
 
 import java.io.IOException;
 import java.util.Random;
@@ -36,7 +37,7 @@ public class DHTProfile {
                 b.addAddress(DHTConfig.BOOTSRAP_ADDR);
                 currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).bindings(b).ports(DHTConfig.DRS_PORT).start()).start();
             } else {
-                currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(4000).behindFirewall().start()).start();
+                currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(DHTConfig.DRS_PORT).behindFirewall().start()).start();
                 PeerAddress bootStrapServer = new PeerAddress(Number160.ZERO, DHTConfig.BOOTSRAP_ADDR, DHTConfig.DRS_PORT, DHTConfig.DRS_PORT, DHTConfig.DRS_PORT + 1);
                 FutureDiscover fd = currentClient.peer().discover().peerAddress(bootStrapServer).start();
                 fd.awaitUninterruptibly();
@@ -60,6 +61,13 @@ public class DHTProfile {
         } finally {
             MY_PROFILE = currentClient;
         }
+    }
+
+    public static DHTProfile instance() throws InitializationFailedException {
+        if (INSTANCE == null) {
+            INSTANCE = new DHTProfile(false);
+        }
+        return INSTANCE;
     }
 
     public static void init(boolean isBootstrap) throws InitializationFailedException {
