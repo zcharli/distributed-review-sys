@@ -33,7 +33,7 @@ public class DHT<KEY extends DRSKey> {
             m_profile = DHTProfile.instance();
         } catch (InitializationFailedException e) {
             e.printStackTrace();
-            LOGGER.log(Level.SEVERE, "Failed to initialize DHT: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "Failed to initialize DHT, likely tried to init DHT before init DHTProfile: " + e.getMessage());
         }
     }
 

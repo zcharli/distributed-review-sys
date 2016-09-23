@@ -6,6 +6,7 @@ import net.tomp2p.peers.Number160;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +48,12 @@ public class DHTConfig {
     public DHTConfig domainKey(String key) {
         domainKey = key;
         domainHash = Number160.createHash(domainKey);
+        return this;
+    }
+
+    public DHTConfig generateRandomDomainKey() {
+        Random r = new Random(42L);
+        domainKey = Integer.toString(r.nextInt());
         return this;
     }
 

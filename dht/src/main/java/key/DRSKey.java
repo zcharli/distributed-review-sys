@@ -4,6 +4,9 @@ package key;
  * Created by cli on 9/20/2016.
  */
 public interface DRSKey {
+
+    public static final int MAX_KEY_LENGTH = 42;
+
     // Typical hash of an list's ID
     public abstract String getLocationKey();
 

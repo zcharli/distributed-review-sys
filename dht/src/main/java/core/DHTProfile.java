@@ -63,18 +63,26 @@ public class DHTProfile {
         }
     }
 
-    public static DHTProfile instance() throws InitializationFailedException {
+    public static DHTProfile instance()  {
         if (INSTANCE == null) {
-            INSTANCE = new DHTProfile(false);
+            LOGGER.log(Level.WARNING, "DHTProfile.init(isBoostrap) must be called first");
+            return null;
         }
         return INSTANCE;
     }
 
-    public static void init(boolean isBootstrap) throws InitializationFailedException {
+    /**
+     * Should only be called once
+     * @param isBootstrap
+     * @return
+     * @throws InitializationFailedException
+     */
+    public static DHTProfile init(boolean isBootstrap) throws InitializationFailedException {
         if (INSTANCE != null) {
-            return;
+            throw new InitializationFailedException("DHTProfile instance has already been initialized");
         }
 
         INSTANCE = new DHTProfile(isBootstrap);
+        return INSTANCE;
     }
 }
