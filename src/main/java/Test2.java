@@ -26,8 +26,7 @@ public class Test2 {
         System.out.println("Init bootsrap successful");
         dht.getGlobalConfig().generateRandomDomainKey();
         try {
-            for (; ; ) {
-
+            for (; ;) {
                 Thread.sleep(5000);
                 if (dht.checkActive()) {
                     System.out.println("DHT is up");
