@@ -1,8 +1,6 @@
 package core;
 
-import com.sun.istack.internal.Nullable;
 import config.DHTConfig;
-import exceptions.InitializationFailedException;
 import key.DRSKey;
 import msg.AsyncComplete;
 import msg.AsyncResult;
@@ -13,6 +11,7 @@ import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
@@ -29,11 +28,9 @@ public class DHT<KEY extends DRSKey> {
     private final static Logger LOGGER = Logger.getLogger(DHT.class.getName());
 
     public DHT() {
-        try {
-            m_profile = DHTProfile.instance();
-        } catch (InitializationFailedException e) {
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, "Failed to initialize DHT, likely tried to init DHT before init DHTProfile: " + e.getMessage());
+        m_profile = DHTProfile.instance();
+        if (m_profile == null) {
+            LOGGER.log(Level.SEVERE, "Failed to initialize DHT, likely tried to get instance DHT before init DHTProfile");
         }
     }
 
@@ -143,7 +140,8 @@ public class DHT<KEY extends DRSKey> {
             @Override
             public void operationComplete(FutureGet future) throws Exception {
                 if (future == null || future.isFailed()) {
-                    LOGGER.log(Level.WARNING, "Future object failed to return from get(KEY key, AsyncResult callback) or is null.");
+                    //LOGGER.log(Level.WARNING, "Future object failed to return from get(KEY key, AsyncResult callback) or is null.");
+                    callback.call();
                     return;
                 }
 

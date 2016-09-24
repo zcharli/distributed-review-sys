@@ -1,7 +1,6 @@
 package key;
 
 import com.google.common.base.Strings;
-import core.DHTProfile;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

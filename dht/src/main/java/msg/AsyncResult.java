@@ -1,7 +1,8 @@
 package msg;
 
-import com.sun.istack.internal.Nullable;
 import exceptions.NotImplementedException;
+import javax.annotation.Nullable;
+import net.tomp2p.peers.Number640;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 

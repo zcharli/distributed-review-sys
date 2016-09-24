@@ -1,7 +1,7 @@
 package core;
 
 import com.google.common.base.Strings;
-import com.sun.istack.internal.Nullable;
+import javax.annotation.Nullable;
 import config.DHTConfig;
 import exceptions.InitializationFailedException;
 import key.DRSKey;
@@ -87,8 +87,8 @@ public class DHTManager {
         }
     }
 
-    public void putContentOnStorage(DRSKey key) {
-        // TODO: Implement blocking put on DHT
+    public boolean checkActive() {
+        return !m_profile.MY_PROFILE.peer().isShutdown();
     }
 
     @Nullable
@@ -102,13 +102,17 @@ public class DHTManager {
 
     public boolean isInvalidKey(DRSKey key) {
         return (key == null ||
-                Strings.isNullOrEmpty(key.getContentKey()) ||
+                //Strings.isNullOrEmpty(key.getContentKey()) ||
                 Strings.isNullOrEmpty(key.getLocationKey()) ||
-                key.getContentKey().length() > DRSKey.MAX_KEY_LENGTH ||
+                //key.getContentKey().length() > DRSKey.MAX_KEY_LENGTH ||
                 key.getLocationKey().length() > DRSKey.MAX_KEY_LENGTH);
     }
 
     public void getContentFromStorage(DRSKey key) {
         // TODO: implement blocking get
+    }
+
+    public void putContentOnStorage(DRSKey key) {
+        // TODO: Implement blocking put on DHT
     }
 }

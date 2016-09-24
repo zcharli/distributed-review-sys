@@ -4,21 +4,27 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = "Test"
+mainClassName='Test2'
 
 repositories {
     mavenCentral()
     maven { url "http://tomp2p.net/dev/mvn" }
 }
 
-task(runMaster, dependsOn: 'classes', type: JavaExec) {
-    main='Test'
+task(debugMaster, dependsOn: 'classes', type: org.gradle.api.tasks.JavaExec) {
+    main='Test2'
     classpath = sourceSets.main.runtimeClasspath
-    args ('1'.split(' '))
+    jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"
+}
+
+task(runMaster, dependsOn: 'classes', type: JavaExec) {
+    main='Test2'
+    classpath = sourceSets.main.runtimeClasspath
+    args '1'
 }
 
 task(runSlave, dependsOn: 'classes', type: JavaExec) {
-    main='Test'
+    main='Test2'
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -60,6 +66,6 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'Test'
+        attributes 'Main-Class': 'Test2'
     }
 }
