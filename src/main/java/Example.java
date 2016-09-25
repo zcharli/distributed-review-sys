@@ -37,11 +37,11 @@ public class Example {
             ExampleUtils.bootstrap(peers);
             master = peers[0];
             Number160 nr = new Number160(RND);
-            examplePutGet(peers, nr);
-            examplePutGetConfig(peers, nr);
-            exampleGetBlocking(peers, nr);
-            exampleGetNonBlocking(peers, nr);
-            Thread.sleep(waitingTime);
+//            examplePutGet(peers, nr);
+//            examplePutGetConfig(peers, nr);
+//            exampleGetBlocking(peers, nr);
+//            exampleGetNonBlocking(peers, nr);
+//            Thread.sleep(waitingTime);
             exampleAddGet(peers);
         } finally {
             if (master != null) {
@@ -96,12 +96,17 @@ public class Example {
             throws IOException, ClassNotFoundException
     {
         Number160 nr = new Number160( RND );
+        Number160 nr2 = new Number160( RND );
         String toStore1 = "hallo1";
         String toStore2 = "hallo2";
         String toStore3 = "hallo3";
+        String toStore4 = "hallo4";
+
         Data data1 = new Data( toStore1 );
         Data data2 = new Data( toStore2 );
         Data data3 = new Data( toStore3 );
+        Data data4 = new Data( toStore4 );
+
         FuturePut futurePut = peers[30].add( nr ).data( data1 ).start();
         futurePut.awaitUninterruptibly();
         System.out.println( "added: " + toStore1 + " (" + futurePut.isSuccess() + ")" );
@@ -114,10 +119,16 @@ public class Example {
         futurePut.awaitUninterruptibly();
         System.out.println( "added: " + toStore2 + " (" + futurePut.isSuccess() + ")" );
 
+
+        futurePut = peers[30].add( nr2 ).data( data4 ).start();
+        futurePut.awaitUninterruptibly();
+        System.out.println( "added: " + toStore4 + " (" + futurePut.isSuccess() + ")" );
+
         FutureGet futureGet = peers[77].get( nr ).all().start();
         futureGet.awaitUninterruptibly();
         System.out.println( "size" + futureGet.dataMap().size() );
         Iterator<Data> iterator = futureGet.dataMap().values().iterator();
+        System.out.println( "got: " + iterator.next().object() + " (" + futureGet.isSuccess() + ")" );
         System.out.println( "got: " + iterator.next().object() + " (" + futureGet.isSuccess() + ")" );
         System.out.println( "got: " + iterator.next().object() + " (" + futureGet.isSuccess() + ")" );
     }
