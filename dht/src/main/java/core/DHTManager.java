@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * DHTProfile must be initialized first thing before initializing DHT
+ * DHTProfile must be initialized first thing before creating new DHT wrapper
  *
  * Created by czl on 19/09/16.
  */
@@ -34,7 +34,7 @@ public class DHTManager {
             throw new InitializationFailedException("Bootstrap node's address was unable to be found.");
         }
 
-        m_profile = DHTProfile.init(isBootstrap);
+        m_profile = DHTProfile.init(this.isBootstrap);
         m_dht = new DHT<>();
     }
 
@@ -43,7 +43,7 @@ public class DHTManager {
     }
 
     public boolean shutdown() {
-        BaseFuture shutdownFuture = DHTProfile.instance().MY_PROFILE.shutdown();
+        BaseFuture shutdownFuture = m_profile.MY_PROFILE.shutdown();
         shutdownFuture.awaitUninterruptibly();
         return shutdownFuture.isSuccess();
     }
@@ -92,6 +92,11 @@ public class DHTManager {
     }
 
     @Nullable
+    public DHTProfile getProfile() {
+        return m_profile;
+    }
+
+    @Nullable
     public Collection<Data> getAllFromStorage(DRSKey key) {
         if (isInvalidKey(key)) {
             return null;
@@ -102,9 +107,7 @@ public class DHTManager {
 
     public boolean isInvalidKey(DRSKey key) {
         return (key == null ||
-                //Strings.isNullOrEmpty(key.getContentKey()) ||
                 Strings.isNullOrEmpty(key.getLocationKey()) ||
-                //key.getContentKey().length() > DRSKey.MAX_KEY_LENGTH ||
                 key.getLocationKey().length() > DRSKey.MAX_KEY_LENGTH);
     }
 

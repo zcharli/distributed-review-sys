@@ -2,11 +2,14 @@ import core.DHTManager;
 import key.DefaultDHTKeyPair;
 import msg.AsyncComplete;
 import msg.AsyncResult;
+import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.NavigableMap;
 
 /**
  * Created by czl on 19/09/16.
@@ -98,12 +101,18 @@ public class Test2 {
 
                                 Iterator<Data> iterator = payload().values().iterator();
                                 printElements(iterator);
+                                NavigableMap<Number640, Data> allCurrent =  dht.getProfile().MY_PROFILE.storageLayer().get();
+                                System.out.println("\nCurrent elements on this node");
+                                for(Map.Entry<Number640, Data> e : allCurrent.entrySet()) {
+                                    System.out.println("k:" + e.getKey() + " v:" + e.getValue());
+                                }
+
                                 return 0;
                             }
                         });
             } else {
                 dht.addToStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(content)
+                                .locationKey(cmd)
                                 .build()
                         , content, new AsyncComplete() {
                             @Override
@@ -114,7 +123,7 @@ public class Test2 {
                                     dht.addToStorage(DefaultDHTKeyPair.builder()
                                                     .locationKey(Integer.toString(keyStore))
                                                     .build()
-                                            , content, new AsyncComplete() {
+                                            , cmd, new AsyncComplete() {
                                                 @Override
                                                 public Integer call() throws Exception {
                                                     if (isSuccessful()) {

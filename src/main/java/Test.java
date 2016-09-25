@@ -28,14 +28,21 @@ import java.util.Random;
 public class Test {
     private static int keyStore = 543453049;
     private PeerDHT peer;
-    InetAddress address = Inet4Address.getByName("192.168.101.12");
+    static InetAddress address;
 
+    static {
+        try {
+            address = Inet4Address.getByName("192.168.101.12");
+        } catch (Exception e) {
+            System.out.println("cannot find address host");
+        }
+    }
 
     public Test() throws Exception {
 
     }
 
-    public void startServer() throws Exception {
+    public static void startServer() throws Exception {
         PeerDHT peer = null;
         try {
             Random r = new Random(42L);
@@ -65,7 +72,7 @@ public class Test {
         }
     }
 
-    public void startClientNAT() throws Exception {
+    public static void startClientNAT() throws Exception {
         Random r = new Random(43L);
         PeerDHT peer = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(4000).behindFirewall().start()).start();
         PeerAddress bootStrapServer = new PeerAddress(Number160.ZERO, address, 4000, 4000, 4000 + 1);
@@ -118,7 +125,7 @@ public class Test {
         // peer.halt();
     }
 
-    public String getLine() {
+    public static String getLine() {
         System.out.print("Please enter a short line of text: ");
         InputStreamReader converter = new InputStreamReader(System.in);
         BufferedReader in = new BufferedReader(converter);
@@ -137,14 +144,9 @@ public class Test {
     public static void main(String[] args) {
         try {
             if (args.length == 1) {
-                Test dns = new Test();
-//                dns.store(args[1], args[2]);
-//                System.out.println("Name:" + args[1] + " IP:" + dns.get(args[1]));
-                dns.startServer();
-                //dns.poll();
+                startServer();
             }else {
-                Test dns = new Test();
-                dns.startClientNAT();
+                startClientNAT();
             }
         } catch (Exception e) {
             e.printStackTrace();

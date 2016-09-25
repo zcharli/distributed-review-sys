@@ -15,7 +15,6 @@ import java.util.logging.Logger;
  */
 public class DHTConfig {
 
-
     public static final InetAddress BOOTSRAP_ADDR;
     public static final int DRS_PORT;
 
