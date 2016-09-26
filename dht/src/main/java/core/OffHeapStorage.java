@@ -295,11 +295,11 @@ public class OffHeapStorage implements Storage {
     public boolean isDomainProtectedByOthers(Number320 key, PublicKey publicKey) {
         PublicKey other = protectedMap.get(key);
         if (other == null) {
-            LOG.debug("domain {} not protected", key);
+            LOGGER.debug("domain {} not protected", key);
             return false;
         }
         final boolean retVal = !other.equals(publicKey);
-        LOG.debug("domain {} protected: {}", key, retVal);
+        LOGGER.debug("domain {} protected: {}", key, retVal);
         return retVal;
     }
 
@@ -338,7 +338,7 @@ public class OffHeapStorage implements Storage {
             responsibilityMapRev.put(peerId, contentIDs);
         }
         contentIDs.add(locationKey);
-        LOG.debug("Update {} is responsible for key {}.", peerId, locationKey);
+        LOGGER.debug("Update {} is responsible for key {}.", peerId, locationKey);
         return hasChanged;
     }
 
@@ -347,7 +347,7 @@ public class OffHeapStorage implements Storage {
         Number160 peerId = responsibilityMap.remove(locationKey);
         if(peerId != null) {
             removeRevResponsibility(peerId, locationKey);
-            LOG.debug("Remove responsiblity for {}.", locationKey);
+            LOGGER.debug("Remove responsiblity for {}.", locationKey);
         }
     }
 
