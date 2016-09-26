@@ -10,10 +10,11 @@ import net.tomp2p.futures.FutureDiscover;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.PeerAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by czl on 20/09/16.
@@ -22,7 +23,7 @@ public class DHTProfile {
 
     private static DHTProfile INSTANCE;
 
-    private final static Logger LOGGER = Logger.getLogger(DHTProfile.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(DHTProfile.class);
 
     public final PeerDHT MY_PROFILE;
 
@@ -40,7 +41,7 @@ public class DHTProfile {
                 currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(DHTConfig.DRS_PORT).behindFirewall().start()).start();
             }
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "DHTProfile failed to activate peer.");
+            LOGGER.error("DHTProfile failed to activate peer.");
             e.printStackTrace();
         } finally {
             MY_PROFILE = currentClient;
@@ -49,7 +50,7 @@ public class DHTProfile {
 
     public static DHTProfile instance()  {
         if (INSTANCE == null) {
-            LOGGER.log(Level.WARNING, "DHTProfile.init(isBootstrap) must be called first");
+            LOGGER.warn("DHTProfile.init(isBootstrap) must be called first");
             return null;
         }
         return INSTANCE;
@@ -61,20 +62,20 @@ public class DHTProfile {
         fd.awaitUninterruptibly();
 
         if (!fd.isSuccess()) {
-            LOGGER.log(Level.SEVERE, "Unable to find profile's outside address");
+            LOGGER.error("Unable to find profile's outside address");
             throw new InitializationFailedException("DHTProfile failed it's discovery phase: " + fd.failedReason());
         } else {
-            LOGGER.log(Level.INFO, "Client successfully discovered bootstrap server.");
+            LOGGER.info("Client successfully discovered bootstrap server.");
         }
 
         bootStrapServer = fd.reporter();
         FutureBootstrap bootstrap = MY_PROFILE.peer().bootstrap().peerAddress(bootStrapServer).start();
         bootstrap.awaitUninterruptibly();
         if (!bootstrap.isSuccess()) {
-            LOGGER.log(Level.SEVERE, "Unable to find bootstrap this client.");
+            LOGGER.error("Unable to find bootstrap this client.");
             throw new InitializationFailedException("DHTProfile failed it's bootstrap phase: " + bootstrap.failedReason());
         } else {
-            LOGGER.log(Level.INFO, "Client successfully connected to bootstrap server.");
+            LOGGER.info("Client successfully connected to bootstrap server.");
         }
     }
 

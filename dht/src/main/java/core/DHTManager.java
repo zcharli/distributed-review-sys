@@ -9,11 +9,12 @@ import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.futures.BaseFuture;
 import net.tomp2p.storage.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * DHTProfile must be initialized first thing before creating new DHT wrapper
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  * Created by czl on 19/09/16.
  */
 public class DHTManager {
-    private final static Logger LOGGER = Logger.getLogger(DHTManager.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(DHTManager.class);
 
     private boolean isBootstrap;
     private final DHTProfile m_profile;
@@ -69,7 +70,7 @@ public class DHTManager {
         try {
             m_dht.add(key, element, asyncComplete);
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Exception on DHT add: " + e.getMessage());
+            LOGGER.warn("Exception on DHT add: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -82,7 +83,7 @@ public class DHTManager {
         try {
             m_dht.put(key, element, asyncResult);
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Exception on DHT put: " + e.getMessage());
+            LOGGER.warn("Exception on DHT put: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -10,13 +10,13 @@ import net.tomp2p.futures.BaseFutureListener;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by cli on 9/20/2016.
@@ -25,12 +25,12 @@ public class DHT<KEY extends DRSKey> {
 
     DHTProfile m_profile;
 
-    private final static Logger LOGGER = Logger.getLogger(DHT.class.getName());
+    private final static Logger LOGGER = LoggerFactory.getLogger(DHT.class);
 
     public DHT() {
         m_profile = DHTProfile.instance();
         if (m_profile == null) {
-            LOGGER.log(Level.SEVERE, "Failed to initialize DHT, likely tried to get instance DHT before init DHTProfile");
+            LOGGER.error("Failed to initialize DHT, likely tried to get instance DHT before init DHTProfile");
         }
     }
 
@@ -48,7 +48,7 @@ public class DHT<KEY extends DRSKey> {
             @Override
             public void operationComplete(FuturePut future) throws Exception {
                 if (future == null || future.isFailed()) {
-                    LOGGER.log(Level.WARNING, "Future object failed to return from put(KEY key, Object element, AsyncResult callback) or is null.");
+                    LOGGER.warn("Future object failed to return from put(KEY key, Object element, AsyncResult callback) or is null.");
                 }
                 callback.isSuccessful(future.isSuccess());
                 callback.call();
@@ -56,7 +56,7 @@ public class DHT<KEY extends DRSKey> {
 
             @Override
             public void exceptionCaught(Throwable t) throws Exception {
-                LOGGER.log(Level.WARNING, String.format("Failed to put %s to dht: " + t.getMessage()));
+                LOGGER.warn(String.format("Failed to put %s to dht: " + t.getMessage()));
                 callback.isSuccessful(false);
                 callback.call();
             }
@@ -75,7 +75,7 @@ public class DHT<KEY extends DRSKey> {
             @Override
             public void operationComplete(FuturePut future) throws Exception {
                 if (future == null || future.isFailed()) {
-                    LOGGER.log(Level.WARNING, "Future object failed to return from add(KEY key, Object element, AsyncResult callback) or is null.");
+                    LOGGER.warn("Future object failed to return from add(KEY key, Object element, AsyncResult callback) or is null.");
                 }
 
                 callback.isSuccessful(future.isSuccess());
@@ -84,7 +84,7 @@ public class DHT<KEY extends DRSKey> {
 
             @Override
             public void exceptionCaught(Throwable t) throws Exception {
-                LOGGER.log(Level.WARNING, String.format("Failed to add %s to dht: " + t.getMessage()));
+                LOGGER.warn(String.format("Failed to add %s to dht: " + t.getMessage()));
                 callback.isSuccessful(false);
                 callback.call();
             }
@@ -116,7 +116,7 @@ public class DHT<KEY extends DRSKey> {
                     return dataMap.values();
                 }
             } catch (Exception e) {
-                LOGGER.log(Level.WARNING, "Exception while decoding futureGet: " + e.getMessage());
+                LOGGER.warn("Exception while decoding futureGet: " + e.getMessage());
             }
         }
         return null;
@@ -155,7 +155,7 @@ public class DHT<KEY extends DRSKey> {
 
             @Override
             public void exceptionCaught(Throwable t) throws Exception {
-                LOGGER.log(Level.WARNING, String.format("Failed to get %s from dht: " + t.getMessage()));
+                LOGGER.warn(String.format("Failed to get %s from dht: " + t.getMessage()));
                 callback.call();
             }
         });
