@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.security.PublicKey;
