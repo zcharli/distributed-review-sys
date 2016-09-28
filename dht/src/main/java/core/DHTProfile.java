@@ -27,18 +27,26 @@ public class DHTProfile {
 
     public final PeerDHT MY_PROFILE;
 
-    private DHTProfile(boolean isBootStrap) throws InitializationFailedException {
+    private DHTProfile(boolean isBootStrap, boolean isPersistent) throws InitializationFailedException {
         PeerDHT currentClient = null;
         try {
+            // OffHeapStorage can be configured for versions and version check intervals
+            OffHeapStorage storageLayer = isPersistent ? new OffHeapStorage().loadFromDisk() : null;
+            Bindings b = new Bindings();
+            // TODO: Make add interface set-able on boot up
+            b.addInterface("ens3");
             if (isBootStrap) {
                 Random r = new Random(42L);
-                Bindings b = new Bindings();
                 b.addAddress(DHTConfig.BOOTSRAP_ADDR);
-                currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).bindings(b).ports(DHTConfig.DRS_PORT).start()).start();
+                currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).bindings(b).ports(DHTConfig.DRS_PORT).start())
+                        .storage(storageLayer)
+                        .start();
             } else {
                 Random r = new Random(43L);
                 System.out.println("Trying to connect to: " + DHTConfig.BOOTSRAP_ADDR.getHostAddress() + ":" + DHTConfig.DRS_PORT);
-                currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(DHTConfig.DRS_PORT).behindFirewall().start()).start();
+                currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(DHTConfig.DRS_PORT).bindings(b).behindFirewall().start())
+                        .storage(storageLayer)
+                        .start();
             }
         } catch (Exception e) {
             LOGGER.error("DHTProfile failed to activate peer.");
@@ -85,12 +93,12 @@ public class DHTProfile {
      * @return
      * @throws InitializationFailedException
      */
-    public static DHTProfile init(boolean isBootstrap) throws InitializationFailedException {
+    public static DHTProfile init(boolean isBootstrap, boolean isPersistent) throws InitializationFailedException {
         if (INSTANCE != null) {
             throw new InitializationFailedException("DHTProfile instance has already been initialized");
         }
 
-        INSTANCE = new DHTProfile(isBootstrap);
+        INSTANCE = new DHTProfile(isBootstrap, isPersistent);
         if (!isBootstrap) {
             INSTANCE.connectToBootstrapServer();
         }

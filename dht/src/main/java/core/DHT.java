@@ -155,7 +155,7 @@ public class DHT<KEY extends DRSKey> {
 
             @Override
             public void exceptionCaught(Throwable t) throws Exception {
-                LOGGER.warn(String.format("Failed to get %s from dht: " + t.getMessage()));
+                LOGGER.warn(String.format("Failed to get %s from dht: " + t != null && t.getMessage() != null ? t.getMessage() : "unknown"));
                 callback.call();
             }
         });
