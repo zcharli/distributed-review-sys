@@ -1,9 +1,13 @@
+import core.APIServer;
 import core.DHTManager;
 import key.DefaultDHTKeyPair;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +25,7 @@ public class Test2 {
     public static void startBootstrap() {
         DHTManager dht = null;
         try {
-            dht = new DHTManager(true);
+            dht = DHTManager.builder().bootstrap(true).persistent(true).build();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -67,7 +71,7 @@ public class Test2 {
         DHTManager d = null;
         final DHTManager dht;
         try {
-            d = new DHTManager(false);
+            d = DHTManager.builder().bootstrap(false).persistent(true).build();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -97,6 +101,7 @@ public class Test2 {
 
                                 if (payload() == null) {
                                     System.out.println("PAYLOAD IS NULL FUCK");
+                                    return 0;
                                 }
 
                                 Iterator<Data> iterator = payload().values().iterator();
@@ -176,21 +181,44 @@ public class Test2 {
         return inLine;
     }
 
+    public static void testRedis() {
+        JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
+
+        try(Jedis jd = pool.getResource()) {
+            System.out.println("got jedis resource");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("did not get jedis resource");
+            System.exit(0);
+        }
+    }
+
+    public static void testApiServer() {
+        APIServer server = new APIServer("192.168.101.12", 9214);
+        try {
+            server.start();
+        } catch(Exception e) {
+            System.out.println("Error starting server: " + e.getMessage());
+        }
+    }
 
     public static void main(String[] args) {
-        if (args.length == 0) {
-            System.out.println("Staring client");
-            // start client
-            startClient();
-            try {
-                //startClientNAT();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Starting bootstrap");
-            // start bootstrap
-            startBootstrap();
-        }
+
+        testRedis();
+        testApiServer();
+//        if (args.length == 0) {
+//            System.out.println("Staring client");
+//            // start client
+//            startClient();
+//            try {
+//                //startClientNAT();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            System.out.println("Starting bootstrap");
+//            // start bootstrap
+//            startBootstrap();
+//        }
     }
 }

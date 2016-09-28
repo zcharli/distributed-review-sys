@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.logging.Level;
 
 /**
  * DHTProfile must be initialized first thing before creating new DHT wrapper
@@ -24,19 +23,45 @@ import java.util.logging.Level;
 public class DHTManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(DHTManager.class);
 
-    private boolean isBootstrap;
     private final DHTProfile m_profile;
     private final DHT<DRSKey> m_dht;
 
     public DHTManager(boolean isBootstrap) throws InitializationFailedException {
-        this.isBootstrap = isBootstrap;
+        this(isBootstrap, true);
+    }
+
+    public DHTManager(boolean isBootstrap, boolean isPersistent) throws InitializationFailedException {
 
         if (DHTConfig.BOOTSRAP_ADDR == null) {
             throw new InitializationFailedException("Bootstrap node's address was unable to be found.");
         }
 
-        m_profile = DHTProfile.init(this.isBootstrap);
+        m_profile = DHTProfile.init(isBootstrap, isPersistent);
         m_dht = new DHT<>();
+    }
+
+    public static DHTBuilder builder() {
+        return new DHTBuilder();
+    }
+
+    public static class DHTBuilder {
+        private boolean isBootstrap = false;
+        private boolean isPersistent = false;
+        public DHTBuilder() {}
+
+        public DHTBuilder bootstrap(boolean yes) {
+            isBootstrap = yes;
+            return this;
+        }
+
+        public DHTBuilder persistent(boolean yes) {
+            isPersistent = yes;
+            return this;
+        }
+
+        public DHTManager build() throws InitializationFailedException {
+            return new DHTManager(isBootstrap, isPersistent);
+        }
     }
 
     public DHTConfig getGlobalConfig() {
@@ -75,7 +100,8 @@ public class DHTManager {
         }
     }
 
-    public void putContentOnStorage(DRSKey key, Object element, AsyncComplete asyncResult) {
+    private void putContentOnStorage(DRSKey key, Object element, AsyncComplete asyncResult) {
+        // This method shouldn't be here. Put will overwrite and we do not want that.
         if (isInvalidKey(key) || element == null) {
             return;
         }

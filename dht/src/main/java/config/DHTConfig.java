@@ -16,7 +16,9 @@ import java.util.logging.Logger;
 public class DHTConfig {
 
     public static final InetAddress BOOTSRAP_ADDR;
-    public static final int DRS_PORT;
+    public static int DRS_PORT;
+    public static final String REDIS_HOST = "localhost";
+    public static final int REDIS_PORT = 6379;
 
     private String domainKey = "default";
     private Number160 domainHash;

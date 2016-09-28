@@ -1,10 +1,10 @@
 package core;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import config.DHTConfig;
 import key.OffHeapKey;
+import msg.RedisElementContainer;
 import net.tomp2p.dht.Storage;
-import net.tomp2p.dht.StorageMemory;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number320;
 import net.tomp2p.peers.Number480;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.security.PublicKey;
@@ -33,9 +32,9 @@ public class OffHeapStorage implements Storage {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
     // Core
-    private static final JedisPool m_storagePool = new JedisPool(new JedisPoolConfig(), "localhost");
+    private static final JedisPool m_storagePool = new JedisPool(new JedisPoolConfig(), DHTConfig.REDIS_HOST);
     final private NavigableMap<Number640, Data> dataMap = new ConcurrentSkipListMap<Number640, Data>();
-    final ObjectMapper objectMapper = new ObjectMapper();
+    final private ObjectMapper objectMapper = new ObjectMapper();
 
     // Maintenance
     final private Map<Number640, Long> timeoutMap = new ConcurrentHashMap<Number640, Long>();
@@ -66,20 +65,34 @@ public class OffHeapStorage implements Storage {
         this.maxVersions = maxVersions;
     }
 
-    public void loadFromDisk() {
+    public OffHeapStorage loadFromDisk() {
         try (Jedis adapter = m_storagePool.getResource()) {
             Set<String> allKeys = adapter.keys("*");
             for (String key : allKeys) {
                 for (String jsonData : adapter.lrange(key, 0, -1)) {
                     try {
-                        Data data = objectMapper.readValue(jsonData, Data.class);
-                        // Need serialized key...
+                        RedisElementContainer data = objectMapper.readValue(jsonData, RedisElementContainer.class);
+                        Number640 mapKey = new Number640(
+                                  new Number160(data.getLocationBuffer())
+                                , new Number160(data.getDomainBuffer())
+                                , new Number160(data.getContentBuffer())
+                                , new Number160(data.getVersionBuffer()));
+
+                        dataMap.put(mapKey, new Data(data.buffer));
+
+                        LOGGER.debug("Loaded a element from disk: " + mapKey.toString());
                     } catch (IOException e) {
                         LOGGER.error("Failed to deserialize data json: " + e.getMessage());
                     }
                 }
             }
+        } catch (Exception e) {
+            LOGGER.error("Redis was not found on the system. At the present time, on memory storage is not supported.");
+            e.printStackTrace();
+            System.exit(0);
         }
+        LOGGER.debug("Finished loading elements from disk.");
+        return this;
     }
 
     // Core
@@ -105,14 +118,28 @@ public class OffHeapStorage implements Storage {
 
         try (Jedis adapter = m_storagePool.getResource()) {
             try {
-                String dataJson = objectMapper.writeValueAsString(value);
+                String dataJson = objectMapper.writeValueAsString(RedisElementContainer.builder()
+                        .setBuffer(value.toBytes())
+                        .setContentBuffer(key.contentKey().toIntArray())
+                        .setLocationBuffer(key.locationKey().toIntArray())
+                        .setVersionBuffer(key.versionKey().toIntArray())
+                        .setDomainBuffer(key.domainKey().toIntArray())
+                        .build());
                 String offHeapKey = OffHeapKey.builder().id(key).buildReviewKey();
                 adapter.lpush(offHeapKey, dataJson);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 LOGGER.error("Error when writing Data object to json: " + e.getMessage());
             }
+        } catch (Exception e) {
+            LOGGER.error("Unable to grab a shared resource for Jedis.");
+            e.printStackTrace();
         }
-
+        // TODO: Remove after debugging
+        try {
+            System.out.println("Added " + value.object().toString() + " to table");
+        } catch(Exception e) {
+            System.out.println("Unabled to read object after adding");
+        }
         return oldData;
     }
 
@@ -140,28 +167,6 @@ public class OffHeapStorage implements Storage {
     @Override
     public NavigableMap<Number640, Data> remove(Number640 fromKey, Number640 toKey) {
         NavigableMap<Number640, Data> tmp = dataMap.subMap(fromKey, true, toKey, true);
-
-        // new TreeMap<Number640, Data>(tmp); is not possible as this may lead to no such element exception:
-        //
-        //      java.util.NoSuchElementException: null
-        //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapIter.advance(ConcurrentSkipListMap.java:3030) ~[na:1.7.0_60]
-        //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapEntryIterator.next(ConcurrentSkipListMap.java:3100) ~[na:1.7.0_60]
-        //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapEntryIterator.next(ConcurrentSkipListMap.java:3096) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2394) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2344) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.<init>(TreeMap.java:195) ~[na:1.7.0_60]
-        //    	at net.tomp2p.dht.StorageMemory.subMap(StorageMemory.java:119) ~[classes/:na]
-        //
-        // the reason is that the size in TreeMap.buildFromSorted is stored beforehand, then iteratated. If the size changes,
-        // then you will call next() that returns null and an exception is thrown.
-
         final NavigableMap<Number640, Data> retVal = new ConcurrentSkipListMap<Number640, Data>(tmp);
         tmp.clear();
         return retVal;
@@ -175,30 +180,6 @@ public class OffHeapStorage implements Storage {
         final NavigableMap<Number640, Data> tmp = clone.subMap(fromKey, true, toKey, true);
         final NavigableMap<Number640, Data> retVal = new TreeMap<Number640, Data>();
         if (limit < 0) {
-
-            // new TreeMap<Number640, Data>(tmp); is not possible as this may lead to no such element exception:
-            //
-            //      java.util.NoSuchElementException: null
-            //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapIter.advance(ConcurrentSkipListMap.java:3030) ~[na:1.7.0_60]
-            //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapEntryIterator.next(ConcurrentSkipListMap.java:3100) ~[na:1.7.0_60]
-            //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapEntryIterator.next(ConcurrentSkipListMap.java:3096) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2394) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2344) ~[na:1.7.0_60]
-            //    	at java.util.TreeMap.<init>(TreeMap.java:195) ~[na:1.7.0_60]
-            //    	at net.tomp2p.dht.StorageMemory.subMap(StorageMemory.java:119) ~[classes/:na]
-            //
-            // the reason is that the size in TreeMap.buildFromSorted is stored beforehand, then iteratated. If the size changes,
-            // then you will call next() that returns null and an exception is thrown.
-            //for(Map.Entry<Number640, Data> entry:(ascending ? tmp : tmp.descendingMap()).entrySet()) {
-            //	retVal.put(entry.getKey(), entry.getValue());
-            //}
             return ascending ? tmp : tmp.descendingMap();
         } else {
             Iterator<Map.Entry<Number640, Data>> iterator = ascending ? tmp.entrySet().iterator() : tmp
@@ -213,27 +194,6 @@ public class OffHeapStorage implements Storage {
 
     @Override
     public NavigableMap<Number640, Data> map() {
-
-        // new TreeMap<Number640, Data>(tmp); is not possible as this may lead to no such element exception:
-        //
-        //      java.util.NoSuchElementException: null
-        //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapIter.advance(ConcurrentSkipListMap.java:3030) ~[na:1.7.0_60]
-        //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapEntryIterator.next(ConcurrentSkipListMap.java:3100) ~[na:1.7.0_60]
-        //    	at java.util.concurrent.ConcurrentSkipListMap$SubMap$SubMapEntryIterator.next(ConcurrentSkipListMap.java:3096) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2394) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2418) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.buildFromSorted(TreeMap.java:2344) ~[na:1.7.0_60]
-        //    	at java.util.TreeMap.<init>(TreeMap.java:195) ~[na:1.7.0_60]
-        //    	at net.tomp2p.dht.StorageMemory.subMap(StorageMemory.java:119) ~[classes/:na]
-        //
-        // the reason is that the size in TreeMap.buildFromSorted is stored beforehand, then iteratated. If the size changes,
-        // then you will call next() that returns null and an exception is thrown.
         final NavigableMap<Number640, Data> retVal = new TreeMap<Number640, Data>();
         for(final Map.Entry<Number640, Data> entry:dataMap.entrySet()) {
             retVal.put(entry.getKey(), entry.getValue());
@@ -295,11 +255,11 @@ public class OffHeapStorage implements Storage {
     public boolean isDomainProtectedByOthers(Number320 key, PublicKey publicKey) {
         PublicKey other = protectedMap.get(key);
         if (other == null) {
-            LOG.debug("domain {} not protected", key);
+            LOGGER.debug("domain {} not protected", key);
             return false;
         }
         final boolean retVal = !other.equals(publicKey);
-        LOG.debug("domain {} protected: {}", key, retVal);
+        LOGGER.debug("domain {} protected: {}", key, retVal);
         return retVal;
     }
 
@@ -338,7 +298,7 @@ public class OffHeapStorage implements Storage {
             responsibilityMapRev.put(peerId, contentIDs);
         }
         contentIDs.add(locationKey);
-        LOG.debug("Update {} is responsible for key {}.", peerId, locationKey);
+        LOGGER.debug("Update {} is responsible for key {}.", peerId, locationKey);
         return hasChanged;
     }
 
@@ -347,7 +307,7 @@ public class OffHeapStorage implements Storage {
         Number160 peerId = responsibilityMap.remove(locationKey);
         if(peerId != null) {
             removeRevResponsibility(peerId, locationKey);
-            LOG.debug("Remove responsiblity for {}.", locationKey);
+            LOGGER.debug("Remove responsiblity for {}.", locationKey);
         }
     }
 
@@ -389,5 +349,4 @@ public class OffHeapStorage implements Storage {
     public int storageCheckIntervalMillis() {
         return storageCheckIntervalMillis;
     }
-
 }
