@@ -194,7 +194,7 @@ public class Test2 {
     }
 
     public static void testApiServer() {
-        APIServer server = new APIServer("192.168.101.12", 9214);
+        APIServer server = new APIServer("192.168.101.12", 9090);
         try {
             server.start();
         } catch(Exception e) {

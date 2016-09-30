@@ -3,6 +3,7 @@ package core;
 import config.APIConfig;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -11,6 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.DRSServlet;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -74,7 +80,38 @@ public class APIServer {
             configure();
         }
         m_apiServer.setHandler(m_servletContextHandler);
+
+
+//        // The ServletHandler is a dead simple way to create a context handler
+//        // that is backed by an instance of a Servlet.
+//        // This handler then needs to be registered with the Server object.
+//        ServletHandler handler = new ServletHandler();
+//        m_apiServer.setHandler(handler);
+//
+//        // Passing in the class for the Servlet allows jetty to instantiate an
+//        // instance of that Servlet and mount it on a given context path.
+//
+//        // IMPORTANT:
+//        // This is a raw Servlet, not a Servlet that has been configured
+//        // through a web.xml @WebServlet annotation, or anything similar.
+//        handler.addServletWithMapping(HelloServlet.class, "/*");
+
+
         m_apiServer.start();
         m_apiServer.join();
     }
+//
+//    @SuppressWarnings("serial")
+//    public static class HelloServlet extends HttpServlet
+//    {
+//        @Override
+//        protected void doGet( HttpServletRequest request,
+//                              HttpServletResponse response ) throws ServletException,
+//                IOException
+//        {
+//            response.setContentType("text/html");
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            response.getWriter().println("<h1>Hello from HelloServlet</h1>");
+//        }
+//    }
 }

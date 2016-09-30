@@ -11,10 +11,11 @@ repositories {
     maven { url "http://tomp2p.net/dev/mvn" }
 }
 
-task(debugMaster, dependsOn: 'classes', type: org.gradle.api.tasks.JavaExec) {
+task(debug, dependsOn: 'classes', type: org.gradle.api.tasks.JavaExec) {
     main='Test2'
     classpath = sourceSets.main.runtimeClasspath
-    jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"
+    jvmArgs '-Xdebug',
+            '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8080'
 }
 
 task(runMaster, dependsOn: 'classes', type: JavaExec) {
