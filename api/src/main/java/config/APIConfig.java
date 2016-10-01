@@ -5,6 +5,7 @@ package config;
  */
 public class APIConfig {
     public static int API_PORT = 9214;
+    public static final String DEFAULT_HOST = "127.0.0.1";
     public static final APIConfig INSTANCE;
 
     private APIConfig() {}

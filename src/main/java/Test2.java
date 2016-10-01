@@ -1,3 +1,4 @@
+import core.APIServer;
 import core.DHTManager;
 import key.DefaultDHTKeyPair;
 import msg.AsyncComplete;
@@ -192,23 +193,32 @@ public class Test2 {
         }
     }
 
+    public static void testApiServer() {
+        APIServer server = new APIServer("192.168.101.12", 8080);
+        try {
+            server.start();
+        } catch(Exception e) {
+            System.out.println("Error starting server: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
 
         testRedis();
-
-        if (args.length == 0) {
-            System.out.println("Staring client");
-            // start client
-            startClient();
-            try {
-                //startClientNAT();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Starting bootstrap");
-            // start bootstrap
-            startBootstrap();
-        }
+        testApiServer();
+//        if (args.length == 0) {
+//            System.out.println("Staring client");
+//            // start client
+//            startClient();
+//            try {
+//                //startClientNAT();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            System.out.println("Starting bootstrap");
+//            // start bootstrap
+//            startBootstrap();
+//        }
     }
 }
