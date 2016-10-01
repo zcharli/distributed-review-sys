@@ -19,6 +19,7 @@ public class DHTConfig {
     public static int DRS_PORT;
     public static final String REDIS_HOST = "localhost";
     public static final int REDIS_PORT = 6379;
+    public static final Number160 ACCEPTANCE_DOMAIN = Number160.createHash("reviews_staging_domain");
 
     private String domainKey = "default";
     private Number160 domainHash;

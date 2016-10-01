@@ -44,6 +44,10 @@ public class DHT<KEY extends DRSKey> {
                 .domainKey(  DHTConfig.instance().domainKey() )
                 .start();
 
+        attachFutureListenerToPut(futurePut, callback);
+    }
+
+    private void attachFutureListenerToPut(FuturePut futurePut, AsyncComplete callback) {
         futurePut.addListener(new BaseFutureListener<FuturePut>() {
             @Override
             public void operationComplete(FuturePut future) throws Exception {
@@ -61,6 +65,25 @@ public class DHT<KEY extends DRSKey> {
                 callback.call();
             }
         });
+    }
+
+    /**
+     * The first step in the workflow to publish a review
+     * @param key
+     * @param element
+     * @param callback
+     * @throws IOException
+     */
+    public void addAcceptance(KEY key, Object element, AsyncComplete callback) throws IOException {
+        if (element == null || key == null) {
+            return;
+        }
+
+        FuturePut futurePut = m_profile.MY_PROFILE.put(Number160.createHash(key.getLocationKey()))
+                .data(new Number160(key.getContentKey()), new Data(element))
+                .domainKey(DHTConfig.ACCEPTANCE_DOMAIN)
+                .start();
+        attachFutureListenerToPut(futurePut, callback);
     }
 
     public void add(KEY key, Object element, AsyncComplete callback) throws IOException {
@@ -160,5 +183,17 @@ public class DHT<KEY extends DRSKey> {
             }
         });
         return;
+    }
+
+    /**
+     * Generally used for deleting staging content
+     * @param key
+     * @param callback
+     */
+    public void delete(KEY key, AsyncComplete callback) {
+        if (key == null) {
+            return;
+        }
+
     }
 }
