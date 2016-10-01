@@ -194,7 +194,11 @@ public class Test2 {
     }
 
     public static void testApiServer() {
+<<<<<<< HEAD
         APIServer server = new APIServer("192.168.101.12", 8080);
+=======
+        APIServer server = new APIServer("192.168.101.12", 9090);
+>>>>>>> 15041379b3a62ff1c332e1f87a97cc4fb205a52c
         try {
             server.start();
         } catch(Exception e) {
