@@ -9,6 +9,7 @@ import key.DRSKey;
 import key.DefaultDHTKeyPair;
 import msg.AsyncComplete;
 import msg.AsyncResult;
+import net.tomp2p.dht.FutureRemove;
 import net.tomp2p.futures.BaseFuture;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
@@ -59,7 +60,7 @@ public class DHTManager {
      * @param key
      * @param asyncResult
      */
-    public void getAllFromStorage(DRSKey key, AsyncResult asyncResult) {
+    public void getAllFromStorage(final DRSKey key, final AsyncResult asyncResult) {
         if (isInvalidKey(key)) {
             return;
         }
@@ -67,7 +68,7 @@ public class DHTManager {
         m_dht.get(key, asyncResult);
     }
 
-    public void addToStorage(DRSKey key, Object element, AsyncComplete asyncComplete) {
+    public void addToStorage(final DRSKey key, final Object element, final AsyncComplete asyncComplete) {
         if (isInvalidKey(key) || element == null) {
             return;
         }
@@ -80,7 +81,7 @@ public class DHTManager {
         }
     }
 
-    public void removeFromStorage(DRSKey key, AsyncComplete asyncComplete) {
+    public void removeFromStorage(final DRSKey key, final AsyncComplete asyncComplete) {
         if (isInvalidKey(key)) {
             return;
         }
@@ -88,7 +89,7 @@ public class DHTManager {
         m_dht.remove(key, asyncComplete);
     }
 
-    public void putContentOnStorage(DRSKey key, Object element, AsyncComplete asyncComplete) {
+    public void putContentOnStorage(final DRSKey key, final Object element, final AsyncComplete asyncComplete) {
         // This method shouldn't be here. Put will overwrite and we do not want that.
         if (isInvalidKey(key) || element == null) {
             return;
@@ -102,7 +103,7 @@ public class DHTManager {
         }
     }
 
-    public void approveReview(DRSKey key, AsyncComplete asyncComplete) {
+    public void approveReview(final DRSKey key, AsyncComplete asyncComplete) {
         if (isInvalidKey(key) || asyncComplete == null) {
             return;
         }
@@ -121,6 +122,38 @@ public class DHTManager {
 
                 for (Map.Entry<Number640, Data> entry : payload().entrySet()) {
                     if (entry.getKey().contentKey().equals(key.getContentKey())) {
+                        final Object data = entry.getValue().object();
+                        // Now remove it from acceptance and add it to published
+
+                        m_dht.remove(key, new AsyncComplete() {
+                            @Override
+                            public Integer call()  throws Exception {
+                                if (!isSuccessful()) {
+                                    asyncComplete.isSuccessful(false);
+                                    asyncComplete.message("Approve review failed on step 2, could not delete acceptance review");
+                                    asyncComplete.call();
+                                    return 0;
+                                }
+
+                                m_dht.put(publishedKey, data, new AsyncComplete() {
+                                    @Override
+                                    public Integer call() throws Exception {
+                                        if (!isSuccessful()) {
+                                            // TODO: Loss of data case, need to deal with
+                                            asyncComplete.isSuccessful(false);
+                                            asyncComplete.message("Approve review failed on step 3, inserting new data into published");
+                                            asyncComplete.call();
+                                            return 0;
+                                        }
+                                        asyncComplete.isSuccessful(isSuccessful());
+                                        asyncComplete.call();
+                                        return 0;
+                                    }
+                                });
+                                return 0;
+                            }
+                        });
+
 
                         break;
                     }

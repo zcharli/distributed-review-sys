@@ -128,7 +128,7 @@ public class OffHeapStorage implements Storage {
                         .setDomainBuffer(key.domainKey().toIntArray())
                         .build());
                 // All reviews go to acceptance first
-                String offHeapKey = DefaultOffHeapKey.builder().id(key).buildReviewKey();
+                String offHeapKey = buildOffHeapKey(key);
                 adapter.lpush(offHeapKey, dataJson);
             } catch (Exception e) {
                 LOGGER.error("Error when writing Data object to json: " + e.getMessage());
@@ -162,9 +162,40 @@ public class OffHeapStorage implements Storage {
         return tmp.size();
     }
 
+    private String buildOffHeapKey(Number640 key) {
+        String offHeapKey;
+        if (key.domainKey().equals(DHTConfig.ACCEPTANCE_DOMAIN)) {
+            offHeapKey = AcceptanceOffHeapKey.builder().id(key).buildReviewKey();
+        } else {
+            offHeapKey = PublishedOffHeapKey.builder().id(key).buildReviewKey();
+        }
+        return offHeapKey;
+    }
+
     @Override
     public Data remove(Number640 key, boolean returnData) {
-        return dataMap.remove(key);
+        Data ret = dataMap.remove(key);
+        if (ret == null) {
+            return ret;
+        }
+        try (Jedis adapter = m_storagePool.getResource()) {
+            String offHeapKey = buildOffHeapKey(key);
+            List<String> elementsOffHeap = adapter.lrange(offHeapKey, 0, -1);
+            int i = 0;
+            for (String jsonData : elementsOffHeap) {
+                try {
+                    RedisElementContainer data = objectMapper.readValue(jsonData, RedisElementContainer.class);
+                    if (data.getContentBuffer().equals(key.contentKey())) {
+                        adapter.lrem(offHeapKey, i >= elementsOffHeap.size()/2 ? -1 : 1 ,jsonData);
+                    }
+                } catch (IOException e) {
+                    LOGGER.error("Error when reading Data object to json: " + e.getMessage());
+                } finally {
+                    i++;
+                }
+            }
+        }
+        return ret;
     }
 
     @Override

@@ -164,7 +164,6 @@ public class DHT<KEY extends DRSKey> {
         if (key == null) {
             return;
         }
-
         FutureRemove futureRemove = m_profile.MY_PROFILE
                 .remove( key.getLocationKey() )
                 .contentKey( key.getContentKey() )
