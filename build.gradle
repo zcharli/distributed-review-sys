@@ -22,11 +22,15 @@ task(runMaster, dependsOn: 'classes', type: JavaExec) {
     main='Test2'
     classpath = sourceSets.main.runtimeClasspath
     args '1'
+    jvmArgs '-Xdebug',
+            '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8080'
 }
 
 task(runSlave, dependsOn: 'classes', type: JavaExec) {
     main='Test2'
     classpath = sourceSets.main.runtimeClasspath
+    jvmArgs '-Xdebug',
+            '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8080'
 }
 
 task(launch, dependsOn: 'classes', type: JavaExec) {

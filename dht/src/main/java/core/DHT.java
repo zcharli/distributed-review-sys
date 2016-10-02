@@ -1,15 +1,12 @@
 package core;
 
-import config.DHTConfig;
 import key.DRSKey;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.dht.FutureGet;
 import net.tomp2p.dht.FuturePut;
 import net.tomp2p.dht.FutureRemove;
-import net.tomp2p.futures.BaseFuture;
 import net.tomp2p.futures.BaseFutureListener;
-import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 import org.slf4j.Logger;
@@ -49,8 +46,7 @@ public class DHT<KEY extends DRSKey> {
         }
 
         FuturePut futurePut = m_profile.MY_PROFILE.put( key.getLocationKey() )
-                .data( key.getContentKey(), new Data( element ) )
-                .domainKey( key.getDomainKey() )
+                .data( key.getDomainKey(), key.getContentKey(), new Data( element ) )
                 .start();
 
         attachFutureListenerToPut(futurePut, callback);
@@ -84,6 +80,7 @@ public class DHT<KEY extends DRSKey> {
 
         FuturePut futurePut = m_profile.MY_PROFILE.add( key.getLocationKey() )
                 .data( new Data( element ) ).domainKey( key.getDomainKey() ).start();
+
         attachFutureListenerToPut(futurePut, callback);
     }
 
@@ -103,7 +100,6 @@ public class DHT<KEY extends DRSKey> {
                 .start();
 
         futureGet.awaitUninterruptibly(2000);
-        Object ret = null;
 
         if (futureGet.isSuccess() && futureGet.data() != null) {
             try {
@@ -128,8 +124,10 @@ public class DHT<KEY extends DRSKey> {
         if (key == null) {
             return;
         }
+
         FutureGet futureGet = m_profile.MY_PROFILE.get( key.getLocationKey() )
-                .all().domainKey( key.getDomainKey() )
+                .all()
+                .domainKey( key.getDomainKey() )
                 .start();
 
         futureGet.addListener(new BaseFutureListener<FutureGet>() {
@@ -141,7 +139,6 @@ public class DHT<KEY extends DRSKey> {
                     return;
                 }
                 callback.isSuccessful(futureGet.isSuccess());
-                Object ret = null;
                 Map<Number640, Data> dataMap = future.dataMap();
                 if (dataMap.size() != 0) {
                     callback.payload( dataMap );
@@ -167,8 +164,13 @@ public class DHT<KEY extends DRSKey> {
         if (key == null) {
             return;
         }
-        FutureRemove futureRemove = m_profile.MY_PROFILE.remove( key.getLocationKey() )
-                .domainKey( key.getDomainKey() ).start();
+
+        FutureRemove futureRemove = m_profile.MY_PROFILE
+                .remove( key.getLocationKey() )
+                .contentKey( key.getContentKey() )
+                .domainKey( key.getDomainKey() )
+                .start();
+
         futureRemove.addListener(new BaseFutureListener<FutureRemove>() {
             @Override
             public void operationComplete(FutureRemove future) throws Exception {

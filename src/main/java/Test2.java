@@ -95,7 +95,8 @@ public class Test2 {
             String content = command[1];
             if (cmd.equals("show")) {
                 dht.getAllFromStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(Number160.createHash(content)).domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                                .locationKey(Number160.createHash(content))
+                                .domainKey(DHTConfig.PUBLISHED_DOMAIN)
                                 .build()
                         , new AsyncResult() {
                             @Override
@@ -119,8 +120,11 @@ public class Test2 {
                         });
             } else if (cmd.equals("remove")) {
                 String notkey = command[2];
-                DRSKey keyz = DefaultDHTKeyPair.builder().locationKey(Number160.createHash(content))
-                        .domainKey(DHTConfig.PUBLISHED_DOMAIN).build();
+                DRSKey keyz = DefaultDHTKeyPair.builder()
+                        .locationKey(Number160.createHash(content))
+                        .contentKey(Number160.createHash(notkey))
+                        .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                        .build();
                 dht.removeFromStorage(keyz, new AsyncComplete() {
                     @Override
                     public Integer call() {
@@ -132,21 +136,22 @@ public class Test2 {
 
             } else if(cmd.equals("put")) {
                 String contentzzz = command[2];
-                DRSKey keyz = DefaultDHTKeyPair.builder().locationKey(Number160.createHash(content)).contentKey(Number160.createHash(contentzzz))
-                        .domainKey(DHTConfig.PUBLISHED_DOMAIN).build();
-
-
+                DRSKey keyz = DefaultDHTKeyPair.builder()
+                        .locationKey(Number160.createHash(content))
+                        .contentKey(Number160.createHash(contentzzz))
+                        .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                        .build();
                 dht.putContentOnStorage(keyz, contentzzz, new AsyncComplete() {
                     @Override
                     public Integer call() {
                         System.out.println("succ? " + isSuccessful());
-
                         return 0;
                     }
                 });
             } else {
                 dht.addToStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(Number160.createHash(cmd)).domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                                .locationKey(Number160.createHash(cmd))
+                                .domainKey(DHTConfig.PUBLISHED_DOMAIN)
                                 .build()
                         , content, new AsyncComplete() {
                             @Override

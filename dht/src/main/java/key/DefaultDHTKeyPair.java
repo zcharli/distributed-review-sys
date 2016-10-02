@@ -1,6 +1,5 @@
 package key;
 
-import com.google.common.base.Strings;
 import config.DHTConfig;
 import net.tomp2p.peers.Number160;
 
@@ -14,7 +13,6 @@ public class DefaultDHTKeyPair implements DRSKey {
     private final static Logger LOGGER = Logger.getLogger(DefaultDHTKeyPair.class.getName());
 
     private static final String DEFAULT_LOC = "defaultLocation";
-    private static final String DEFAULT_CON = "defaultContent";
 
     private Number160 m_locationKey;
     private Number160 m_contentKey;
@@ -41,7 +39,7 @@ public class DefaultDHTKeyPair implements DRSKey {
             if (domain == null) {
                 return this;
             }
-            domain = m_domainKey;
+            m_domainKey = domain;
             return this;
         }
 
@@ -67,7 +65,7 @@ public class DefaultDHTKeyPair implements DRSKey {
     public Number160 getContentKey() {
         if (m_contentKey == null) {
             LOGGER.log(Level.WARNING, "DRS key found null contentKey key, return default");
-            return Number160.createHash(DEFAULT_CON);
+            return null;
         }
         return m_contentKey;
     }
