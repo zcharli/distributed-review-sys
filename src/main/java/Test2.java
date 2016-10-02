@@ -85,7 +85,12 @@ public class Test2 {
         System.out.println("Domain: " + DHTConfig.ACCEPTANCE_DOMAIN);
         String line = null;
 
-        while ((line = getLine()) != null) {
+        while (true) {
+            line = getLine();
+            if (line == null) {
+                System.out.println("line is null");
+                continue;
+            }
             String[] command = line.split(" ");
             if (command.length < 2) {
                 continue;
@@ -184,7 +189,6 @@ public class Test2 {
             // Add this key
 
         }
-        System.out.println("Shutting down");
     }
 
     public static void printElements(Iterator<Data> iterator) {
