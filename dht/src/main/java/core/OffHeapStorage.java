@@ -2,7 +2,9 @@ package core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
-import key.OffHeapKey;
+import key.AcceptanceOffHeapKey;
+import key.DefaultOffHeapKey;
+import key.PublishedOffHeapKey;
 import msg.RedisElementContainer;
 import net.tomp2p.dht.Storage;
 import net.tomp2p.peers.Number160;
@@ -125,7 +127,8 @@ public class OffHeapStorage implements Storage {
                         .setVersionBuffer(key.versionKey().toIntArray())
                         .setDomainBuffer(key.domainKey().toIntArray())
                         .build());
-                String offHeapKey = OffHeapKey.builder().id(key).buildReviewKey();
+                // All reviews go to acceptance first
+                String offHeapKey = DefaultOffHeapKey.builder().id(key).buildReviewKey();
                 adapter.lpush(offHeapKey, dataJson);
             } catch (Exception e) {
                 LOGGER.error("Error when writing Data object to json: " + e.getMessage());

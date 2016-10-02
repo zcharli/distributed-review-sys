@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
  */
 public class AsyncComplete implements Callable<Integer> {
     private boolean m_success;
+    private String m_message;
 
     public AsyncComplete() {}
 
@@ -19,6 +20,14 @@ public class AsyncComplete implements Callable<Integer> {
 
     public boolean isSuccessful() {
         return m_success;
+    }
+
+    public void message(String msg) {
+        m_message = msg;
+    }
+
+    public String message() {
+        return m_message;
     }
 
     @Override

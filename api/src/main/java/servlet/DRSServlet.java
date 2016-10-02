@@ -2,6 +2,7 @@ package servlet;
 
 
 import review.BaseReview;
+import review.CommodityReview;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,6 +23,6 @@ public class DRSServlet {
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
     public BaseReview get() {
-        return new BaseReview();
+        return new CommodityReview();
     }
 }

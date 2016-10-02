@@ -1,8 +1,11 @@
+import config.DHTConfig;
 import core.APIServer;
 import core.DHTManager;
+import key.DRSKey;
 import key.DefaultDHTKeyPair;
 import msg.AsyncComplete;
 import msg.AsyncResult;
+import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 import redis.clients.jedis.Jedis;
@@ -31,9 +34,9 @@ public class Test2 {
             System.exit(0);
         }
         System.out.println("Init bootsrap successful");
-        dht.getGlobalConfig().generateRandomDomainKey();
+        System.out.println("Domain: " + DHTConfig.ACCEPTANCE_DOMAIN);
         try {
-            for (; ;) {
+            for (; ; ) {
                 Thread.sleep(5000);
                 if (dht.checkActive()) {
                     System.out.println("DHT is up");
@@ -41,7 +44,7 @@ public class Test2 {
                     System.out.println("DHT is down");
                 }
                 dht.getAllFromStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(Integer.toString(keyStore))
+                                .locationKey(Number160.createHash(Integer.toString(keyStore))).domainKey(DHTConfig.PUBLISHED_DOMAIN)
                                 .build()
                         , new AsyncResult() {
                             @Override
@@ -79,8 +82,7 @@ public class Test2 {
             dht = d;
         }
         System.out.println("Init client successful");
-        dht.getGlobalConfig().generateRandomDomainKey();
-
+        System.out.println("Domain: " + DHTConfig.ACCEPTANCE_DOMAIN);
         String line = null;
 
         while ((line = getLine()) != null) {
@@ -93,7 +95,8 @@ public class Test2 {
             String content = command[1];
             if (cmd.equals("show")) {
                 dht.getAllFromStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(content)
+                                .locationKey(Number160.createHash(content))
+                                .domainKey(DHTConfig.PUBLISHED_DOMAIN)
                                 .build()
                         , new AsyncResult() {
                             @Override
@@ -106,18 +109,49 @@ public class Test2 {
 
                                 Iterator<Data> iterator = payload().values().iterator();
                                 printElements(iterator);
-                                NavigableMap<Number640, Data> allCurrent =  dht.getProfile().MY_PROFILE.storageLayer().get();
+                                NavigableMap<Number640, Data> allCurrent = dht.getProfile().MY_PROFILE.storageLayer().get();
                                 System.out.println("\nCurrent elements on this node");
-                                for(Map.Entry<Number640, Data> e : allCurrent.entrySet()) {
+                                for (Map.Entry<Number640, Data> e : allCurrent.entrySet()) {
                                     System.out.println("k:" + e.getKey() + " v:" + e.getValue());
                                 }
 
                                 return 0;
                             }
                         });
+            } else if (cmd.equals("remove")) {
+                String notkey = command[2];
+                DRSKey keyz = DefaultDHTKeyPair.builder()
+                        .locationKey(Number160.createHash(content))
+                        .contentKey(Number160.createHash(notkey))
+                        .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                        .build();
+                dht.removeFromStorage(keyz, new AsyncComplete() {
+                    @Override
+                    public Integer call() {
+                        System.out.println("is succ? "+  new Number640(keyz.getLocationKey(), keyz.getDomainKey(), keyz.getContentKey(), Number160.ZERO) +"\n" + isSuccessful());
+
+                        return 0;
+                    }
+                });
+
+            } else if(cmd.equals("put")) {
+                String contentzzz = command[2];
+                DRSKey keyz = DefaultDHTKeyPair.builder()
+                        .locationKey(Number160.createHash(content))
+                        .contentKey(Number160.createHash(contentzzz))
+                        .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                        .build();
+                dht.putContentOnStorage(keyz, contentzzz, new AsyncComplete() {
+                    @Override
+                    public Integer call() {
+                        System.out.println("succ? " + isSuccessful());
+                        return 0;
+                    }
+                });
             } else {
                 dht.addToStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(cmd)
+                                .locationKey(Number160.createHash(cmd))
+                                .domainKey(DHTConfig.PUBLISHED_DOMAIN)
                                 .build()
                         , content, new AsyncComplete() {
                             @Override
@@ -126,7 +160,7 @@ public class Test2 {
                                     System.out.println("added successfully");
 
                                     dht.addToStorage(DefaultDHTKeyPair.builder()
-                                                    .locationKey(Integer.toString(keyStore))
+                                                    .locationKey(Number160.createHash(Integer.toString(keyStore))).domainKey(DHTConfig.PUBLISHED_DOMAIN)
                                                     .build()
                                             , cmd, new AsyncComplete() {
                                                 @Override
@@ -184,7 +218,7 @@ public class Test2 {
     public static void testRedis() {
         JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
 
-        try(Jedis jd = pool.getResource()) {
+        try (Jedis jd = pool.getResource()) {
             System.out.println("got jedis resource");
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,31 +228,32 @@ public class Test2 {
     }
 
     public static void testApiServer() {
-        APIServer server = new APIServer("192.168.101.12", 9214);
+        APIServer server = new APIServer("192.168.101.12", 9090);
         try {
             server.start();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Error starting server: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
 
-        testRedis();
-        testApiServer();
-//        if (args.length == 0) {
-//            System.out.println("Staring client");
-//            // start client
-//            startClient();
-//            try {
-//                //startClientNAT();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.out.println("Starting bootstrap");
-//            // start bootstrap
-//            startBootstrap();
+//        testRedis();
+//        testApiServer();
+        if (args.length == 0) {
+            System.out.println("Staring client");
+            // start client
+            startClient();
+            try {
+                //startClientNAT();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Starting bootstrap");
+            // start bootstrap
+            startBootstrap();
 //        }
+        }
     }
 }

@@ -1,13 +1,12 @@
 package core;
 
-import config.DHTConfig;
 import key.DRSKey;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.dht.FutureGet;
 import net.tomp2p.dht.FuturePut;
+import net.tomp2p.dht.FutureRemove;
 import net.tomp2p.futures.BaseFutureListener;
-import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 import org.slf4j.Logger;
@@ -34,16 +33,26 @@ public class DHT<KEY extends DRSKey> {
         }
     }
 
+    /**
+     * Always puts new reviews into acceptance domain
+     * @param key
+     * @param element
+     * @param callback
+     * @throws IOException
+     */
     public void put(KEY key, Object element, AsyncComplete callback) throws IOException {
         if (element == null || key == null) {
             return;
         }
 
-        FuturePut futurePut = m_profile.MY_PROFILE.put( Number160.createHash( key.getLocationKey() ) )
-                .data( new Number160( key.getContentKey() ), new Data( element ) )
-                .domainKey(  DHTConfig.instance().domainKey() )
+        FuturePut futurePut = m_profile.MY_PROFILE.put( key.getLocationKey() )
+                .data( key.getDomainKey(), key.getContentKey(), new Data( element ) )
                 .start();
 
+        attachFutureListenerToPut(futurePut, callback);
+    }
+
+    private void attachFutureListenerToPut(FuturePut futurePut, AsyncComplete callback) {
         futurePut.addListener(new BaseFutureListener<FuturePut>() {
             @Override
             public void operationComplete(FuturePut future) throws Exception {
@@ -65,30 +74,14 @@ public class DHT<KEY extends DRSKey> {
 
     public void add(KEY key, Object element, AsyncComplete callback) throws IOException {
         if (key == null || element == null) {
+            LOGGER.error("Invalid add request");
             return;
         }
 
-        FuturePut futurePut = m_profile.MY_PROFILE.add( Number160.createHash( key.getLocationKey() ) )
-                .data( new Data( element ) ).domainKey( DHTConfig.instance().domainKey() ).start();
+        FuturePut futurePut = m_profile.MY_PROFILE.add( key.getLocationKey() )
+                .data( new Data( element ) ).domainKey( key.getDomainKey() ).start();
 
-        futurePut.addListener(new BaseFutureListener<FuturePut>() {
-            @Override
-            public void operationComplete(FuturePut future) throws Exception {
-                if (future == null || future.isFailed()) {
-                    LOGGER.warn("Future object failed to return from add(KEY key, Object element, AsyncResult callback) or is null.");
-                }
-
-                callback.isSuccessful(future.isSuccess());
-                callback.call();
-            }
-
-            @Override
-            public void exceptionCaught(Throwable t) throws Exception {
-                LOGGER.warn(String.format("Failed to add %s to dht: " + t.getMessage()));
-                callback.isSuccessful(false);
-                callback.call();
-            }
-        });
+        attachFutureListenerToPut(futurePut, callback);
     }
 
     /**
@@ -102,12 +95,11 @@ public class DHT<KEY extends DRSKey> {
             return null;
         }
 
-        FutureGet futureGet = m_profile.MY_PROFILE.get( Number160.createHash( key.getLocationKey() ) )
-                .all().domainKey( DHTConfig.instance().domainKey() )
+        FutureGet futureGet = m_profile.MY_PROFILE.get( key.getLocationKey() )
+                .all().domainKey( key.getDomainKey() )
                 .start();
 
         futureGet.awaitUninterruptibly(2000);
-        Object ret = null;
 
         if (futureGet.isSuccess() && futureGet.data() != null) {
             try {
@@ -132,8 +124,10 @@ public class DHT<KEY extends DRSKey> {
         if (key == null) {
             return;
         }
-        FutureGet futureGet = m_profile.MY_PROFILE.get( Number160.createHash( key.getLocationKey() ) )
-                .all().domainKey( DHTConfig.instance().domainKey() )
+
+        FutureGet futureGet = m_profile.MY_PROFILE.get( key.getLocationKey() )
+                .all()
+                .domainKey( key.getDomainKey() )
                 .start();
 
         futureGet.addListener(new BaseFutureListener<FutureGet>() {
@@ -144,8 +138,7 @@ public class DHT<KEY extends DRSKey> {
                     callback.call();
                     return;
                 }
-
-                Object ret = null;
+                callback.isSuccessful(futureGet.isSuccess());
                 Map<Number640, Data> dataMap = future.dataMap();
                 if (dataMap.size() != 0) {
                     callback.payload( dataMap );
@@ -160,5 +153,42 @@ public class DHT<KEY extends DRSKey> {
             }
         });
         return;
+    }
+
+    /**
+     * Generally used for deleting staging content
+     * @param key
+     * @param callback
+     */
+    public void remove(KEY key, AsyncComplete callback) {
+        if (key == null) {
+            return;
+        }
+
+        FutureRemove futureRemove = m_profile.MY_PROFILE
+                .remove( key.getLocationKey() )
+                .contentKey( key.getContentKey() )
+                .domainKey( key.getDomainKey() )
+                .start();
+
+        futureRemove.addListener(new BaseFutureListener<FutureRemove>() {
+            @Override
+            public void operationComplete(FutureRemove future) throws Exception {
+                if (future == null || future.isFailed()) {
+                    LOGGER.warn("Future object failed to return from remove(KEY key, AsyncComplete callback) or is null.");
+                    callback.call();
+                    return;
+                }
+
+                callback.isSuccessful(future.isSuccess() && future.isRemoved());
+                callback.call();
+            }
+
+            @Override
+            public void exceptionCaught(Throwable t) throws Exception {
+                LOGGER.warn(String.format("Failed to remove %s from dht: " + t != null && t.getMessage() != null ? t.getMessage() : "unknown"));
+                callback.call();
+            }
+        });
     }
 }

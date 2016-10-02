@@ -19,9 +19,8 @@ public class DHTConfig {
     public static int DRS_PORT;
     public static final String REDIS_HOST = "localhost";
     public static final int REDIS_PORT = 6379;
-
-    private String domainKey = "default";
-    private Number160 domainHash;
+    public static final Number160 ACCEPTANCE_DOMAIN = Number160.createHash("reviews_staging_domain");
+    public static final Number160 PUBLISHED_DOMAIN = ACCEPTANCE_DOMAIN;//Number160.createHash("published_reviews_domain");
 
     private static DHTConfig INSTANCE;
     private DHTConfig() {}
@@ -44,24 +43,5 @@ public class DHTConfig {
             INSTANCE = new DHTConfig();
         }
         return INSTANCE;
-    }
-
-    public DHTConfig domainKey(String key) {
-        domainKey = key;
-        domainHash = Number160.createHash(domainKey);
-        return this;
-    }
-
-    public DHTConfig generateRandomDomainKey() {
-        Random r = new Random(42L);
-        domainKey = Integer.toString(r.nextInt());
-        return this;
-    }
-
-    public Number160 domainKey() {
-        if (domainHash == null) {
-            domainHash = Number160.createHash(domainKey);
-        }
-        return domainHash;
     }
 }
