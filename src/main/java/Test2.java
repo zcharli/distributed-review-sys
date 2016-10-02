@@ -215,13 +215,6 @@ public class Test2 {
             System.err.println("Error reading input.");
             e.printStackTrace();
             System.exit(1);
-        } finally {
-            try {
-                in.close();
-                converter.close();
-            } catch (Exception e) {
-                System.out.println("not opened");
-            }
         }
         return inLine;
     }
