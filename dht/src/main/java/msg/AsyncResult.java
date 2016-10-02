@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 public class AsyncResult implements Callable<Integer> {
 
     private Map<Number640,Data> payload;
+    private boolean m_successful;
 
     public AsyncResult() {}
 
@@ -25,6 +26,14 @@ public class AsyncResult implements Callable<Integer> {
     @Nullable
     public Map<Number640,Data> payload() {
         return payload;
+    }
+
+    public void isSuccessful(boolean succ) {
+        m_successful = succ;
+    }
+
+    public boolean isSuccessful() {
+        return m_successful;
     }
 
     @Override

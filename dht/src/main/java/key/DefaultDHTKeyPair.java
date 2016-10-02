@@ -1,6 +1,8 @@
 package key;
 
 import com.google.common.base.Strings;
+import config.DHTConfig;
+import net.tomp2p.peers.Number160;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,55 +16,64 @@ public class DefaultDHTKeyPair implements DRSKey {
     private static final String DEFAULT_LOC = "defaultLocation";
     private static final String DEFAULT_CON = "defaultContent";
 
-    private String m_locationKey;
-    private String m_contentKey;
+    private Number160 m_locationKey;
+    private Number160 m_contentKey;
+    private Number160 m_domainKey;
 
     public static class DefaultDHTKeyBuilder extends DHTKeyBuilder {
-        private String m_locationKey;
-        private String m_contentKey;
+        private Number160 m_locationKey;
+        private Number160 m_contentKey;
+        private Number160 m_domainKey;
 
         public DefaultDHTKeyBuilder() {}
 
-        public DefaultDHTKeyBuilder locationKey(String loc) {
-            if (loc.length() >= MAX_KEY_LENGTH) {
-                loc = loc.substring(0, MAX_KEY_LENGTH - 1);
-            }
+        public DefaultDHTKeyBuilder locationKey(Number160 loc) {
             m_locationKey = loc;
             return this;
         }
 
-        public DefaultDHTKeyBuilder contentKey(String con) {
-            if (con.length() >= MAX_KEY_LENGTH) {
-                con = con.substring(0, MAX_KEY_LENGTH - 1);
-            }
+        public DefaultDHTKeyBuilder contentKey(Number160 con) {
             m_contentKey = con;
             return this;
         }
 
+        public DefaultDHTKeyBuilder domainKey(Number160 domain) {
+            if (domain == null) {
+                return this;
+            }
+            domain = m_domainKey;
+            return this;
+        }
+
         public DRSKey build() {
-            return new DefaultDHTKeyPair(m_locationKey, m_contentKey);
+            return new DefaultDHTKeyPair(m_locationKey, m_contentKey, m_domainKey);
         }
     }
 
-    public DefaultDHTKeyPair(String locationKey, String contentKey) {
+    public DefaultDHTKeyPair(Number160 locationKey, Number160 contentKey, Number160 domainKey) {
         m_locationKey = locationKey;
         m_contentKey = contentKey;
+        m_domainKey = domainKey == null ? DHTConfig.ACCEPTANCE_DOMAIN : DHTConfig.PUBLISHED_DOMAIN;
     }
 
-    public String getLocationKey() {
-        if (Strings.isNullOrEmpty(m_locationKey)) {
+    public Number160 getLocationKey() {
+        if (m_locationKey == null) {
             LOGGER.log(Level.WARNING, "DRS key found null location key, return default");
-            return DEFAULT_LOC;
+            return Number160.createHash(DEFAULT_LOC);
         }
         return m_locationKey;
     }
 
-    public String getContentKey() {
-        if (Strings.isNullOrEmpty(m_contentKey)) {
+    public Number160 getContentKey() {
+        if (m_contentKey == null) {
             LOGGER.log(Level.WARNING, "DRS key found null contentKey key, return default");
-            return DEFAULT_CON;
+            return Number160.createHash(DEFAULT_CON);
         }
         return m_contentKey;
+    }
+
+    public Number160 getDomainKey() {
+        return m_domainKey;
     }
 
     public static DefaultDHTKeyBuilder builder() {
