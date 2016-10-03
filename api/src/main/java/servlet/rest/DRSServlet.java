@@ -1,4 +1,4 @@
-package servlet;
+package servlet.rest;
 
 
 import review.BaseReview;
@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
  * Created by czl on 19/09/16.
  */
 
-@Path("/drs")
+@Path("/")
 public class DRSServlet {
 
     public DRSServlet() {

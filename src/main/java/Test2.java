@@ -232,7 +232,7 @@ public class Test2 {
     }
 
     public static void testApiServer() {
-        APIServer server = new APIServer("192.168.101.12", 9090);
+        APIServer server = new APIServer("192.168.101.19", 9090);
         try {
             server.start();
         } catch (Exception e) {
@@ -243,21 +243,21 @@ public class Test2 {
     public static void main(String[] args) {
 
 //        testRedis();
-//        testApiServer();
-        if (args.length == 0) {
-            System.out.println("Staring client");
-            // start client
-            startClient();
-            try {
-                //startClientNAT();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Starting bootstrap");
-            // start bootstrap
-            startBootstrap();
+        testApiServer();
+//        if (args.length == 0) {
+//            System.out.println("Staring client");
+//            // start client
+//            startClient();
+//            try {
+//                //startClientNAT();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            System.out.println("Starting bootstrap");
+//            // start bootstrap
+//            startBootstrap();
+////        }
 //        }
-        }
     }
 }

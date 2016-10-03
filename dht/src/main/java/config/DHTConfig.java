@@ -21,6 +21,7 @@ public class DHTConfig {
     public static final int REDIS_PORT = 6379;
     public static final Number160 ACCEPTANCE_DOMAIN = Number160.createHash("reviews_staging_domain");
     public static final Number160 PUBLISHED_DOMAIN = ACCEPTANCE_DOMAIN;//Number160.createHash("published_reviews_domain");
+    public boolean isBootstrap = false;
 
     private static DHTConfig INSTANCE;
     private DHTConfig() {}
@@ -29,7 +30,8 @@ public class DHTConfig {
         DRS_PORT = 4000;
         InetAddress tempAddr = null;
         try {
-            tempAddr = Inet4Address.getByName("192.168.101.12");
+            // TODO: code for changing IP addresses incase .19 changes
+            tempAddr = Inet4Address.getByName("192.168.101.19");
         } catch (UnknownHostException e) {
             Logger.getGlobal().log(Level.SEVERE, "Host InetAddress was not found.");
         } finally {

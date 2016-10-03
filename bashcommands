@@ -1,0 +1,19 @@
+
+export SLAVE1="ubuntu@134.117.26.135"
+export SLAVE2="ubuntu@134.117.26.136"
+export SLAVE3="ubuntu@134.117.26.137"
+
+alias drs_top="cd ~/honours-drs"
+
+function deploy_to_slaves {
+    cd ~/honours-drs
+    gradle distTar
+    mv ~/honours-drs/build/distributions/*.tar ~/dist/
+    cd ~/dist
+    tar xf *.tar
+    scp -r drs*SNAPSHOT $SLAVE1:/home/ubuntu/dist
+    scp -r drs*SNAPSHOT $SLAVE2:/home/ubuntu/dist
+    scp -r drs*SNAPSHOT $SLAVE3:/home/ubuntu/dist
+    cd ~/dist/drs*SNAPSHOT/bin
+ }
+

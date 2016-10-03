@@ -40,7 +40,7 @@ public class DHTManager {
         if (DHTConfig.BOOTSRAP_ADDR == null) {
             throw new InitializationFailedException("Bootstrap node's address was unable to be found.");
         }
-
+        DHTConfig.instance().isBootstrap = isBootstrap;
         m_profile = DHTProfile.init(isBootstrap, isPersistent);
         m_dht = new DHT<>();
     }
