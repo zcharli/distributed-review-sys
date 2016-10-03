@@ -1,4 +1,4 @@
 rootProject.name = 'drs'
 include 'api'
 include 'dht'
-
+include 'management'

@@ -6,6 +6,8 @@
 /subprojects/*/build
 /subprojects/docs/src/samples/*/*/build
 /subprojects/internal-android-performance-testing/build-android-libs
+api/build
+dht/build
 
 # IDEA
 # ----
@@ -76,6 +78,7 @@ atlassian-ide-plugin.xml
 # Ember
 # -----
 # compiled output 
+api/src/main/resources/webapp
 management/dist 
 management/tmp  
 
@@ -90,5 +93,5 @@ management/coverage/*
 management/libpeerconnection.log 
 management/npm-debug.log 
 management/testem.log
-
+management/build
 

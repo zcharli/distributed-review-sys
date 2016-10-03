@@ -66,7 +66,18 @@ dependencies {
     compile project(":dht")
     compile project(":api")
 
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        classpath "com.kiefer.gradle:ember-cli-gradle-plugin:3.1.0"
+    }
 }
 
 jar {
