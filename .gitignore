@@ -72,3 +72,23 @@ atlassian-ide-plugin.xml
 # Logs
 # ----
 /*.log
+
+# Ember
+# -----
+# compiled output 
+management/dist 
+management/tmp  
+
+# dependencies 
+management/node_modules 
+management/bower_components  
+
+# misc 
+management/.sass-cache 
+management/connect.lock 
+management/coverage/* 
+management/libpeerconnection.log 
+management/npm-debug.log 
+management/testem.log
+
+
