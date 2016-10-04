@@ -85,3 +85,4 @@ jar {
         attributes 'Main-Class': 'Test2'
     }
 }
+

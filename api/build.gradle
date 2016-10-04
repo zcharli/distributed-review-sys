@@ -52,7 +52,6 @@ task unpackJsProjects(type: Copy, dependsOn: configurations.js.buildDependencies
         include "assets/**"
     }
 
-
     destinationDir new File("$project.projectDir/src/main/resources/webapp")
 }
 

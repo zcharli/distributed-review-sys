@@ -8,3 +8,8 @@ idea {
     excludeDirs += file('bower_components')
   }
 }
+
+embercli {
+  testCommand = "test"
+  testArguments = ["--split=5", "--parallel", "--test-port=0"]
+}
