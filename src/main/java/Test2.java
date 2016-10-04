@@ -243,21 +243,23 @@ public class Test2 {
     public static void main(String[] args) {
 
 //        testRedis();
+        System.out.println("Launching API");
         testApiServer();
-//        if (args.length == 0) {
-//            System.out.println("Staring client");
-//            // start client
-//            startClient();
-//            try {
-//                //startClientNAT();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.out.println("Starting bootstrap");
-//            // start bootstrap
-//            startBootstrap();
-////        }
+        System.out.println("Launching DHT");
+        if (args.length == 0) {
+            System.out.println("Staring client");
+            // start client
+            startClient();
+            try {
+                //startClientNAT();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Starting bootstrap");
+            // start bootstrap
+            startBootstrap();
 //        }
+        }
     }
 }

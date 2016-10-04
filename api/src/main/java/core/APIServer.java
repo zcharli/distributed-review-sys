@@ -83,7 +83,7 @@ public class APIServer {
         m_servletContextHandler.setContextPath("/");
         m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
         m_servletContextHandler.addServlet(m_apiServletHolder, "/api/*");
-        m_servletContextHandler.addServlet(m_webServletHolder, "/");
+        m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
 
     private void registerServlets() {
