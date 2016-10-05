@@ -25,7 +25,14 @@ public class ReviewServlet {
                                 final @Suspended AsyncResponse response) {
         if (type == null || !m_validTypes.contains(type.toLowerCase())) {
             response.resume(Response.status(Response.Status.BAD_REQUEST).entity("Invalid review type.").build());
+            return;
         }
 
+        new Thread() {
+            @Override
+            public void run() {
+
+            }
+        };
     }
 }

@@ -2,6 +2,8 @@ package core;
 
 import config.APIConfig;
 import exceptions.InitializationFailedException;
+import filter.AuthorizationFilter;
+import filter.ContextInjectionFilter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -14,10 +16,12 @@ import org.slf4j.LoggerFactory;
 import servlet.rest.DRSServlet;
 import servlet.webapp.DRSManagement;
 
+import javax.servlet.DispatcherType;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.EnumSet;
 
 /**
  * Created by cli on 9/27/2016.
@@ -85,6 +89,8 @@ public class APIServer {
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
         m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
+        m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
+        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addServlet(m_apiServletHolder, "/api/*");
         m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
