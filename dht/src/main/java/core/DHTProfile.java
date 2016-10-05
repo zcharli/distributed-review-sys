@@ -87,14 +87,14 @@ public class DHTProfile {
     }
 
     /**
-     * Should only be called once
+     * Should only be called once, possible bug here.
      * @param isBootstrap
      * @return
      * @throws InitializationFailedException
      */
     public static DHTProfile init(boolean isBootstrap, boolean isPersistent) throws InitializationFailedException {
         if (INSTANCE != null) {
-            throw new InitializationFailedException("DHTProfile instance has already been initialized");
+            return INSTANCE;
         }
 
         INSTANCE = new DHTProfile(isBootstrap, isPersistent);

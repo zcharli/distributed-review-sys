@@ -14,6 +14,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.rest.DRSServlet;
+import servlet.rest.ReviewServlet;
 import servlet.webapp.DRSManagement;
 
 import javax.servlet.DispatcherType;
@@ -89,8 +90,8 @@ public class APIServer {
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
         m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
+        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
-        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addServlet(m_apiServletHolder, "/api/*");
         m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
@@ -100,7 +101,7 @@ public class APIServer {
             return;
         }
         m_resourceConfig.packages(DRSServlet.class.getPackage().getName());
-        m_resourceConfig.packages(DRSManagement.class.getPackage().getName());
+        m_resourceConfig.packages(ReviewServlet.class.getPackage().getName());
     }
 
     public void start() throws Exception {

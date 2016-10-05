@@ -233,6 +233,7 @@ public class Test2 {
 
     public static void testApiServer() {
         try {
+            DHTConfig.instance().isBootstrap = true;
             APIServer server = new APIServer("192.168.101.19", 9090);
             server.start();
         } catch (Exception e) {
@@ -245,21 +246,21 @@ public class Test2 {
 //        testRedis();
         System.out.println("Launching API");
         testApiServer();
-        System.out.println("Launching DHT");
-        if (args.length == 0) {
-            System.out.println("Staring client");
-            // start client
-            startClient();
-            try {
-                //startClientNAT();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Starting bootstrap");
-            // start bootstrap
-            startBootstrap();
+//        System.out.println("Launching DHT");
+//        if (args.length == 0) {
+//            System.out.println("Staring client");
+//            // start client
+//            startClient();
+//            try {
+//                //startClientNAT();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            System.out.println("Starting bootstrap");
+//            // start bootstrap
+//            startBootstrap();
+////        }
 //        }
-        }
     }
 }

@@ -17,10 +17,17 @@ public class DRSServlet {
     public DRSServlet() {
     }
 
-    @POST @Consumes("application/json")
+    @GET
     @Path("/new")
     @Produces(MediaType.APPLICATION_JSON)
     public BaseReview get() {
         return new CommodityReview();
     }
+
+    @GET
+    @Path("/ping")
+    public String pong() {
+        return "pong";
+    }
+
 }

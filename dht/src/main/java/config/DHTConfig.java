@@ -18,9 +18,8 @@ public class DHTConfig {
     public static final InetAddress BOOTSRAP_ADDR;
     public static int DRS_PORT;
     public static final String REDIS_HOST = "localhost";
-    public static final int REDIS_PORT = 6379;
     public static final Number160 ACCEPTANCE_DOMAIN = Number160.createHash("reviews_staging_domain");
-    public static final Number160 PUBLISHED_DOMAIN = ACCEPTANCE_DOMAIN;//Number160.createHash("published_reviews_domain");
+    public static final Number160 PUBLISHED_DOMAIN = ACCEPTANCE_DOMAIN;
     public boolean isBootstrap = false;
     public boolean willPersistData = true;
     public static boolean collectMetrics = false;

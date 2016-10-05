@@ -35,4 +35,10 @@ public class ReviewServlet {
             }
         };
     }
+
+    @GET
+    @Path("/ping")
+    public String pong() {
+        return "pong";
+    }
 }
