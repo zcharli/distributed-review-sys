@@ -1,6 +1,7 @@
 package core;
 
 import config.APIConfig;
+import exceptions.InitializationFailedException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -24,22 +25,23 @@ import java.net.UnknownHostException;
 public class APIServer {
     private final static Logger LOGGER = LoggerFactory.getLogger(APIServer.class);
 
-    public final Server m_apiServer;
+    private final Server m_apiServer;
     private ResourceConfig m_resourceConfig;
     private ServletContainer m_apiServletContainer;
     private ServletHolder m_webServletHolder;
     private ServletHolder m_apiServletHolder;
     private ServletContextHandler m_servletContextHandler;
+    private final DHTManager m_dhtManager;
 
-    public APIServer() {
+    public APIServer() throws InitializationFailedException {
         this(APIConfig.DEFAULT_HOST, APIConfig.API_PORT);
     }
 
-    public APIServer(int port) {
+    public APIServer(int port) throws InitializationFailedException {
         this(APIConfig.DEFAULT_HOST, port);
     }
 
-    public APIServer(String host, int port) {
+    public APIServer(String host, int port) throws InitializationFailedException {
         APIConfig.API_PORT = port;
         InetSocketAddress currentAddress = null;
         try {
@@ -49,6 +51,7 @@ public class APIServer {
             System.exit(0);
         }
         m_apiServer = new Server(currentAddress);
+        m_dhtManager = new DHTManager();
     }
 
     /**

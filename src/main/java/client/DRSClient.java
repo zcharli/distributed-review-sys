@@ -26,13 +26,17 @@ public class DRSClient {
     @Parameter(names = "-bootstrap", description = "Run the bootstrap version of the DHT")
     private boolean bootstrap = false;
 
+    @Parameter(names = "-persistance", description = "Run the bootstrap version of the DHT")
+    private boolean persistance = true;
+
     @Parameter(names = "-dht_interface", description = "DHT listen interface")
     private String dhtInterface;
 
     public void run() {
-        if (bootstrap) {
-            DHTConfig.instance().isBootstrap = bootstrap;
-        }
+
+        DHTConfig.instance().isBootstrap = bootstrap;
+        DHTConfig.instance().willPersistData = persistance;
+
         if (host == null) {
             host = APIConfig.DEFAULT_HOST;
         }
@@ -44,7 +48,13 @@ public class DRSClient {
         if (dhtInterface != null) {
             DHTConfig.DHT_LISTEN_INTERFACE = dhtInterface;
         }
-        APIServer server = new APIServer(host, port);
+
+        try {
+            APIServer server = new APIServer(host, port);
+            server.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

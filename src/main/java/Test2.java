@@ -232,8 +232,8 @@ public class Test2 {
     }
 
     public static void testApiServer() {
-        APIServer server = new APIServer("192.168.101.19", 9090);
         try {
+            APIServer server = new APIServer("192.168.101.19", 9090);
             server.start();
         } catch (Exception e) {
             System.out.println("Error starting server: " + e.getMessage());

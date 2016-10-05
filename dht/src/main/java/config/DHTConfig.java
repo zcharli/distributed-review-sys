@@ -22,6 +22,7 @@ public class DHTConfig {
     public static final Number160 ACCEPTANCE_DOMAIN = Number160.createHash("reviews_staging_domain");
     public static final Number160 PUBLISHED_DOMAIN = ACCEPTANCE_DOMAIN;//Number160.createHash("published_reviews_domain");
     public boolean isBootstrap = false;
+    public boolean willPersistData = true;
     public static boolean collectMetrics = false;
     public static String DHT_LISTEN_INTERFACE = "ens3";
 

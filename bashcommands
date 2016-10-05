@@ -1,3 +1,4 @@
+# copy and past into .bashrc
 
 export SLAVE1="ubuntu@134.117.26.135"
 export SLAVE2="ubuntu@134.117.26.136"

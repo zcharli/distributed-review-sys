@@ -35,6 +35,10 @@ public class DHTManager {
     private final DHTProfile m_profile;
     private final DHT<DRSKey> m_dht;
 
+    public DHTManager() throws InitializationFailedException {
+        this(DHTConfig.instance().isBootstrap, DHTConfig.instance().willPersistData);
+    }
+
     public DHTManager(boolean isBootstrap) throws InitializationFailedException {
         this(isBootstrap, true);
     }
