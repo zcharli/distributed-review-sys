@@ -90,8 +90,8 @@ public class APIServer {
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
         m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
-        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
-        m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
+//        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
+//        m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addServlet(m_apiServletHolder, "/api/*");
         m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
@@ -108,7 +108,6 @@ public class APIServer {
         if (m_resourceConfig == null) {
             configure();
         }
-        m_apiServer.start();
-//        m_apiServer.join();
+        m_apiServer.start();;
     }
 }
