@@ -137,12 +137,6 @@ public class OffHeapStorage implements Storage {
             LOGGER.error("Unable to grab a shared resource for Jedis.");
             e.printStackTrace();
         }
-        // TODO: Remove after debugging
-        try {
-            System.out.println("Added " + value.object().toString() + " to table");
-        } catch(Exception e) {
-            System.out.println("Unabled to read object after adding");
-        }
         return oldData;
     }
 

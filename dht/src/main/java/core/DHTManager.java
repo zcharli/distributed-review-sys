@@ -2,11 +2,14 @@ package core;
 
 import com.google.common.base.Strings;
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableMap;
 import config.DHTConfig;
 import exceptions.InitializationFailedException;
 import key.DHTKeyBuilder;
 import key.DRSKey;
 import key.DefaultDHTKeyPair;
+import key.KeyRequestCollection;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.dht.FutureRemove;
@@ -18,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -103,7 +107,26 @@ public class DHTManager {
         }
     }
 
-    public void approveReview(final DRSKey key, AsyncComplete asyncComplete) {
+    /**
+     * Returns a immutable map of all the data that are in acceptance and on this node
+     * @return
+     */
+    public ImmutableMap<Number640, Object> getAllUnapprovedData() {
+        Map<Number640, Data> inMemoryStorage = m_profile.MY_PROFILE.storageLayer().get();
+        Map<Number640, Object> tempForImmutable = new HashMap<>();
+        for (Map.Entry<Number640, Data> entry : inMemoryStorage.entrySet()) {
+            if (entry.getKey().domainKey().equals(DHTConfig.ACCEPTANCE_DOMAIN)) {
+                try {
+                    tempForImmutable.put(entry.getKey(), entry.getValue().object());
+                } catch (Exception e) {
+                    LOGGER.error("Unable to decode Data.object(): " + entry.getKey());
+                }
+            }
+        }
+        return ImmutableMap.copyOf(tempForImmutable);
+    }
+
+    public void approveData(final DRSKey key, AsyncComplete asyncComplete) {
         if (isInvalidKey(key) || asyncComplete == null) {
             return;
         }

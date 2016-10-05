@@ -1,6 +1,7 @@
 package core;
 
 import key.DRSKey;
+import key.KeyRequestCollection;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.dht.FutureGet;
@@ -115,7 +116,7 @@ public class DHT<KEY extends DRSKey> {
     }
 
     /**
-     * Gets all async
+     * Gets all async for one product
      * @param key
      * @param callback
      * @return

@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Random;
-import java.util.logging.Level;
 
 /**
  * Created by czl on 20/09/16.
@@ -34,7 +33,7 @@ public class DHTProfile {
             OffHeapStorage storageLayer = isPersistent ? new OffHeapStorage().loadFromDisk() : null;
             Bindings b = new Bindings();
             // TODO: Make add interface set-able on boot up
-            b.addInterface("ens3");
+            b.addInterface(DHTConfig.DHT_LISTEN_INTERFACE);
             if (isBootStrap) {
                 Random r = new Random(42L);
                 b.addAddress(DHTConfig.BOOTSRAP_ADDR);

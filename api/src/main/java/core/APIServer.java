@@ -99,6 +99,6 @@ public class APIServer {
             configure();
         }
         m_apiServer.start();
-        m_apiServer.join();
+//        m_apiServer.join();
     }
 }
