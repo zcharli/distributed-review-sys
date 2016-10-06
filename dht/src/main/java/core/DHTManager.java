@@ -25,25 +25,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * DHTProfile must be initialized first thing before creating new DHT wrapper
+ * An immutable instance of dht manager
  *
  * Created by czl on 19/09/16.
  */
 public class DHTManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(DHTManager.class);
 
+    private static DHTManager INSTANCE;
+
     private final DHTProfile m_profile;
     private final DHT<DRSKey> m_dht;
 
-    public DHTManager() throws InitializationFailedException {
+    public static DHTManager instance() {
+        if (INSTANCE == null) {
+            try {
+                INSTANCE = new DHTManager();
+            } catch (Exception e) {
+                LOGGER.error("Fatal dht initialization execption: " + e.getMessage());
+                System.exit(0);
+            }
+        }
+        return INSTANCE;
+    }
+
+    private DHTManager() throws InitializationFailedException {
         this(DHTConfig.instance().isBootstrap, DHTConfig.instance().willPersistData);
     }
 
-    public DHTManager(boolean isBootstrap) throws InitializationFailedException {
+    private DHTManager(boolean isBootstrap) throws InitializationFailedException {
         this(isBootstrap, true);
     }
 
-    public DHTManager(boolean isBootstrap, boolean isPersistent) throws InitializationFailedException {
+    private DHTManager(boolean isBootstrap, boolean isPersistent) throws InitializationFailedException {
 
         if (DHTConfig.BOOTSRAP_ADDR == null) {
             throw new InitializationFailedException("Bootstrap node's address was unable to be found.");

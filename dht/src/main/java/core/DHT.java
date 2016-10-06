@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class DHT<KEY extends DRSKey> {
 
-    DHTProfile m_profile;
+    private final DHTProfile m_profile;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DHT.class);
 

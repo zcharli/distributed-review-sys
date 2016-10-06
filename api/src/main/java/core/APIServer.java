@@ -8,7 +8,14 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.persistence.jaxb.BeanValidationMode;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import org.glassfish.jersey.CommonProperties;
+import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
+import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.server.validation.internal.ValidationExceptionMapper;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
@@ -16,8 +23,10 @@ import org.slf4j.LoggerFactory;
 import servlet.rest.DRSServlet;
 import servlet.rest.ReviewServlet;
 import servlet.webapp.DRSManagement;
+import validator.ValidationConfigContext;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.http.HttpServlet;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
@@ -36,7 +45,6 @@ public class APIServer {
     private ServletHolder m_webServletHolder;
     private ServletHolder m_apiServletHolder;
     private ServletContextHandler m_servletContextHandler;
-    private final DHTManager m_dhtManager;
 
     public APIServer() throws InitializationFailedException {
         this(APIConfig.DEFAULT_HOST, APIConfig.API_PORT);
@@ -56,7 +64,7 @@ public class APIServer {
             System.exit(0);
         }
         m_apiServer = new Server(currentAddress);
-        m_dhtManager = new DHTManager();
+
     }
 
     /**
@@ -70,9 +78,7 @@ public class APIServer {
     }
 
     private void configureApi() {
-        m_resourceConfig = new ResourceConfig();
-        registerServlets();
-        m_resourceConfig.register(JacksonFeature.class);
+        m_resourceConfig = new DRSConfig();
         m_apiServletContainer = new ServletContainer(m_resourceConfig);
         m_apiServletHolder = new ServletHolder("api", m_apiServletContainer);
     }
@@ -90,19 +96,12 @@ public class APIServer {
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
         m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
-//        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
-//        m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
+        m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
+        m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addServlet(m_apiServletHolder, "/api/*");
         m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
 
-    private void registerServlets() {
-        if (m_resourceConfig == null) {
-            return;
-        }
-        m_resourceConfig.packages(DRSServlet.class.getPackage().getName());
-        m_resourceConfig.packages(ReviewServlet.class.getPackage().getName());
-    }
 
     public void start() throws Exception {
         if (m_resourceConfig == null) {
