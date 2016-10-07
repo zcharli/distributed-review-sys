@@ -8,28 +8,14 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.persistence.jaxb.BeanValidationMode;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
-import org.glassfish.jersey.CommonProperties;
-import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
-import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.ServerProperties;
-import org.glassfish.jersey.server.validation.internal.ValidationExceptionMapper;
 import org.glassfish.jersey.servlet.ServletContainer;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.rest.DRSServlet;
-import servlet.rest.ReviewServlet;
-import servlet.webapp.DRSManagement;
-import validator.ValidationConfigContext;
 
 import javax.servlet.DispatcherType;
-import javax.servlet.http.HttpServlet;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.EnumSet;
 
@@ -78,7 +64,7 @@ public class APIServer {
     }
 
     private void configureApi() {
-        m_resourceConfig = new DRSConfig();
+        m_resourceConfig = new APIResourceConfig();
         m_apiServletContainer = new ServletContainer(m_resourceConfig);
         m_apiServletHolder = new ServletHolder("api", m_apiServletContainer);
     }

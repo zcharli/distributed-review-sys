@@ -9,7 +9,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class ApplicationException implements ExceptionMapper<Exception> {
+public class ApplicationExceptionMapper implements ExceptionMapper<Exception> {
 
     public Response toResponse(Exception e) {
         System.out.println("FUCKK UUUU");

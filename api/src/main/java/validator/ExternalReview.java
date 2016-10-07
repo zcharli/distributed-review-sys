@@ -34,22 +34,12 @@ public @interface ExternalReview {
 
         @Override
         public boolean isValid(final CreateReviewRequest review, ConstraintValidatorContext ctx) {
-//        ctx.disableDefaultConstraintViolation();
-
             if (review.identifier == null) {
-                ctx.buildConstraintViolationWithTemplate("{NotNull}")
-                        .addNode("indentifier")
-                        .addConstraintViolation();
                 return false;
             }
-
             if (review.review == null) {
-//            ctx.buildConstraintViolationWithTemplate("HAY BAY BEEEE")
-//                    .addNode("review")
-//                    .addConstraintViolation();
                 return false;
             }
-
             return true;
         }
     }
