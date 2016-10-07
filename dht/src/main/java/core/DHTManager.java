@@ -1,24 +1,19 @@
 package core;
 
-import com.google.common.base.Strings;
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableMap;
 import config.DHTConfig;
 import exceptions.InitializationFailedException;
-import key.DHTKeyBuilder;
 import key.DRSKey;
 import key.DefaultDHTKeyPair;
-import key.KeyRequestCollection;
 import msg.AsyncComplete;
 import msg.AsyncResult;
-import net.tomp2p.dht.FutureRemove;
 import net.tomp2p.futures.BaseFuture;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;

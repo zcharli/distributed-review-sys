@@ -3,7 +3,6 @@ package core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
 import key.AcceptanceOffHeapKey;
-import key.DefaultOffHeapKey;
 import key.PublishedOffHeapKey;
 import msg.RedisElementContainer;
 import net.tomp2p.dht.Storage;

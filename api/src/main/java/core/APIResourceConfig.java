@@ -1,11 +1,13 @@
 package core;
 
 import exception.ApplicationExceptionMapper;
+import exception.JsonMappingExceptionMapper;
+import exception.JsonProcessingExceptionMapper;
+import exception.ValidationExceptionMapper;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationFeature;
-import exception.ValidationExceptionMapper;
 import servlet.rest.DRSServlet;
 import servlet.rest.ReviewServlet;
 import validator.ValidationConfigContext;
@@ -19,8 +21,12 @@ public class APIResourceConfig extends ResourceConfig {
         packages(DRSServlet.class.getPackage().getName());
         packages(ReviewServlet.class.getPackage().getName());
         register(ValidationConfigContext.class);
+
         register(ValidationExceptionMapper.class);
+        register(JsonProcessingExceptionMapper.class);
+        register(JsonMappingExceptionMapper.class);
         register(ApplicationExceptionMapper.class);
+
         register(JacksonFeature.class);
         register(ValidationFeature.class);
         property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);

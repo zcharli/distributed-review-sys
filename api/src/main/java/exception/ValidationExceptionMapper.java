@@ -29,7 +29,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ValidationExce
                 strBuilder.append(cv.getMessageTemplate());
             }
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).type(MediaType.APPLICATION_JSON)
-                    .entity(new ValidationError(strBuilder.toString(), request.getRequestURI(), e.getMessage())).build();
+                    .entity(new ValidationError(strBuilder.toString(), request.getRequestURI(), "Likely missing required parameters")).build();
         }
         return Response.serverError().entity(e.getMessage()).build();
     }

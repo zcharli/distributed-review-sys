@@ -2,7 +2,6 @@ package msg;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import msg.ByteArraySerializer;
 
 /**
  * Created by cli on 9/26/2016.

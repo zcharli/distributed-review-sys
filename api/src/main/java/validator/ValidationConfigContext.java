@@ -15,9 +15,6 @@ public class ValidationConfigContext implements ContextResolver<ValidationConfig
     private ResourceContext resourceContext;
     @Override
     public ValidationConfig getContext(final Class<?> type) {
-        System.out.println("validation configed");
-        final ValidationConfig config = new ValidationConfig();
-        config.constraintValidatorFactory(resourceContext.getResource(InjectingConstraintValidatorFactory.class));
-        return config;
+        return new ValidationConfig().constraintValidatorFactory(resourceContext.getResource(InjectingConstraintValidatorFactory.class));
     }
 }

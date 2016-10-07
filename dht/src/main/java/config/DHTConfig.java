@@ -6,7 +6,6 @@ import net.tomp2p.peers.Number160;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

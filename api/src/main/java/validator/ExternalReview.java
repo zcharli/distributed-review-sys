@@ -1,7 +1,5 @@
 package validator;
 
-import request.CreateReviewRequest;
-
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -24,8 +22,7 @@ public @interface ExternalReview {
 
     Class<? extends Payload>[] payload() default {};
 
-    public static class ReviewValidator implements ConstraintValidator<ExternalReview, CreateReviewRequest> {
-
+    public static class ReviewValidator implements ConstraintValidator<ExternalReview, Validatable> {
 
         @Override
         public void initialize(final ExternalReview studentID) {
@@ -33,14 +30,8 @@ public @interface ExternalReview {
         }
 
         @Override
-        public boolean isValid(final CreateReviewRequest review, ConstraintValidatorContext ctx) {
-            if (review.identifier == null) {
-                return false;
-            }
-            if (review.review == null) {
-                return false;
-            }
-            return true;
+        public boolean isValid(final Validatable review, ConstraintValidatorContext ctx) {
+            return review.validate();
         }
     }
 }

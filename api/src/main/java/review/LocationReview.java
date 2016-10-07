@@ -1,5 +1,6 @@
 package review;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -29,5 +30,13 @@ public class LocationReview extends BaseReview {
         super(review, stars);
         m_latitutde = lat;
         m_longitude = lon;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getIdentifier() {
+        int result = (int) (m_longitude ^ (m_longitude >>> 32));
+        result = 31 * result + (int) (m_latitutde ^ (m_latitutde >>> 32));
+        return Integer.toString(result);
     }
 }

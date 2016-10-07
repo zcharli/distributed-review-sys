@@ -1,11 +1,13 @@
 package review;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import review.request.BaseCRRequest;
 
 /**
  * Created by cli on 9/27/2016.
  */
-public class BaseReview {
+public abstract class BaseReview {
 
     @JsonProperty("review_content")
     public String m_content;
@@ -26,5 +28,19 @@ public class BaseReview {
         m_createTime = System.nanoTime();
         m_content = content;
         m_stars = stars;
+    }
+
+    public BaseReview(BaseCRRequest request) {
+        m_createTime = System.nanoTime();
+        m_stars = request.stars;
+        m_content = request.content;
+    }
+
+    @JsonIgnore
+    public abstract String getIdentifier();
+
+    @JsonIgnore
+    public String getContent() {
+        return m_content;
     }
 }

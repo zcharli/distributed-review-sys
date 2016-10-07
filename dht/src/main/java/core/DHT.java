@@ -1,7 +1,6 @@
 package core;
 
 import key.DRSKey;
-import key.KeyRequestCollection;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.dht.FutureGet;

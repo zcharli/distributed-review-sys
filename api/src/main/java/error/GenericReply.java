@@ -5,11 +5,11 @@ package error;
  *
  * Created by czl on 04/10/16.
  */
-public class GenericError<T> {
+public class GenericReply<T> {
     public String errorCode;
     public T errorDetails;
 
-    public GenericError(String errorCode, T errorDetails) {
+    public GenericReply(String errorCode, T errorDetails) {
         this.errorCode = errorCode;
         this.errorDetails = errorDetails;
     }

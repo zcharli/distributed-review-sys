@@ -4,6 +4,8 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'application'
 
+applicationDefaultJvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8080"]
+
 mainClassName='Test2'
 
 repositories {
@@ -86,4 +88,3 @@ jar {
         attributes 'Main-Class': 'Test2'
     }
 }
-
