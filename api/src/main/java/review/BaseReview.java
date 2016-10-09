@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import review.request.BaseCRRequest;
 
+import java.io.Serializable;
+
 /**
  * Created by cli on 9/27/2016.
  */
-public abstract class BaseReview {
+public abstract class BaseReview implements Serializable {
 
     @JsonProperty("review_content")
     public String m_content;

@@ -1,5 +1,6 @@
 package servlet.rest;
 
+import config.DHTConfig;
 import core.DHTManager;
 import error.GenericReply;
 import key.DRSKey;
@@ -35,7 +36,8 @@ public class ReviewServlet {
                 BaseReview reviewToSave = request.buildReview();
                 DRSKey barcodeKey = DefaultDHTKeyPair.builder()
                         .locationKey(Number160.createHash(reviewToSave.getIdentifier()))
-                        .contentKey(Number160.createHash(reviewToSave.getContent())).build();
+                        .contentKey(Number160.createHash(reviewToSave.getContent()))
+                        .domainKey(DHTConfig.PUBLISHED_DOMAIN).build();
                 DHTManager.instance().putContentOnStorage(barcodeKey, reviewToSave, new AsyncComplete() {
                     @Override
                     public Integer call() {

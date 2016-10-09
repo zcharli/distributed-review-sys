@@ -26,15 +26,18 @@ public class Test2 {
     private static int keyStore = 543453049;
 
     public static void startBootstrap() {
-        DHTManager dht = null;
+        final DHTManager dht;
+        DHTManager dht2 = null;
         try {
-            dht = DHTManager.builder().bootstrap(true).persistent(true).build();
+            dht2 = DHTManager.builder().bootstrap(true).persistent(true).build();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
+        } finally {
+            dht = dht2;
         }
         System.out.println("Init bootsrap successful");
-        System.out.println("Domain: " + DHTConfig.ACCEPTANCE_DOMAIN);
+        System.out.println("Domain: " + DHTConfig.PUBLISHED_DOMAIN);
         try {
             for (; ; ) {
                 Thread.sleep(5000);
@@ -52,6 +55,11 @@ public class Test2 {
 
                                 if (payload() == null) {
                                     System.out.println("PAYLOAD IS NULL FUCK");
+                                    NavigableMap<Number640, Data> allCurrent = dht.getProfile().MY_PROFILE.storageLayer().get();
+                                    System.out.println("\nCurrent elements on this node");
+                                    for (Map.Entry<Number640, Data> e : allCurrent.entrySet()) {
+                                        System.out.println("k:" + e.getKey() + " v:" + e.getValue());
+                                    }
                                     return 0;
                                 }
 
@@ -82,7 +90,7 @@ public class Test2 {
             dht = d;
         }
         System.out.println("Init client successful");
-        System.out.println("Domain: " + DHTConfig.ACCEPTANCE_DOMAIN);
+        System.out.println("Domain: " + DHTConfig.PUBLISHED_DOMAIN);
         String line = null;
 
         while (true) {
@@ -246,21 +254,21 @@ public class Test2 {
 //        testRedis();
         System.out.println("Launching API");
         testApiServer();
-//        System.out.println("Launching DHT");
-//        if (args.length == 0) {
-//            System.out.println("Staring client");
-//            // start client
-//            startClient();
-//            try {
-//                //startClientNAT();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.out.println("Starting bootstrap");
-//            // start bootstrap
-//            startBootstrap();
-////        }
+        System.out.println("Launching DHT");
+        if (args.length == 0) {
+            System.out.println("Staring client");
+            // start client
+            startClient();
+            try {
+                //startClientNAT();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Starting bootstrap");
+            // start bootstrap
+            startBootstrap();
 //        }
+        }
     }
 }
