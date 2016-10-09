@@ -15,5 +15,9 @@ public class PublishedOffHeapKey extends DefaultOffHeapKey {
 
     public static class PublishedOffHeapKeyBuilder extends DefaultOffHeapKey.OffHeapKeyBuilder {
         public PublishedOffHeapKeyBuilder() {}
+
+        public String buildReviewKey() {
+            return String.format("%s%s%s", m_prefix, m_review_prefix, m_id);
+        }
     }
 }

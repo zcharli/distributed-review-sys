@@ -16,6 +16,8 @@ public class APIConfig {
     public static final String DEFAULT_HOST = "127.0.0.1";
     public static final APIConfig INSTANCE;
     public static final String WEB_RESOURCE_PATH;
+    public static final String DEFAULT_STEP = "5";
+
 
     static {
         INSTANCE = new APIConfig();
