@@ -20,8 +20,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public abstract class BaseCRRequest implements Validatable {
 
-    @NotNull(message = "Review identifier is missing or null")
-    public String identifier;
     @NotNull(message = "Review body is missing or null")
     public String content;
 
@@ -32,9 +30,6 @@ public abstract class BaseCRRequest implements Validatable {
     public abstract BaseReview buildReview();
 
     public boolean validate() {
-        if (identifier == null) {
-            return false;
-        }
 
         if (content == null) {
             return false;
