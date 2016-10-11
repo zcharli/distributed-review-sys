@@ -51,7 +51,7 @@ public class DefaultDHTKeyPair implements DRSKey {
     public DefaultDHTKeyPair(Number160 locationKey, Number160 contentKey, Number160 domainKey) {
         m_locationKey = locationKey;
         m_contentKey = contentKey;
-        m_domainKey = domainKey == null ? DHTConfig.ACCEPTANCE_DOMAIN : DHTConfig.PUBLISHED_DOMAIN;
+        m_domainKey = domainKey == null ? DHTConfig.ACCEPTANCE_DOMAIN : domainKey;
     }
 
     public Number160 getLocationKey() {

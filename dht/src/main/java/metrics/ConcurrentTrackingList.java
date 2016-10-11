@@ -37,7 +37,8 @@ public class ConcurrentTrackingList<K, V> {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             try {
                 String buffer = objectMapper.writeValueAsString(value);
-                adapter.lpush(DHTConfig.TRACKED_ID, buffer);
+                String trackingKey = DHTConfig.TRACKED_ID + key.toString();
+                adapter.lpush(trackingKey, buffer);
             } catch (Exception e) {
                 LOGGER.error("Json processing error when trying to write value as string: " + key);
             }

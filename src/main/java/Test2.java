@@ -47,14 +47,14 @@ public class Test2 {
                     System.out.println("DHT is down");
                 }
                 dht.getAllFromStorage(DefaultDHTKeyPair.builder()
-                                .locationKey(Number160.createHash(Integer.toString(keyStore))).domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                                .locationKey(Number160.createHash(Integer.toString(keyStore))).domainKey(DHTConfig.ACCEPTANCE_DOMAIN)
                                 .build()
                         , new AsyncResult() {
                             @Override
                             public Integer call() {
 
                                 if (payload() == null) {
-                                    System.out.println("PAYLOAD IS NULL FUCK");
+                                    System.out.println("No results");
                                     NavigableMap<Number640, Data> allCurrent = dht.getProfile().MY_PROFILE.storageLayer().get();
                                     System.out.println("\nCurrent elements on this node");
                                     for (Map.Entry<Number640, Data> e : allCurrent.entrySet()) {
@@ -62,14 +62,11 @@ public class Test2 {
                                     }
                                     return 0;
                                 }
-
                                 Iterator<Data> iterator = payload().values().iterator();
                                 printElements(iterator);
                                 return 0;
                             }
                         });
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();

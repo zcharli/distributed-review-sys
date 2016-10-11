@@ -5,7 +5,6 @@ package key;
  * Created by cli on 10/1/2016.
  */
 public class AcceptanceOffHeapKey extends DefaultOffHeapKey {
-    protected static final String m_review_prefix = "acceptance:";
 
     protected AcceptanceOffHeapKey() {}
 
@@ -17,7 +16,7 @@ public class AcceptanceOffHeapKey extends DefaultOffHeapKey {
         public AcceptanceOffHeapKeyBuilder() {}
 
         public String buildReviewKey() {
-            return String.format("%s%s%s", m_prefix, m_review_prefix, m_id);
+            return String.format("%s%s%s", m_prefix, "acceptance:", m_id);
         }
     }
 }
