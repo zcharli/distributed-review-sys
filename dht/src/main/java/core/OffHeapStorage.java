@@ -33,7 +33,7 @@ public class OffHeapStorage implements Storage {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
     // Core
-    private static final JedisPool m_storagePool = new JedisPool(new JedisPoolConfig(), DHTConfig.REDIS_HOST);
+    private static final JedisPool m_storagePool = DHTConfig.REDIS_RESOURCE_POOL;
     final private NavigableMap<Number640, Data> dataMap = new ConcurrentSkipListMap<Number640, Data>();
     final private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -70,6 +70,9 @@ public class OffHeapStorage implements Storage {
         try (Jedis adapter = m_storagePool.getResource()) {
             Set<String> allKeys = adapter.keys("*");
             for (String key : allKeys) {
+                if (!key.startsWith("drs")) {
+                    continue;
+                }
                 for (String jsonData : adapter.lrange(key, 0, -1)) {
                     try {
                         RedisElementContainer data = objectMapper.readValue(jsonData, RedisElementContainer.class);

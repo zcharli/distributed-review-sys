@@ -1,7 +1,10 @@
 package core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
 import exceptions.InitializationFailedException;
+import metrics.ConcurrentTrackingList;
+import metrics.TrackingContext;
 import net.tomp2p.connection.Bindings;
 import net.tomp2p.dht.PeerBuilderDHT;
 import net.tomp2p.dht.PeerDHT;
@@ -12,6 +15,7 @@ import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.PeerAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 import java.util.Random;
 
@@ -84,6 +88,23 @@ public class DHTProfile {
         } else {
             LOGGER.info("Client successfully connected to bootstrap server.");
         }
+    }
+
+    public ConcurrentTrackingList<Number160, TrackingContext> loadTrackedData() {
+        ConcurrentTrackingList<Number160, TrackingContext> cache = new ConcurrentTrackingList<Number160, TrackingContext>();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+            for (String jsonData : adapter.lrange(DHTConfig.TRACKED_ID, 0, -1)) {
+                try {
+                    TrackingContext fromBuffer = objectMapper.readValue(jsonData, TrackingContext.class);
+                    Number160 keyFromBuffer = new Number160(fromBuffer.locationBuffer);
+                    cache.silentLoad(keyFromBuffer, fromBuffer);
+                } catch (Exception e) {
+                    LOGGER.error("Error reading in load tracked data");
+                }
+            }
+        }
+        return cache;
     }
 
     /**

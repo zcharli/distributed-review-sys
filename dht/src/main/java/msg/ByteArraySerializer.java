@@ -15,11 +15,9 @@ public class ByteArraySerializer extends JsonSerializer<byte[]> {
     public void serialize(byte[] bytes, JsonGenerator jgen,
                           SerializerProvider provider) throws IOException {
         jgen.writeStartArray();
-
         for (byte b : bytes) {
             jgen.writeNumber(b & 0xFF);
         }
-
         jgen.writeEndArray();
     }
 }

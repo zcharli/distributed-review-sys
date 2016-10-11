@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Created by cli on 9/27/2016.
  */
-public abstract class BaseReview implements Serializable {
+public abstract class BaseReview implements Serializable, ReviewIdentity {
 
     @JsonProperty("review_content")
     public String m_content;
@@ -44,5 +44,9 @@ public abstract class BaseReview implements Serializable {
     @JsonIgnore
     public String getContent() {
         return m_content;
+    }
+
+    public BaseReview identity() {
+        return this;
     }
 }

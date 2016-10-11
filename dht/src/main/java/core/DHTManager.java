@@ -1,13 +1,19 @@
 package core;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import config.DHTConfig;
 import exceptions.InitializationFailedException;
 import key.DRSKey;
 import key.DefaultDHTKeyPair;
+import metrics.ConcurrentTrackingList;
+import metrics.MetricsCollector;
+import metrics.TrackingContext;
 import msg.AsyncComplete;
 import msg.AsyncResult;
 import net.tomp2p.futures.BaseFuture;
+import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 import org.slf4j.Logger;
@@ -28,9 +34,9 @@ public class DHTManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(DHTManager.class);
 
     private static DHTManager INSTANCE;
-
     private final DHTProfile m_profile;
     private final DHT<DRSKey> m_dht;
+    private final MetricsCollector m_metricsCollector;
 
     public static DHTManager instance() {
         if (INSTANCE == null) {
@@ -60,6 +66,7 @@ public class DHTManager {
         DHTConfig.instance().isBootstrap = isBootstrap;
         m_profile = DHTProfile.init(isBootstrap, isPersistent);
         m_dht = new DHT<>();
+        m_metricsCollector = new MetricsCollector(m_profile.loadTrackedData());
     }
 
     public DHTConfig getGlobalConfig() {
@@ -81,8 +88,13 @@ public class DHTManager {
         if (isInvalidKey(key)) {
             return;
         }
-
         m_dht.get(key, asyncResult);
+        m_metricsCollector.collectUseMetric(key);
+    }
+
+    @Nullable
+    public ImmutableList<Number160> getTrackedFromAcceptanceDomain() {
+        return m_metricsCollector.getTrackedKeys();
     }
 
     public void addToStorage(final DRSKey key, final Object element, final AsyncComplete asyncComplete) {
@@ -96,6 +108,7 @@ public class DHTManager {
             LOGGER.warn("Exception on DHT add: " + e.getMessage());
             e.printStackTrace();
         }
+        m_metricsCollector.collectUseMetric(key);
     }
 
     public void removeFromStorage(final DRSKey key, final AsyncComplete asyncComplete) {
@@ -118,6 +131,7 @@ public class DHTManager {
             LOGGER.warn("Exception on DHT put: " + e.getMessage());
             e.printStackTrace();
         }
+        m_metricsCollector.collectUseMetric(key);
     }
 
     /**
@@ -189,8 +203,6 @@ public class DHTManager {
                                 return 0;
                             }
                         });
-
-
                         break;
                     }
                 }
@@ -214,6 +226,7 @@ public class DHTManager {
             return null;
         }
         Collection<Data> ret = m_dht.get(key);
+        m_metricsCollector.collectUseMetric(key);
         return ret;
     }
 
