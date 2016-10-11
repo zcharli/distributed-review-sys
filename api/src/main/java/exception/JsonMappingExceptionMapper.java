@@ -36,8 +36,8 @@ public class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingEx
             if (index > 0) {
                 cause = split[1].substring(1, index - 1);
             }
-        }
+        }e.printStackTrace();
         return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).type(MediaType.APPLICATION_JSON)
-                .entity(new ValidationError("Error in request", request.getRequestURI(), cause)).build();
+                .entity(new ValidationError("Error in request", request.getRequestURI(), e.getMessage())).build();
     }
 }
