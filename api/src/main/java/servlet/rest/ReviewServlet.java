@@ -149,7 +149,7 @@ public class ReviewServlet {
     public void getTrackedReviewsNeedingApproval(final @Suspended AsyncResponse response) {
         ImmutableList<Number160> trackedIds = DHTManager.instance().getTrackedFromAcceptanceDomain();
         if (trackedIds == null) {
-            response.resume(Response.serverError().entity(new GenericReply<String>("DHT-APPROVAL", "Unabled to find tracked IDs on this node.")))
+            response.resume(Response.serverError().entity(new GenericReply<String>("DHT-APPROVAL", "Unabled to find tracked IDs on this node.")));
         }
         List<BaseReview> results = new LinkedList<>();
         for (Number160 locationId : trackedIds) {
