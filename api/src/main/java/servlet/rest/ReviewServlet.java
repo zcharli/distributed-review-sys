@@ -86,7 +86,7 @@ public class ReviewServlet {
             public Integer call() {
                 if (!isSuccessful()) {
                     response.resume(Response.serverError().entity(
-                            new GenericReply<String>("DHT-ACCEPT", "Failed to publish review")
+                            new GenericReply<String>("DHT-ACCEPT", message())
                     ).build());
                 } else {
                     response.resume(Response.ok().entity(

@@ -40,7 +40,7 @@ public class ConcurrentTrackingList<K, V> {
                 String trackingKey = DHTConfig.TRACKED_ID + key.toString();
                 adapter.lpush(trackingKey, buffer);
             } catch (Exception e) {
-                LOGGER.error("Json processing error when trying to write value as string: " + key);
+                LOGGER.error("Json processing error save(): "  + key + " " + e.getMessage());
             }
         }
         m_indexMap.put(value, m_cache.size() - 1);
