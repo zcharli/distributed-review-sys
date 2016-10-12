@@ -62,7 +62,7 @@ public class ReviewServlet {
                                     "DHT-PUT", "An error occurred when trying to put object into the DHT and thus has failed"))
                             .build());
                 } else {
-                    response.resume(Response.ok(new GenericReply<String>("DHT-PUT", "Success")).build());
+                    response.resume(Response.ok(new ReviewOperationComplete<String>("DHT-PUT", "Success")).build());
                 }
                 return 0;
             }
@@ -166,7 +166,6 @@ public class ReviewServlet {
         }
         response.resume(Response.ok().entity(new ReviewOperationComplete<List<BaseReview>>("200",results)).build());
     }
-
 
     @GET
     @Path("/ping")

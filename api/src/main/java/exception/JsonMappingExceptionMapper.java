@@ -30,14 +30,14 @@ public class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingEx
         }
 
         String[] split = e.getMessage().split(":");
-        String cause = "";
+        String cause = "Unknown error, see logs.";
         if (split.length > 2) {
             int index = split[1].indexOf('(');
             if (index > 0) {
                 cause = split[1].substring(1, index - 1);
             }
-        }e.printStackTrace();
+        }
         return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).type(MediaType.APPLICATION_JSON)
-                .entity(new ValidationError("Error in request", request.getRequestURI(), e.getMessage())).build();
+                .entity(new ValidationError("Error in request", request.getRequestURI(), cause)).build();
     }
 }
