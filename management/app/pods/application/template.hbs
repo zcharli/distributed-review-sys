@@ -1,9 +1,13 @@
-{{side-nav}}
+{{#if session.isAuthenticated}}
 
-{{top-nav}}
+  {{side-nav}}
+  {{top-nav}}
 
-<div class="pusher">
+{{/if}}
+
+<div class="pusher fullscreen">
     <div class="full height">
       {{outlet}}
     </div>
 </div>
+

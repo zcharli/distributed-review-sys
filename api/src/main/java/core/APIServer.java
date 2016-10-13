@@ -50,7 +50,6 @@ public class APIServer {
             System.exit(0);
         }
         m_apiServer = new Server(currentAddress);
-
     }
 
     /**

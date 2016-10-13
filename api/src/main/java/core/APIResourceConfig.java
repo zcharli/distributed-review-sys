@@ -8,7 +8,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationFeature;
-import servlet.rest.DRSServlet;
+import servlet.rest.AccountServlet;
 import servlet.rest.ReviewServlet;
 import validator.ValidationConfigContext;
 /**
@@ -18,7 +18,7 @@ public class APIResourceConfig extends ResourceConfig {
 
     public APIResourceConfig() {
         packages("my.package");
-        packages(DRSServlet.class.getPackage().getName());
+        packages(AccountServlet.class.getPackage().getName());
         packages(ReviewServlet.class.getPackage().getName());
         register(ValidationConfigContext.class);
 

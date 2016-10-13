@@ -6,11 +6,11 @@ package error;
  * Created by czl on 04/10/16.
  */
 public class GenericReply<T> {
-    public String errorCode;
-    public T errorDetails;
+    public String status;
+    public T responseText;
 
-    public GenericReply(String errorCode, T errorDetails) {
-        this.errorCode = errorCode;
-        this.errorDetails = errorDetails;
+    public GenericReply(String errorCode, T responseText) {
+        this.status = errorCode;
+        this.responseText = responseText;
     }
 }

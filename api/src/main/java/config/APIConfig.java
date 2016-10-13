@@ -18,7 +18,6 @@ public class APIConfig {
     public static final String WEB_RESOURCE_PATH;
     public static final String DEFAULT_STEP = "5";
 
-
     static {
         INSTANCE = new APIConfig();
         String path = INSTANCE.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
