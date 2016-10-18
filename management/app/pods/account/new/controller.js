@@ -22,8 +22,9 @@ export default Ember.Controller.extend({
         return;
       }
 
+      const endpoint = 'http://134.117.26.135:9090';
       const options = {
-        url: '/api/account/new',
+        url: endpoint + '/api/account/new',
         data: JSON.stringify({
           identification: identification,
           password: password

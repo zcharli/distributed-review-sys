@@ -26,6 +26,7 @@ public class APIResourceConfig extends ResourceConfig {
         register(JsonProcessingExceptionMapper.class);
         register(JsonMappingExceptionMapper.class);
         register(ApplicationExceptionMapper.class);
+        register(CORSResponseFilter.class);
 
         register(JacksonFeature.class);
         register(ValidationFeature.class);
