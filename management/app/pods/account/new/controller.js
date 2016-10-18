@@ -11,7 +11,7 @@ export default Ember.Controller.extend({
         this.set('errorMessage', "Passwords do not match!");
         return;
       }
-      const passwordRegex = /(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/;
       if (!passwordRegex.test(password)) {
         this.set('errorMessage', 'Your password must have at least one number, one uppercase, one lowercase, and one special character');
         return;
@@ -24,10 +24,10 @@ export default Ember.Controller.extend({
 
       const options = {
         url: '/api/account/new',
-        data: {
+        data: JSON.stringify({
           identification: identification,
           password: password
-        },
+        }),
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json'
@@ -39,6 +39,7 @@ export default Ember.Controller.extend({
           clearDuration: 1200
         });
         this.get('session').set("clientId", response.clientId);
+        this.set('session.isAuthenticated', true);
         this.transitionToRoute('index');
       }, (xhr) => {
         this.set('errorMessage', xhr.errorMessage);

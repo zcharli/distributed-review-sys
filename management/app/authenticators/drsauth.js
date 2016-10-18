@@ -68,8 +68,8 @@ export default BaseAuthenticator.extend({
 
   makeRequest(url, data) {
     const options = {
-      url,
-      data,
+      url: url,
+      data: JSON.stringify(data),
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json'

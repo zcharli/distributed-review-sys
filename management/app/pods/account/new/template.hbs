@@ -7,7 +7,7 @@
                     Create Account
                 </div>
             </h2>
-            <form {{action 'createAccount' on='submit'}} class="ui large form">
+            <form  class="ui large form">
                 <div class="ui stacked segment">
                     <div class="field">
                         <div class="ui left icon input">
@@ -27,7 +27,7 @@
                           {{input id='passwordConfirm' placeholder='Confirm Password' type='password' value=passwordConfirm}}
                         </div>
                     </div>
-                    <button class="ui fluid large teal submit button">Login</button>
+                    <button class="ui fluid large teal submit button" {{action 'createAccount'}}>Login</button>
                   {{#if errorMessage}}
                       <p>{{errorMessage}}</p>
                   {{/if}}

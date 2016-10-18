@@ -247,7 +247,6 @@ public class Test2 {
     }
 
     public static void main(String[] args) {
-
 //        testRedis();
         System.out.println("Launching API");
         testApiServer();

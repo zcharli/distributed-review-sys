@@ -37,6 +37,7 @@ task(runSlave, dependsOn: 'classes', type: JavaExec) {
 
 task(launch, dependsOn: 'classes', type: JavaExec) {
     main='client.DRSClient'
+    args '-bootstrap', '-port', '9090', '-host', '192.168.101.19'
     classpath = sourceSets.main.runtimeClasspath
 }
 

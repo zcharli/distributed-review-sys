@@ -1,6 +1,7 @@
 package core;
 
 import config.APIConfig;
+import error.SPAErrorRedirectModule;
 import exceptions.InitializationFailedException;
 import filter.AuthorizationFilter;
 import filter.ContextInjectionFilter;
@@ -81,6 +82,7 @@ public class APIServer {
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
         m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
+        m_servletContextHandler.setErrorHandler(new SPAErrorRedirectModule());
         m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addServlet(m_apiServletHolder, "/api/*");
