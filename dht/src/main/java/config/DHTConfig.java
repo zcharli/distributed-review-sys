@@ -17,7 +17,8 @@ import java.util.logging.Logger;
 public class DHTConfig {
 
     public static final InetAddress BOOTSRAP_ADDR;
-    public static final String TRACKED_ID = "trk:loc";
+    public static final String TRACKED_ID = "trk:loc:";
+    public static final String REDIS_USERNAME_PREFIX = "drs:usr:";
     public static final JedisPool REDIS_RESOURCE_POOL = new JedisPool(new JedisPoolConfig(), DHTConfig.REDIS_HOST);
     public static int DRS_PORT;
     public static final String REDIS_HOST = "localhost";

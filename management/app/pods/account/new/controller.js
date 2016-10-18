@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  notifications: Ember.inject.service('notification-messages'),
+  session: Ember.inject.service('session'),
 
   actions: {
     createAccount() {
@@ -19,7 +21,28 @@ export default Ember.Controller.extend({
         this.set("errorMessage", "That email is invalid");
         return;
       }
-      
+
+      const options = {
+        url: '/api/account/new',
+        data: {
+          identification: identification,
+          password: password
+        },
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json'
+      };
+
+      Ember.$.ajax(options).then((response) => {
+        this.get('notifications').success('Account successfully created!', {
+          autoClear: true,
+          clearDuration: 1200
+        });
+        this.get('session').set("clientId", response.clientId);
+        this.transitionToRoute('index');
+      }, (xhr) => {
+        this.set('errorMessage', xhr.errorMessage);
+      });
     }
   }
 });

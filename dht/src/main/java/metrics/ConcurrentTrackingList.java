@@ -17,7 +17,6 @@ import java.util.*;
 public class ConcurrentTrackingList<K, V> {
     private final static Logger LOGGER = LoggerFactory.getLogger(ConcurrentTrackingList.class);
 
-    private final String trkPrefix = DHTConfig.TRACKED_ID + ":";
     private volatile Map<K, V> m_cache;
     private final Map<V, Integer> m_indexMap;
     private volatile ObjectMapper objectMapper;
@@ -37,7 +36,7 @@ public class ConcurrentTrackingList<K, V> {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             try {
                 String buffer = objectMapper.writeValueAsString(value);
-                String trackingKey = trkPrefix + key.toString();
+                String trackingKey = DHTConfig.TRACKED_ID + key.toString();
                 adapter.lpush(trackingKey, buffer);
             } catch (Exception e) {
                 LOGGER.error("Json processing error save(): "  + key + " " + e.getMessage());
@@ -51,7 +50,7 @@ public class ConcurrentTrackingList<K, V> {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             try {
                 String buffer = objectMapper.writeValueAsString(value);
-                adapter.lset(trkPrefix + key.toString(), m_indexMap.get(value), buffer);
+                adapter.lset(DHTConfig.TRACKED_ID + key.toString(), m_indexMap.get(value), buffer);
             } catch (Exception e) {
                 LOGGER.error("Json processing error update(): "  + key + " " + e.getMessage() + "\n");
                 e.printStackTrace();

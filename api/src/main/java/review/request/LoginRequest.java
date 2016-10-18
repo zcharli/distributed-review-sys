@@ -1,11 +1,13 @@
 package review.request;
 
+import validator.Validatable;
+
 import javax.validation.constraints.NotNull;
 
 /**
  * Created by cli on 10/12/2016.
  */
-public class LoginRequest {
+public class LoginRequest implements Validatable {
     @NotNull(message = "Username must not be null")
     public String username;
 
