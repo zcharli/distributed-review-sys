@@ -5,8 +5,8 @@ const {RSVP, isEmpty, run} = Ember;
 
 export default BaseAuthenticator.extend({
   endpoint: 'http://134.117.26.135:9090',
-  serverLoginEndpoint: this.endpoint + '/api/account/login',
-  serverLogoutEndpoint: this.endpoint + '/api/account/logout',
+  serverLoginEndpoint: 'http://134.117.26.135:9090' + '/api/account/login',
+  serverLogoutEndpoint: 'http://134.117.26.135:9090' + '/api/account/logout',
   loggedIn: false,
   clientId: null,
 

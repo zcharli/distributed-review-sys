@@ -7,25 +7,20 @@
         <a href="/"><b>Management</b></a>
     </div>
     <div class="item">
-        <div class="header">Introduction</div>
+        <div class="header">Product Administration</div>
         <div class="menu">
+          {{#link-to 'product' class='item'}}View all products{{/link-to}}
+          {{#link-to 'approvals' class='item'}}Approve reviews{{/link-to}}
+        </div>
 
-            <a class="item" href="/introduction/integrations.html">
-                Integrations
-            </a>
-
-            <a class="item" href="/introduction/build-tools.html">
-                Build Tools
-            </a>
-
-            <a class="item" href="/introduction/advanced-usage.html">
-                Recipes
-            </a>
-
-            <a class="item" href="/introduction/glossary.html">
-                Glossary
-            </a>
-
+    </div>
+    <div class="item">
+        <div class="header">Settings</div>
+        <div class="menu">
+          {{#link-to 'account.settings' class='item'}}Settings{{/link-to}}
+        </div>
+        <div class="menu">
+          {{#link-to 'settings' class='item'}}System{{/link-to}}
         </div>
     </div>
 </div>
