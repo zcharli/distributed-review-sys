@@ -8,5 +8,5 @@ moduleForModel('product/review', 'Unit | Model | product/review', {
 test('it exists', function(assert) {
   let model = this.subject();
   // let store = this.store();
-  assert.ok(true);
+  assert.ok(!true);
 });
