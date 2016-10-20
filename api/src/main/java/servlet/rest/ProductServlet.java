@@ -42,7 +42,7 @@ public class ProductServlet {
 
     @GET
     @Path("/all")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
     @Produces(MediaType.APPLICATION_JSON)
     public void getAllProducts(final @Suspended AsyncResponse response) {
 
