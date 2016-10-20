@@ -30,8 +30,11 @@ public class DRSClient {
     @Parameter(names = "-host", description = "Host address for API")
     private String host;
 
+    @Parameter(names = "-custombootstrap", description = "Used for client nodes to connect to the custom bootstrap address,")
+    private String customBootstrap;
+
     @Parameter(names = "-bootstrap", description = "Run the bootstrap version of the DHT")
-    private String bootstrap = "-1";
+    private String bootstrap;
 
     @Parameter(names = "-persistance", description = "Run the bootstrap version of the DHT")
     private boolean persistance = true;
@@ -41,8 +44,8 @@ public class DRSClient {
 
     public void run() {
 
-        DHTConfig.instance().isBootstrap = !bootstrap.equals("-1");
-        if (DHTConfig.instance().isBootstrap && !Strings.isNullOrEmpty(bootstrap)) {
+        DHTConfig.instance().isBootstrap = !Strings.isNullOrEmpty(bootstrap);
+        if (DHTConfig.instance().isBootstrap) {
             try {
                 DHTConfig.instance().setBootstrapAddress(bootstrap);
             } catch (Exception e) {
@@ -51,6 +54,16 @@ public class DRSClient {
                 System.exit(0);
             }
         }
+
+        if (!Strings.isNullOrEmpty(customBootstrap)) {
+            try {
+                DHTConfig.instance().setBootstrapAddress(customBootstrap);
+            } catch (Exception e) {
+                LOGGER.error("Could not resolve custom bootstrap address.");
+                System.exit(0);
+            }
+        }
+
         DHTConfig.instance().willPersistData = persistance;
 
         if (drsport != -1) {
