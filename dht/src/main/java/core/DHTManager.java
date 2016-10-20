@@ -186,7 +186,9 @@ public class DHTManager {
                                     asyncComplete.call();
                                     return 0;
                                 }
-
+                                if (DHTConfig.instance().willPersistData) {
+                                    m_dht.removeDataFromStaging(entry);
+                                }
                                 m_dht.put(publishedKey, data, new AsyncComplete() {
                                     @Override
                                     public Integer call() throws Exception {

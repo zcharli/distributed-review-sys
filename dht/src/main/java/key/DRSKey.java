@@ -1,6 +1,8 @@
 package key;
 
+import config.DHTConfig;
 import net.tomp2p.peers.Number160;
+import net.tomp2p.peers.Number640;
 
 import javax.annotation.Nullable;
 

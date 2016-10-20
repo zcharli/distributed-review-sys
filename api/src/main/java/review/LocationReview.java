@@ -19,15 +19,15 @@ public class LocationReview extends BaseReview {
     }
 
     public LocationReview(String review) {
-        this(review, -1, -1, -1);
+        this(review, "", -1, -1, -1);
     }
 
-    public LocationReview(String review, float stars) {
-        this(review, stars, -1, -1);
+    public LocationReview(String review, int stars) {
+        this(review, "", stars, -1, -1);
     }
 
-    public LocationReview(String review, float stars, long lat, long lon) {
-        super(review, stars);
+    public LocationReview(String review, String title, int stars, long lat, long lon) {
+        super(review, title, stars, 0);
         m_latitutde = lat;
         m_longitude = lon;
     }

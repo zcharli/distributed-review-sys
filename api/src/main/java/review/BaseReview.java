@@ -1,27 +1,37 @@
 package review;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import com.google.common.base.Strings;
 import net.tomp2p.peers.Number160;
-import review.request.BaseCRRequest;
+import validator.Validatable;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
  * Created by cli on 9/27/2016.
  */
-public abstract class BaseReview implements Serializable, ReviewIdentity {
+@XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CommodityReview.class, name = "commodity")
+})
+public abstract class BaseReview implements Serializable, ReviewIdentity, Validatable {
 
     @JsonProperty("review_content")
+    @NotNull(message = "Review body is missing or null")
     public String m_content;
 
     @JsonProperty("created_at")
     public long m_createTime;
 
     @JsonProperty("stars")
-    public float m_stars;
+    public int m_stars;
 
     @JsonProperty("title")
+    @NotNull(message = "A review title is missing or null")
     public String m_title;
 
     @JsonProperty("upvotes")
@@ -37,34 +47,36 @@ public abstract class BaseReview implements Serializable, ReviewIdentity {
     public Number160 m_domainId;
 
     public BaseReview() {
-        m_createTime = System.nanoTime();
-        m_stars = -1;
-        m_content = "";
+        this("", "", 0, 0);
     }
 
-    public BaseReview(String content, float stars) {
-        m_createTime = System.nanoTime();
+    public BaseReview(String content, int stars) {
+        this(content, "", stars, 0);
+    }
+
+    public BaseReview(String content, String title, int stars) {
+        this(content, title, stars, 0);
+    }
+
+    public BaseReview(String content, String title, int stars, int votes) {
+        m_createTime = System.currentTimeMillis();
         m_content = content;
         m_stars = stars;
+        m_upvotes = votes;
+        m_title = title;
     }
 
-    public BaseReview(BaseCRRequest request) {
-        m_createTime = System.nanoTime();
-        m_stars = request.stars;
-        m_content = request.content;
-    }
-
-    @JsonProperty("contentId")
+    @JsonIgnore
     public String getContentId() {
         return m_contentId != null ? m_contentId.toString(true) : "";
     }
 
-    @JsonProperty("domainId")
+    @JsonIgnore
     public String getDomainId() {
         return m_domainId != null ? m_domainId.toString(true) : "";
     }
 
-    @JsonProperty("locationId")
+    @JsonIgnore
     public String getLocationId() {
         return m_locationId != null ? m_locationId.toString(true) : "";
     }
@@ -86,5 +98,14 @@ public abstract class BaseReview implements Serializable, ReviewIdentity {
 
     public BaseReview identity() {
         return this;
+    }
+
+    public boolean validate() {
+
+        if (Strings.isNullOrEmpty(m_content) || Strings.isNullOrEmpty(m_title)) {
+            return false;
+        }
+
+        return true;
     }
 }

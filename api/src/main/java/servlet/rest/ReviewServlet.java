@@ -11,11 +11,9 @@ import msg.AsyncResult;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
-import org.glassfish.jersey.server.ManagedAsync;
 import review.BaseReview;
 import review.ReviewIdentity;
 import review.comparator.ReviewTimestampComparator;
-import review.request.BaseCRRequest;
 import review.request.LimitQueryParam;
 import review.response.ReviewGetResponse;
 import review.response.ReviewOperationComplete;
@@ -34,26 +32,26 @@ import java.util.*;
 @Path("/review")
 public class ReviewServlet {
 
-    public ReviewServlet() {
-    }
+    public ReviewServlet() { }
 
     @PUT
     @Path("/new/{identifier}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createNewReview(final @ExternalReview BaseCRRequest request,
+    public void createNewReview(final @ExternalReview BaseReview request,
                                 final @Suspended AsyncResponse response,
                                 final @PathParam("identifier") String identifier) {
-
+        if (!identifier.equals(request.getIdentifier())) {
+            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
+            return;
+        }
         // TODO: Validate the identifier
         // request.validateId(identifier);
-
-        BaseReview reviewToSave = request.buildReview();
         DRSKey barcodeKey = DefaultDHTKeyPair.builder()
-                .locationKey(Number160.createHash(reviewToSave.getIdentifier()))
-                .contentKey(Number160.createHash(reviewToSave.getContent()))
+                .locationKey(Number160.createHash(request.getIdentifier()))
+                .contentKey(Number160.createHash(request.getContent()))
                 .domainKey(DHTConfig.ACCEPTANCE_DOMAIN).build();
-        DHTManager.instance().putContentOnStorage(barcodeKey, reviewToSave, new AsyncComplete() {
+        DHTManager.instance().putContentOnStorage(barcodeKey, request, new AsyncComplete() {
             @Override
             public Integer call() {
                 if (!isSuccessful()) {
@@ -73,12 +71,13 @@ public class ReviewServlet {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("accept/{identifier}")
-    public void acceptReviewIntoPublished(final @ExternalReview BaseCRRequest request,
+    public void acceptReviewIntoPublished(final @ExternalReview BaseReview request,
                                           final @Suspended AsyncResponse response,
                                           final @PathParam("identifier") String identifier) {
+        // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
                 .locationKey( Number160.createHash(identifier) )
-                .contentKey( Number160.createHash(request.content) )
+                .contentKey( Number160.createHash(request.getContent()) )
                 .domainKey(DHTConfig.ACCEPTANCE_DOMAIN)
                 .build();
         DHTManager.instance().approveData(reviewKey, new AsyncComplete() {

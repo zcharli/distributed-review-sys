@@ -3,6 +3,7 @@ package core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
 import key.AcceptanceOffHeapKey;
+import key.DefaultOffHeapKey;
 import key.PublishedOffHeapKey;
 import msg.RedisElementContainer;
 import net.tomp2p.dht.Storage;
@@ -126,7 +127,7 @@ public class OffHeapStorage implements Storage {
                         .setDomainBuffer(key.domainKey().toIntArray())
                         .build());
                 // All reviews go to acceptance first
-                String offHeapKey = buildOffHeapKey(key);
+                String offHeapKey = DefaultOffHeapKey.buildOffHeapKey(key);
                 adapter.lpush(offHeapKey, dataJson);
             } catch (Exception e) {
                 LOGGER.error("Error when writing Data object to json: " + e.getMessage());
@@ -154,16 +155,6 @@ public class OffHeapStorage implements Storage {
         return tmp.size();
     }
 
-    private String buildOffHeapKey(Number640 key) {
-        String offHeapKey;
-        if (key.domainKey().equals(DHTConfig.ACCEPTANCE_DOMAIN)) {
-            offHeapKey = AcceptanceOffHeapKey.builder().id(key).buildReviewKey();
-        } else {
-            offHeapKey = PublishedOffHeapKey.builder().id(key).buildReviewKey();
-        }
-        return offHeapKey;
-    }
-
     @Override
     public Data remove(Number640 key, boolean returnData) {
         Data ret = dataMap.remove(key);
@@ -171,7 +162,7 @@ public class OffHeapStorage implements Storage {
             return ret;
         }
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
-            String offHeapKey = buildOffHeapKey(key);
+            String offHeapKey = DefaultOffHeapKey.buildOffHeapKey(key);
             List<String> elementsOffHeap = adapter.lrange(offHeapKey, 0, -1);
             int i = 0;
             for (String jsonData : elementsOffHeap) {

@@ -2,15 +2,16 @@ package review.response;
 
 import review.ProductRESTWrapper;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by cli on 10/20/2016.
  */
 public class GetAllProductsResponse {
-    public List<ProductRESTWrapper> product;
+    public Collection<ProductRESTWrapper> product;
 
-    public GetAllProductsResponse(List<ProductRESTWrapper> list) {
+    public GetAllProductsResponse(Collection<ProductRESTWrapper> list) {
         product = list;
     }
 }

@@ -3,9 +3,10 @@ package core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
 import key.DRSKey;
-import key.DefaultDHTKeyPair;
+import key.DefaultOffHeapKey;
 import msg.AsyncComplete;
 import msg.AsyncResult;
+import msg.RedisElementContainer;
 import net.tomp2p.dht.FutureGet;
 import net.tomp2p.dht.FuturePut;
 import net.tomp2p.dht.FutureRemove;
@@ -19,10 +20,7 @@ import redis.clients.jedis.Jedis;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,14 +32,14 @@ import java.util.function.Function;
 public class DHT<KEY extends DRSKey> {
 
     private final DHTProfile m_profile;
-    private final ExecutorService m_keystoreWorker;
+    private final ExecutorService m_persistentWorker;
     private final ObjectMapper mapper;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DHT.class);
 
     public DHT() {
         m_profile = DHTProfile.instance();
-        m_keystoreWorker = Executors.newSingleThreadExecutor();
+        m_persistentWorker = Executors.newSingleThreadExecutor();
         mapper = new ObjectMapper();
         if (m_profile == null) {
             LOGGER.error("Failed to initialize DHT, likely tried to get instance DHT before init DHTProfile");
@@ -50,6 +48,7 @@ public class DHT<KEY extends DRSKey> {
 
     /**
      * Always puts new reviews into acceptance domain
+     *
      * @param key
      * @param element
      * @param callback
@@ -60,8 +59,8 @@ public class DHT<KEY extends DRSKey> {
             return;
         }
 
-        FuturePut futurePut = m_profile.MY_PROFILE.put( key.getLocationKey() )
-                .data( key.getDomainKey(), key.getContentKey(), new Data( element ) )
+        FuturePut futurePut = m_profile.MY_PROFILE.put(key.getLocationKey())
+                .data(key.getDomainKey(), key.getContentKey(), new Data(element))
                 .start();
 
         attachFutureListenerToPut(futurePut, callback, key);
@@ -95,8 +94,8 @@ public class DHT<KEY extends DRSKey> {
             return;
         }
 
-        FuturePut futurePut = m_profile.MY_PROFILE.add( key.getLocationKey() )
-                .data( new Data( element ) ).domainKey( key.getDomainKey() ).start();
+        FuturePut futurePut = m_profile.MY_PROFILE.add(key.getLocationKey())
+                .data(new Data(element)).domainKey(key.getDomainKey()).start();
 
         attachFutureListenerToPut(futurePut, callback, key);
     }
@@ -107,6 +106,7 @@ public class DHT<KEY extends DRSKey> {
 
     /**
      * Gets all sync
+     *
      * @param key
      * @return
      */
@@ -116,8 +116,8 @@ public class DHT<KEY extends DRSKey> {
             return null;
         }
 
-        FutureGet futureGet = m_profile.MY_PROFILE.get( key.getLocationKey() )
-                .all().domainKey( key.getDomainKey() )
+        FutureGet futureGet = m_profile.MY_PROFILE.get(key.getLocationKey())
+                .all().domainKey(key.getDomainKey())
                 .start();
 
         futureGet.awaitUninterruptibly(2000);
@@ -137,6 +137,7 @@ public class DHT<KEY extends DRSKey> {
 
     /**
      * Gets all async for one product
+     *
      * @param key
      * @param callback
      * @return
@@ -146,9 +147,9 @@ public class DHT<KEY extends DRSKey> {
             return;
         }
 
-        FutureGet futureGet = m_profile.MY_PROFILE.get( key.getLocationKey() )
+        FutureGet futureGet = m_profile.MY_PROFILE.get(key.getLocationKey())
                 .all()
-                .domainKey( key.getDomainKey() )
+                .domainKey(key.getDomainKey())
                 .start();
 
         futureGet.addListener(new BaseFutureListener<FutureGet>() {
@@ -162,7 +163,7 @@ public class DHT<KEY extends DRSKey> {
                 callback.isSuccessful(futureGet.isSuccess());
                 Map<Number640, Data> dataMap = future.dataMap();
                 if (dataMap.size() != 0) {
-                    callback.payload( dataMap );
+                    callback.payload(dataMap);
                 }
                 callback.call();
             }
@@ -178,6 +179,7 @@ public class DHT<KEY extends DRSKey> {
 
     /**
      * Generally used for deleting staging content
+     *
      * @param key
      * @param callback
      */
@@ -186,9 +188,9 @@ public class DHT<KEY extends DRSKey> {
             return;
         }
         FutureRemove futureRemove = m_profile.MY_PROFILE
-                .remove( key.getLocationKey() )
-                .contentKey( key.getContentKey() )
-                .domainKey( key.getDomainKey() )
+                .remove(key.getLocationKey())
+                .contentKey(key.getContentKey())
+                .domainKey(key.getDomainKey())
                 .start();
 
         futureRemove.addListener(new BaseFutureListener<FutureRemove>() {
@@ -212,15 +214,46 @@ public class DHT<KEY extends DRSKey> {
         });
     }
 
-    public void addToKeyStore(final Number160 locationKey, Function<Boolean,Boolean> callback) {
+    public void removeDataFromStaging(Map.Entry<Number640, Data> entryToRemove) {
+        final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+            try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+                final Number640 key = entryToRemove.getKey();
+                try {
+                    String dataJson = mapper.writeValueAsString(RedisElementContainer.builder()
+                            .setBuffer(entryToRemove.getValue().toBytes())
+                            .setContentBuffer(key.contentKey().toIntArray())
+                            .setLocationBuffer(key.locationKey().toIntArray())
+                            .setVersionBuffer(key.versionKey().toIntArray())
+                            .setDomainBuffer(key.domainKey().toIntArray())
+                            .build());
+                    String offHeapKey = DefaultOffHeapKey.buildOffHeapKey(key);
+                    // Set 0 since we want to remove ALL acceptance objects that are equal to the current key being accepted
+                    Long result = adapter.lrem(offHeapKey, 0, dataJson);
+                    if (result.longValue() <= 0) {
+                        LOGGER.error("Removing data from storage returned a value that was not found: " + result.longValue());
+                    } else if (result.longValue() == 1) {
+                        LOGGER.info("Successfully removed an acceptance record from backend: " + result.longValue());
+                    } else {
+                        LOGGER.error("Weird error when removing an acceptance record from backend: " + result.longValue());
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("An error occurred while serializing data to remove from acceptance set.");
+                    return false;
+                }
+            }
+            return true;
+        }, m_persistentWorker);
+    }
+
+    public void addToKeyStore(final Number160 locationKey, Function<Boolean, Boolean> callback) {
         final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
             final int[] locationKeyBuffer = locationKey.toIntArray();
             try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
                 String json = "";
                 try {
                     json = mapper.writeValueAsString(locationKeyBuffer);
-                } catch(Exception e) {
-                    LOGGER.error("JSON processing exception on addToKeyStore: "+ e.getMessage());
+                } catch (Exception e) {
+                    LOGGER.error("JSON processing exception on addToKeyStore: " + e.getMessage());
                     return false;
                 }
                 adapter.hset(DHTConfig.KEYSTORE_ADDR, json, json);
@@ -229,7 +262,7 @@ public class DHT<KEY extends DRSKey> {
                 return false;
             }
             return true;
-        }, m_keystoreWorker)
+        }, m_persistentWorker)
                 .thenApply(callback)
                 .exceptionally(ex -> {
                     LOGGER.error("An exception occured asynchronously when addToKeyStore: " + ex.getMessage());
@@ -239,12 +272,13 @@ public class DHT<KEY extends DRSKey> {
 
     /**
      * Synchronous
+     *
      * @return
      */
     public List<Number160> getKeyStore() {
         final List<Number160> list = new LinkedList<>();
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
-            List<String> serializedIntArrays = adapter.lrange(DHTConfig.KEYSTORE_ADDR, 0, -1);
+            Set<String> serializedIntArrays = adapter.hkeys(DHTConfig.KEYSTORE_ADDR);
             for (String number160Buffer : serializedIntArrays) {
                 try {
                     int[] buffer = mapper.readValue(number160Buffer, int[].class);

@@ -1,6 +1,7 @@
 package servlet.rest;
 
 import com.google.common.base.Strings;
+import config.DHTConfig;
 import core.DHTManager;
 import error.GenericReply;
 import key.DHTKeyBuilder;
@@ -22,7 +23,9 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,7 +43,7 @@ public class ProductServlet {
     @Produces(MediaType.APPLICATION_JSON)
     public void getAllProducts(final @Suspended AsyncResponse response) {
 
-        final List<ProductRESTWrapper> productList = new LinkedList<>();
+        Queue<ProductRESTWrapper> productList = new ConcurrentLinkedQueue<ProductRESTWrapper>();
         // TODO: Limit the number of possible keys we can fetch at a time, say MAX 10
         final CompletableFuture<?> fetchAllProducts = CompletableFuture.supplyAsync(() -> DHTManager.instance().getKeysFromKeyStore(), m_queryWorker)
                 .thenApply(locationKeys -> {
@@ -49,19 +52,28 @@ public class ProductServlet {
                                         final ProductRESTWrapper product = new ProductRESTWrapper();
                                         // TODO: look into returning just a fixed number of reviews to paginate
                                         final Collection<Data> reviews = DHTManager.instance()
-                                                .getAllFromStorage(DefaultDHTKeyPair.builder().locationKey(key).build());
-                                        reviews.forEach(review -> {
-                                            try {
-                                                final BaseReview basePointer = (BaseReview) review.object();
-                                                if (Strings.isNullOrEmpty(product.identifier)) {
-                                                    product.setIdentifier(basePointer.getIdentifier());
+                                                .getAllFromStorage(DefaultDHTKeyPair.builder()
+                                                        .locationKey(key)
+                                                        .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                                                        .build());
+                                        if (reviews != null) {
+                                            reviews.forEach(review -> {
+                                                try {
+                                                    final BaseReview basePointer = (BaseReview) review.object();
+                                                    if (Strings.isNullOrEmpty(product.identifier)) {
+                                                        product.setIdentifier(basePointer.getIdentifier());
+                                                    }
+                                                    product.add(basePointer);
+                                                } catch (Exception e) {
+                                                    LOGGER.error("Exception when trying to retrieve review object from Data: " + e.getMessage());
                                                 }
-                                                product.add(basePointer);
-                                            } catch (Exception e) {
-                                                LOGGER.error("Exception when trying to retrieve review object from Data: " + e.getMessage());
-                                            }
-                                        });
-                                        productList.add(product);
+                                            });
+                                            productList.add(product);
+                                        }
+                                    }, m_queryWorker).exceptionally(ex -> {
+                                        LOGGER.error("An error occured when fetch all reviews from locations: " + ex.getMessage());
+                                        ex.printStackTrace();
+                                        return null;
                                     }))
                                     .toArray(CompletableFuture[]::new);
                             CompletableFuture.allOf(productFutures).join();
@@ -69,7 +81,7 @@ public class ProductServlet {
                             return productList;
                         }
                 ).exceptionally(ex -> {
-                    response.resume(Response.serverError().entity(new GenericReply<String>("500", "An error occured")).build());
+                    response.resume(Response.serverError().entity(new GenericReply<String>("500", "An error occured: " + ex.getMessage())).build());
                     return productList;
                 });
     }

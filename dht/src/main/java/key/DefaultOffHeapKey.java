@@ -1,5 +1,6 @@
 package key;
 
+import config.DHTConfig;
 import net.tomp2p.peers.Number640;
 
 /**
@@ -11,6 +12,16 @@ public class DefaultOffHeapKey {
 
     public static OffHeapKeyBuilder builder() {
         return new OffHeapKeyBuilder();
+    }
+
+    public static String buildOffHeapKey(Number640 key) {
+        String offHeapKey;
+        if (key.domainKey().equals(DHTConfig.ACCEPTANCE_DOMAIN)) {
+            offHeapKey = AcceptanceOffHeapKey.builder().id(key).buildReviewKey();
+        } else {
+            offHeapKey = PublishedOffHeapKey.builder().id(key).buildReviewKey();
+        }
+        return offHeapKey;
     }
 
     public static class OffHeapKeyBuilder {
