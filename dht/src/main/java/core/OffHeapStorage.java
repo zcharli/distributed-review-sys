@@ -14,14 +14,11 @@ import net.tomp2p.storage.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
 import java.security.PublicKey;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.*;
 
 /**
  * Created by czl on 24/09/16.
@@ -33,7 +30,6 @@ public class OffHeapStorage implements Storage {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
     // Core
-    private static final JedisPool m_storagePool = DHTConfig.REDIS_RESOURCE_POOL;
     final private NavigableMap<Number640, Data> dataMap = new ConcurrentSkipListMap<Number640, Data>();
     final private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -67,7 +63,7 @@ public class OffHeapStorage implements Storage {
     }
 
     public OffHeapStorage loadFromDisk() {
-        try (Jedis adapter = m_storagePool.getResource()) {
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             Set<String> allKeys = adapter.keys("*");
             for (String key : allKeys) {
                 if (!key.startsWith("drs")) {
@@ -120,7 +116,7 @@ public class OffHeapStorage implements Storage {
             }
         }
 
-        try (Jedis adapter = m_storagePool.getResource()) {
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             try {
                 String dataJson = objectMapper.writeValueAsString(RedisElementContainer.builder()
                         .setBuffer(value.toBytes())
@@ -174,7 +170,7 @@ public class OffHeapStorage implements Storage {
         if (ret == null) {
             return ret;
         }
-        try (Jedis adapter = m_storagePool.getResource()) {
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String offHeapKey = buildOffHeapKey(key);
             List<String> elementsOffHeap = adapter.lrange(offHeapKey, 0, -1);
             int i = 0;

@@ -23,7 +23,9 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * An immutable instance of dht manager
@@ -228,6 +230,11 @@ public class DHTManager {
         Collection<Data> ret = m_dht.get(key);
         m_metricsCollector.collectUseMetric(key);
         return ret;
+    }
+
+    @Nullable
+    public Collection<Number160> getKeysFromKeyStore() {
+        return m_dht.getKeyStore();
     }
 
     public boolean isInvalidKey(DRSKey key) {

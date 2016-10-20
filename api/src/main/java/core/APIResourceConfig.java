@@ -9,6 +9,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationFeature;
 import servlet.rest.AccountServlet;
+import servlet.rest.ProductServlet;
 import servlet.rest.ReviewServlet;
 import validator.ValidationConfigContext;
 /**
@@ -17,11 +18,12 @@ import validator.ValidationConfigContext;
 public class APIResourceConfig extends ResourceConfig {
 
     public APIResourceConfig() {
-        packages("my.package");
+//        packages("my.package");
         packages(AccountServlet.class.getPackage().getName());
         packages(ReviewServlet.class.getPackage().getName());
-        register(ValidationConfigContext.class);
+        packages(ProductServlet.class.getPackage().getName());
 
+        register(ValidationConfigContext.class);
         register(ValidationExceptionMapper.class);
         register(JsonProcessingExceptionMapper.class);
         register(JsonMappingExceptionMapper.class);
@@ -32,11 +34,6 @@ public class APIResourceConfig extends ResourceConfig {
         register(ValidationFeature.class);
         property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
-//        register(MoxyJsonFeature.class);
-//        register(new MoxyJsonConfig().setFormattedOutput(true)
-//                // Turn off BV otherwise the entities on server would be validated by MOXy as well.
-//                .property(MarshallerProperties.BEAN_VALIDATION_MODE, BeanValidationMode.NONE)
-//                .resolver());
     }
 
 }

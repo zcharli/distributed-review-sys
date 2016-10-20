@@ -2,6 +2,7 @@ package servlet.rest;
 
 
 import com.google.common.base.Strings;
+import com.google.common.primitives.Booleans;
 import config.DHTConfig;
 import error.GenericReply;
 import redis.clients.jedis.Jedis;
@@ -32,9 +33,9 @@ import java.util.concurrent.Future;
 public class AccountServlet {
 
     private Random random = new Random();
+    ExecutorService executor = Executors.newFixedThreadPool(10);
 
-    public AccountServlet() {
-    }
+    public AccountServlet() { }
 
     @POST
     @Path("/login")
@@ -61,9 +62,10 @@ public class AccountServlet {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createAccount(final @ExternalCreateAccount CreateAccountRequest request) {
-
+        // Maybe this isn't as fast as I thought...
+        Future<String> hashedPassword = executor.submit(new SaltedPasswordGenThread(request.password));
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
-            String saltyPassword = PasswordAuthentication.instance().hash(request.password.toCharArray());
+            String saltyPassword = hashedPassword.get();
             String reply = adapter.set(createUsernameKey(request.identification), saltyPassword);
             if (reply.equals("OK")) {
                 return Response.accepted().entity(new LoginResponse(200, "Success", Long.toString(random.nextLong()))).build();
@@ -83,5 +85,16 @@ public class AccountServlet {
 
     private String createUsernameKey(String user) {
         return DHTConfig.REDIS_USERNAME_PREFIX + user;
+    }
+
+    public static class SaltedPasswordGenThread implements Callable<String> {
+        String m_nonSaltedPassword;
+        public SaltedPasswordGenThread(String password) {
+            m_nonSaltedPassword = password;
+        }
+        @Override
+        public String call() {
+            return PasswordAuthentication.instance().hash(m_nonSaltedPassword.toCharArray());
+        }
     }
 }

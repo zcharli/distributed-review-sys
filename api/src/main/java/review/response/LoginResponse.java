@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by cli on 10/12/2016.
  */
-public class LoginResponse implements Serializable {
+public class LoginResponse {
     public int status;
     public String responseText;
     public String clientId;
