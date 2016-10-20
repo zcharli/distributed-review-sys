@@ -15,11 +15,11 @@ export default DS.JSONAPIAdapter.extend({
   namespace: Ember.computed('constants', function () {
     return this.get('constants.namespace');
   }),
-  headers: Ember.computed('session.authToken', function () {
-    return {
-      'CLIENT_ID': this.get('session.clientId'),
-    };
-  }),
+  // headers: Ember.computed('session.authToken', function () {
+  //   return {
+  //     // 'CLIENT_ID': this.get('session.clientId'),
+  //   };
+  // }),
   defaultSerializer: '-default',
 
   findAllUrl: Ember.computed('contants', function () {
