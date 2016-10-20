@@ -3,6 +3,8 @@ package exception;
 /**
  * Created by cli on 10/5/2016.
  */
+import error.GenericReply;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -12,11 +14,11 @@ import javax.ws.rs.ext.Provider;
 public class ApplicationExceptionMapper implements ExceptionMapper<Exception> {
 
     public Response toResponse(Exception e) {
-        System.out.println("FUCKK UUUU");
+        System.out.println("Application ExceptionMapper Problem");
         return Response
                 .status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
                 .type(MediaType.TEXT_PLAIN)
-                .entity(e.getMessage())
+                .entity(new GenericReply<String>("500", e.getMessage()))
                 .build();
     }
 }

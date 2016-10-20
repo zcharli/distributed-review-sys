@@ -47,6 +47,8 @@ task(launchSlave, dependsOn: 'classes', type: JavaExec) {
     main='client.DRSClient'
     args '-bootstrap', '-port', '9090', '-host', '192.168.101.16'
     classpath = sourceSets.main.runtimeClasspath
+    jvmArgs '-Xdebug',
+            '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8080'
 }
 
 
