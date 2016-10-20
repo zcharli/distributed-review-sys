@@ -40,13 +40,13 @@ public class DHTProfile {
             b.addInterface(DHTConfig.DHT_LISTEN_INTERFACE);
             if (isBootStrap) {
                 Random r = new Random(42L);
-                b.addAddress(DHTConfig.BOOTSRAP_ADDR);
+                b.addAddress(DHTConfig.instance().BOOTSRAP_ADDR);
                 currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).bindings(b).ports(DHTConfig.DRS_PORT).start())
                         .storage(storageLayer)
                         .start();
             } else {
                 Random r = new Random(43L);
-                System.out.println("Trying to connect to: " + DHTConfig.BOOTSRAP_ADDR.getHostAddress() + ":" + DHTConfig.DRS_PORT);
+                System.out.println("Trying to connect to: " + DHTConfig.instance().BOOTSRAP_ADDR.getHostAddress() + ":" + DHTConfig.DRS_PORT);
                 currentClient = new PeerBuilderDHT(new PeerBuilder(new Number160(r)).ports(DHTConfig.DRS_PORT).bindings(b).behindFirewall().start())
                         .storage(storageLayer)
                         .start();
@@ -68,7 +68,7 @@ public class DHTProfile {
     }
 
     private void connectToBootstrapServer() throws InitializationFailedException {
-        PeerAddress bootStrapServer = new PeerAddress(Number160.ZERO, DHTConfig.BOOTSRAP_ADDR, DHTConfig.DRS_PORT,DHTConfig.DRS_PORT,DHTConfig.DRS_PORT+1);
+        PeerAddress bootStrapServer = new PeerAddress(Number160.ZERO, DHTConfig.instance().BOOTSRAP_ADDR, DHTConfig.DRS_PORT,DHTConfig.DRS_PORT,DHTConfig.DRS_PORT+1);
         FutureDiscover fd = MY_PROFILE.peer().discover().peerAddress(bootStrapServer).start();
         fd.awaitUninterruptibly();
 

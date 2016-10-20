@@ -62,7 +62,7 @@ public class DHTManager {
 
     private DHTManager(boolean isBootstrap, boolean isPersistent) throws InitializationFailedException {
 
-        if (DHTConfig.BOOTSRAP_ADDR == null) {
+        if (DHTConfig.instance().BOOTSRAP_ADDR == null) {
             throw new InitializationFailedException("Bootstrap node's address was unable to be found.");
         }
         DHTConfig.instance().isBootstrap = isBootstrap;
