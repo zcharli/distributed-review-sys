@@ -10,6 +10,8 @@ export default Ember.Controller.extend({
         .then((response) => {
           if (response.staus === 200 && !!response.clientId) {
             this.get('session').set("clientId", response.clientId);
+          } else {
+            this.set('errorMessage', response.responseText);
           }
         })
         .catch((reason) => {
