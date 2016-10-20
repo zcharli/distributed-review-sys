@@ -43,7 +43,7 @@ public class ProductServlet {
     @GET
     @Path("/all")
     @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
     public void getAllProducts(final @Suspended AsyncResponse response) {
 
         Queue<ProductRESTWrapper> productList = new ConcurrentLinkedQueue<ProductRESTWrapper>();
