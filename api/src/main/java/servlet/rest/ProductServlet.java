@@ -35,7 +35,7 @@ public class ProductServlet {
 
     private final ExecutorService m_queryWorker = Executors.newFixedThreadPool(10);
 
-        @GET
+    @GET
     @Path("/all")
     @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
     @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
@@ -155,11 +155,18 @@ public class ProductServlet {
 //                    return jsonApiModel;
 //                });
 //    }
-<<<<<<< HEAD
+<<<<<<<HEAD
+                <<<<<<<HEAD
     }
 =======
 
->>>>>>> Fix up rest vs json api
+        >>>>>>>
+    Fix up
+    rest vs
+    json api
+=======
 }
+>>>>>>>Ok
+        }
 
 //    }
