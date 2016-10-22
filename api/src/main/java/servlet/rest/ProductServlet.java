@@ -155,18 +155,8 @@ public class ProductServlet {
 //                    return jsonApiModel;
 //                });
 //    }
-<<<<<<<HEAD
-                <<<<<<<HEAD
     }
-=======
-
-        >>>>>>>
-    Fix up
-    rest vs
-    json api
-=======
 }
->>>>>>>Ok
-        }
+
 
 //    }
