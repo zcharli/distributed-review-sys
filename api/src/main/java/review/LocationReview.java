@@ -2,6 +2,9 @@ package review;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jsonapi.JsonApiFormatTuple;
+
+import java.util.Map;
 
 /**
  * Created by cli on 9/30/2016.
@@ -30,6 +33,10 @@ public class LocationReview extends BaseReview {
         super(review, title, stars, 0);
         m_latitutde = lat;
         m_longitude = lon;
+    }
+
+    public Map<String, Object> mapObjectForEmber(JsonApiFormatTuple.JsonApiShortRelationshipRep relationship) {
+        return null;
     }
 
     @Override

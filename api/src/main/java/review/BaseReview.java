@@ -83,6 +83,12 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     }
 
     @JsonIgnore
+    public abstract String getIdentifier();
+
+    @JsonIgnore
+    public abstract Map<String, Object> mapObjectForEmber(JsonApiFormatTuple.JsonApiShortRelationshipRep relationship);
+
+    @JsonIgnore
     public String getContentId() {
         return m_contentId != null ? m_contentId.toString(true) : "";
     }
@@ -104,8 +110,7 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
         m_domainId = dom;
     }
 
-    @JsonIgnore
-    public abstract String getIdentifier();
+
 
     @JsonIgnore
     public String getContent() {
@@ -120,9 +125,6 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     public String getModelId() {
         return m_content == null ? "" : m_content.toString();
     }
-
-    @JsonIgnore
-    public abstract Map<String, Object> mapObjectForEmber(JsonApiFormatTuple.JsonApiShortRelationshipRep relationship);
 
     public boolean validate() {
 
