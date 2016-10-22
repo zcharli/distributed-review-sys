@@ -1,4 +1,4 @@
-package jsonapi;
+package wrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import review.BaseReview;

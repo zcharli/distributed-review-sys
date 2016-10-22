@@ -2,8 +2,9 @@ package review;
 
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.Strings;
-import jsonapi.JsonApiFormatTuple;
+import wrapper.JsonApiFormatTuple;
 import net.tomp2p.peers.Number160;
+import net.tomp2p.peers.Number640;
 import validator.Validatable;
 
 import javax.annotation.Nullable;
@@ -26,9 +27,9 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     /*
     Some special attributes
      */
-    @JsonIgnore
     @Nullable
-    public String m_productName; // Special
+    @JsonProperty("description")
+    public String m_productName; // Special uneeded
 
     @JsonProperty("type")
     public static final String m_generalReviewType = "review"; // Maps on to Ember's model
@@ -36,9 +37,16 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     /*
     Below are the normal attributes
      */
+    @JsonProperty("id")
+    public String m_dhtAbsoluteKey;
+
     @JsonProperty("review_content")
     @NotNull(message = "Review body is missing or null")
     public String m_content;
+
+    @JsonProperty("title")
+    @NotNull(message = "A review title is missing or null")
+    public String m_title;
 
     @JsonProperty("created_at")
     public long m_createTime;
@@ -46,14 +54,13 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     @JsonProperty("stars")
     public int m_stars;
 
-    @JsonProperty("title")
-    @NotNull(message = "A review title is missing or null")
-    public String m_title;
-
     @JsonProperty("upvotes")
     public int m_upvotes;
 
-    @JsonProperty("id")
+    /*
+    Content Keys below
+     */
+    @JsonIgnore
     public Number160 m_contentId;
 
     @JsonIgnore
@@ -62,6 +69,12 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     @JsonIgnore
     public Number160 m_domainId;
 
+    @JsonIgnore
+    public Number640 m_dhtKey;
+
+    /*
+    Core class functionality
+     */
     public BaseReview() {
         this("", "", 0, 0);
     }
@@ -83,12 +96,6 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     }
 
     @JsonIgnore
-    public abstract String getIdentifier();
-
-    @JsonIgnore
-    public abstract Map<String, Object> mapObjectForEmber(JsonApiFormatTuple.JsonApiShortRelationshipRep relationship);
-
-    @JsonIgnore
     public String getContentId() {
         return m_contentId != null ? m_contentId.toString(true) : "";
     }
@@ -104,13 +111,21 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     }
 
     @JsonIgnore
-    public void fillInIds(Number160 loc, Number160 con, Number160 dom) {
+    public void fillInIds(Number160 loc, Number160 con, Number160 dom, Number640 absoluteKey) {
         m_locationId = loc;
         m_contentId = con;
         m_domainId = dom;
+        m_dhtKey = absoluteKey;
+        m_dhtAbsoluteKey = Double.toString(absoluteKey.doubleValue());
     }
 
+    @JsonIgnore
+    public abstract String getIdentifier();
 
+    @JsonIgnore
+    public String getAbsoluteId() {
+        return Strings.isNullOrEmpty(m_dhtAbsoluteKey) ? "" : m_dhtAbsoluteKey;
+    }
 
     @JsonIgnore
     public String getContent() {
@@ -126,12 +141,13 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
         return m_content == null ? "" : m_content.toString();
     }
 
-    public boolean validate() {
+    @JsonIgnore
+    public abstract Map<String, Object> mapObjectForEmber(JsonApiFormatTuple.JsonApiShortRelationshipRep relationship);
 
+    public boolean validate() {
         if (Strings.isNullOrEmpty(m_content) || Strings.isNullOrEmpty(m_title)) {
             return false;
         }
-
         return true;
     }
 }

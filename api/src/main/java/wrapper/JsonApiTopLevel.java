@@ -1,9 +1,10 @@
-package jsonapi;
+package wrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,8 +31,8 @@ public class JsonApiTopLevel {
     }
 
     @JsonIgnore
-    public JsonApiTopLevel addPayload(Map<String, Object> objectMapping) {
-        included.add(objectMapping);
+    public JsonApiTopLevel addPayload(List<Map<String, Object>> objectMapping) {
+        included.addAll(objectMapping);
         return this;
     }
 }

@@ -45,6 +45,12 @@ public class ReviewServlet {
             response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
             return;
         }
+        Number160 locationKey = Number160.createHash(identifier);
+        Number160 newDomainKey = DHTConfig.PUBLISHED_DOMAIN;
+        Number160 contentKey = Number160.createHash(request.getContent());
+        Number640 reviewKey = new Number640(locationKey, newDomainKey, contentKey, Number160.ZERO);
+
+        request.fillInIds(locationKey, contentKey, newDomainKey, reviewKey);
         // TODO: Validate the identifier
         // request.validateId(identifier);
         DRSKey barcodeKey = DefaultDHTKeyPair.builder()

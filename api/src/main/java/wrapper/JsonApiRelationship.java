@@ -1,4 +1,4 @@
-package jsonapi;
+package wrapper;
 
 /**
  * Created by cli on 10/21/2016.

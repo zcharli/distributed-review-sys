@@ -2,7 +2,7 @@ package review;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jsonapi.JsonApiFormatTuple;
+import wrapper.JsonApiFormatTuple;
 
 import java.util.Map;
 

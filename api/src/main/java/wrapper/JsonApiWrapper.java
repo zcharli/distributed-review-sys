@@ -1,4 +1,4 @@
-package jsonapi;
+package wrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +18,12 @@ import java.util.Map;
 public class JsonApiWrapper {
     private final static Logger LOGGER = LoggerFactory.getLogger(JsonApiWrapper.class);
 
+    @JsonProperty("id")
+    public String locationId;
+
+    @JsonProperty("type")
+    public String modelType;
+
     @JsonProperty("links")
     public SelfReferingURI requestUri;
 
@@ -25,7 +31,7 @@ public class JsonApiWrapper {
     public Map<String, String> attributeMapping;
 
     @JsonProperty("relationships")
-    public Map<String, Object> relationshipMapping;
+    public Map<String, Map<String, Collection<JsonApiFormatTuple.JsonApiShortRelationshipRep>>> relationshipMapping;
 //
 //    @JsonProperty("included")
 //    public LinkedList<Map<String, Object>> includedPayload;
@@ -35,10 +41,22 @@ public class JsonApiWrapper {
         attributeMapping = new HashMap<>();
 //        includedPayload = new LinkedList<>();
     }
-    public JsonApiWrapper(Collection<JsonApiResourceWrapper> list, SelfReferingURI url, HashMap<String, String> attrs, HashMap<String, Object> relationships) {
+    public JsonApiWrapper(Collection<JsonApiResourceWrapper> list, SelfReferingURI url, HashMap<String, String> attrs, HashMap<String, Map<String, Collection<JsonApiFormatTuple.JsonApiShortRelationshipRep>>> relationships) {
         this.requestUri = url;
         this.attributeMapping = attrs == null ? new HashMap<>() :  attrs;
         this.relationshipMapping = relationships == null ? new HashMap<>() : relationships;
+    }
+
+    @JsonIgnore
+    public JsonApiWrapper setModelType(String type) {
+        this.modelType = type;
+        return this;
+    }
+
+    @JsonIgnore
+    public JsonApiWrapper setModelId(String id) {
+        this.locationId = id;
+        return this;
     }
 
     @JsonIgnore
@@ -62,10 +80,26 @@ public class JsonApiWrapper {
     }
 
     @JsonIgnore
-    public JsonApiWrapper setRelationshipData(String relationship, Collection<JsonApiFormatTuple.JsonApiShortRelationshipRep> resources) {
+    public JsonApiWrapper setRelationshipData(String model, Map<String, Collection<JsonApiFormatTuple.JsonApiShortRelationshipRep>> relationships) {
         if (relationshipMapping != null) {
-            relationshipMapping.put(relationship, resources);
+            relationshipMapping.put(model, relationships);
         }
+        return this;
+    }
+
+    @JsonIgnore
+    public JsonApiWrapper addToRelationshipData(String model, JsonApiFormatTuple.JsonApiShortRelationshipRep relationship) {
+        if (relationshipMapping == null) {
+            relationshipMapping = new HashMap<>();
+        }
+        if (!relationshipMapping.containsKey(model)) {
+            relationshipMapping.put(model, new HashMap<String, Collection<JsonApiFormatTuple.JsonApiShortRelationshipRep>>());
+        }
+
+        if (!relationshipMapping.get(model).containsKey("data")) {
+            relationshipMapping.get(model).put("data", new LinkedList<>());
+        }
+        relationshipMapping.get(model).get("data").add(relationship);
         return this;
     }
 

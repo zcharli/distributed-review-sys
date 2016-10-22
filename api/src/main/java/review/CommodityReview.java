@@ -2,11 +2,10 @@ package review;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jsonapi.JsonApiFormatTuple;
+import wrapper.JsonApiFormatTuple;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by cli on 9/30/2016.
@@ -35,9 +34,10 @@ public class CommodityReview extends BaseReview {
         // Currently this is usually done once, so we can nullify the map after function call stack
         Map<String, Object> includedPayloadMap = new HashMap<>();
         Map<String, Object> attributeMap = new HashMap<>();
+        Map<String, Map<String, Object>> productRelationship = new HashMap<>();
 
         // All the things that we need to satisfy JSON API
-        attributeMap.put("id", getContentId());
+        attributeMap.put("id", getAbsoluteId());
         attributeMap.put("domainId", m_domainId.toString());
         attributeMap.put("locationId", m_locationId.toString());
         attributeMap.put("title", m_title);
@@ -46,10 +46,15 @@ public class CommodityReview extends BaseReview {
         attributeMap.put("created", m_createTime);
         attributeMap.put("upvotes", m_upvotes);
 
-        includedPayloadMap.put("id", getContentId());
+        includedPayloadMap.put("id", getAbsoluteId());
         includedPayloadMap.put("type", "review");
         includedPayloadMap.put("attributes",  attributeMap);
-        includedPayloadMap.put("relationships", relationship);
+
+        List<JsonApiFormatTuple.JsonApiShortRelationshipRep> relationshipRule = new LinkedList<>();
+        relationshipRule.add(relationship);
+        productRelationship.put("product", new HashMap<>());
+        productRelationship.get("product").put("data", relationshipRule);
+        includedPayloadMap.put("relationships", productRelationship);
         return includedPayloadMap;
     }
 
