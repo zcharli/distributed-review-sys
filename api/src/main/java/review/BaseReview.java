@@ -2,12 +2,15 @@ package review;
 
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.Strings;
+import jsonapi.JsonApiFormatTuple;
 import net.tomp2p.peers.Number160;
 import validator.Validatable;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Created by cli on 9/27/2016.
@@ -20,6 +23,19 @@ import java.io.Serializable;
 })
 public abstract class BaseReview implements Serializable, ReviewIdentity, Validatable {
 
+    /*
+    Some special attributes
+     */
+    @JsonIgnore
+    @Nullable
+    public String m_productName; // Special
+
+    @JsonProperty("type")
+    public static final String m_generalReviewType = "review"; // Maps on to Ember's model
+
+    /*
+    Below are the normal attributes
+     */
     @JsonProperty("review_content")
     @NotNull(message = "Review body is missing or null")
     public String m_content;
@@ -37,11 +53,11 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     @JsonProperty("upvotes")
     public int m_upvotes;
 
-    @JsonIgnore
-    public Number160 m_locationId;
+    @JsonProperty("id")
+    public Number160 m_contentId;
 
     @JsonIgnore
-    public Number160 m_contentId;
+    public Number160 m_locationId;
 
     @JsonIgnore
     public Number160 m_domainId;
@@ -99,6 +115,14 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     public BaseReview identity() {
         return this;
     }
+
+    @JsonIgnore
+    public String getModelId() {
+        return m_content == null ? "" : m_content.toString();
+    }
+
+    @JsonIgnore
+    public abstract Map<String, Object> mapObjectForEmber(JsonApiFormatTuple.JsonApiShortRelationshipRep relationship);
 
     public boolean validate() {
 

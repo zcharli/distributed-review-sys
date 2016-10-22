@@ -35,12 +35,12 @@ public class ReviewServlet {
     public ReviewServlet() { }
 
     @PUT
-    @Path("/new/{identifier}")
+    @Path("/new/{m_productName}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void createNewReview(final @ExternalReview BaseReview request,
                                 final @Suspended AsyncResponse response,
-                                final @PathParam("identifier") String identifier) {
+                                final @PathParam("m_productName") String identifier) {
         if (!identifier.equals(request.getIdentifier())) {
             response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
             return;
