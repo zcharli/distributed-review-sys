@@ -5,7 +5,7 @@ import Inflector from 'ember-inflector';
 const inflector = Inflector.inflector;
 inflector.uncountable('product');
 
-export default DS.JSONAPIAdapter.extend({
+export default DS.RESTAdapter.extend({
   constants: Ember.inject.service('constants'),
   session: Ember.inject.service('session'),
 

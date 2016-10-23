@@ -1,4 +1,4 @@
-{{yield}}
+
 <div class="ui vertical inverted sidebar menu left overlay visible" id="toc">
     <div class="item">
         <a class="ui logo icon image" href="/">
@@ -25,20 +25,24 @@
     </div>
 </div>
 
-<div class="ui fixed inverted menu">
-    <div class="ui container">
-        <div class="item">
-            Management
-        </div>
-
-        <div class="right menu">
-
-            <div class="vertically fitted borderless item">
-                <iframe class="github"
-                        src="http://ghbtns.com/github-btn.html?user=semantic-org&amp;repo=semantic-ui&amp;type=watch&amp;count=true"
-                        allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+<div id="content-main" class="ui article">
+    <div id="top-side-nav-comp" class="ui fixed inverted menu">
+        <div class="ui container">
+            <div class="item">
+                Management
             </div>
 
+            <div class="right menu">
+
+                <div class="vertically fitted borderless item">
+                    <iframe class="github"
+                            src="http://ghbtns.com/github-btn.html?user=semantic-org&amp;repo=semantic-ui&amp;type=watch&amp;count=true"
+                            allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+                </div>
+
+            </div>
         </div>
     </div>
+  {{yield}}
 </div>
+

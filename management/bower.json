@@ -3,6 +3,9 @@
   "dependencies": {
     "ember": "~2.8.0",
     "ember-cli-shims": "0.1.1",
-    "semantic-ui": "^2.2.4"
+    "semantic-ui": "^2.2.4",
+    "antiscroll": "git://github.com/Addepar/antiscroll#e0d1538cf4f3fd61c5bedd6168df86d651f125da",
+    "jquery-mousewheel": "~3.1.4",
+    "jquery-ui": "~1.11.4"
   }
 }

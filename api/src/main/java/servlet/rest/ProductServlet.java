@@ -47,7 +47,7 @@ public class ProductServlet {
                 .thenApply(locationKeys -> {
                             final CompletableFuture<?>[] productFutures = locationKeys.stream()
                                     .map(key -> CompletableFuture.runAsync(() -> {
-                                        final ProductReviewWrapper product = new ProductReviewWrapper();
+                                        final ProductReviewWrapper product = new ProductReviewWrapper().setId(key.toString());
                                         // TODO: look into returning just a fixed number of reviews to paginate
                                         final Collection<Data> reviews = DHTManager.instance()
                                                 .getAllFromStorage(DefaultDHTKeyPair.builder()

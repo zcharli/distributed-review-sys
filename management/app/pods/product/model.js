@@ -1,8 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  reviews: DS.hasMany('review'),
+  reviews: DS.hasMany('review', {async: true}),
 
-  id: DS.attr('string'),
   name: DS.attr('string')
 });

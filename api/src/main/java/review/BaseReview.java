@@ -62,12 +62,25 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
      */
     @JsonIgnore
     public Number160 m_contentId;
+    @JsonProperty("contentId")
+    public String getContentId() {
+        return m_contentId == null ? "" : m_contentId.toString();
+    }
 
     @JsonIgnore
     public Number160 m_locationId;
+    @JsonProperty("locationId")
+    public String getLocationId() {
+        return m_locationId != null ? m_locationId.toString(true) : "";
+    }
 
     @JsonIgnore
     public Number160 m_domainId;
+    @JsonProperty("domainId")
+    public String getDomainId() {
+        return m_domainId != null ? m_domainId.toString(true) : "";
+    }
+
 
     @JsonIgnore
     public Number640 m_dhtKey;
@@ -96,27 +109,12 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     }
 
     @JsonIgnore
-    public String getContentId() {
-        return m_contentId != null ? m_contentId.toString(true) : "";
-    }
-
-    @JsonIgnore
-    public String getDomainId() {
-        return m_domainId != null ? m_domainId.toString(true) : "";
-    }
-
-    @JsonIgnore
-    public String getLocationId() {
-        return m_locationId != null ? m_locationId.toString(true) : "";
-    }
-
-    @JsonIgnore
     public void fillInIds(Number160 loc, Number160 con, Number160 dom, Number640 absoluteKey) {
         m_locationId = loc;
         m_contentId = con;
         m_domainId = dom;
         m_dhtKey = absoluteKey;
-        m_dhtAbsoluteKey = Double.toString(absoluteKey.doubleValue());
+        m_dhtAbsoluteKey = Integer.toString(absoluteKey.hashCode());
     }
 
     @JsonIgnore
