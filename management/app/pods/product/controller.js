@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  constants: Ember.service.inject(),
+  constants: Ember.service.inject('constants'),
   reviews: null,
 
   searchSettings: function() {
