@@ -9,6 +9,7 @@ export default Ember.Component.extend({
       apiSettings: {
         url: api + '/search?q={query}'
       },
+      searchDelay: 200,
       type: 'category'
     });
   }),
