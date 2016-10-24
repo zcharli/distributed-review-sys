@@ -7,5 +7,6 @@ moduleFor('controller:product', 'Unit | Controller | product', {
 
 // Replace this with your real tests.
 test('it exists', function(assert) {
-  assert.ok(true);
+  let controller = this.subject();
+  assert.ok(controller);
 });
