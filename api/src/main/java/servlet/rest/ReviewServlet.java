@@ -41,10 +41,11 @@ public class ReviewServlet {
     public void createNewReview(final @ExternalReview BaseReview request,
                                 final @Suspended AsyncResponse response,
                                 final @PathParam("m_productName") String identifier) {
-        if (!identifier.equals(request.getIdentifier())) {
-            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
-            return;
-        }
+//        if (!identifier.equals(request.getIdentifier())) {
+//            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
+//            return;
+//        }
+        request.m_productName = identifier;
         Number160 locationKey = Number160.createHash(identifier);
         Number160 newDomainKey = DHTConfig.PUBLISHED_DOMAIN;
         Number160 contentKey = Number160.createHash(request.getContent());
@@ -81,11 +82,17 @@ public class ReviewServlet {
                                           final @Suspended AsyncResponse response,
                                           final @PathParam("identifier") String identifier) {
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
+        Number160 locationKey = Number160.createHash(identifier);
+        Number160 newDomainKey = DHTConfig.PUBLISHED_DOMAIN;
+        Number160 contentKey = Number160.createHash(request.getContent());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
-                .locationKey( Number160.createHash(identifier) )
-                .contentKey( Number160.createHash(request.getContent()) )
-                .domainKey(DHTConfig.ACCEPTANCE_DOMAIN)
+                .locationKey( locationKey )
+                .contentKey( contentKey )
+                .domainKey( newDomainKey )
                 .build();
+        // The original review is updated since the only time editing is allowed is during acceptance.
+        Number640 fullKey = new Number640(locationKey, newDomainKey, contentKey, Number160.ZERO);
+        request.fillInIds(locationKey, contentKey, newDomainKey, fullKey);
         DHTManager.instance().approveData(reviewKey, new AsyncComplete() {
             @Override
             public Integer call() {

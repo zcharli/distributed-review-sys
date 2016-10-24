@@ -3,18 +3,29 @@ import Ember from 'ember';
 export default Ember.Route.extend({
 
   model() {
-    let reviews = []
     return this.store.findAll('product').then((data) => {
       console.log(data);
-      reviews = data.getEach('reviews');
-      return reviews;
+      // We need to do a loop to combine our data unfortunately
+      const productNames = data.getEach('name');
+      const productIdentifiers = data.getEach('identifier');
+      const productReviews = data.getEach('reviews');
+      // both lengths must be equal and order is preserved.
+
+      const newModel = [];
+
+      for (let i = 0; i < productNames.length; ++i) {
+        newModel.pushObject({
+          parentLevel: {
+            name: productNames[i] || "(not named)",
+            identifier: productIdentifiers[i] || "(no indentifier)",
+          },
+          childLevel: productReviews[i].toArray() // returns the ember classes for each review
+        });
+      }
+      return newModel;
     });
+  },
+  setupController(controller, model) {
+    controller.set('model', model);
   }
-  // setupController(controller, model) {
-  //   console.log("2");
-  //   const productModel = this.modelFor('product');
-  //   this.store.query('review', { param: productModel }).then((data) => {
-  //     console.log(data);
-  //   });
-  // }
 });

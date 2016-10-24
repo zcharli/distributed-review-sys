@@ -1,0 +1,29 @@
+<div class="ui segments">
+    <div class="'ui segment">
+        <div class="ui fluid product-list accordion">
+          {{#each currentResultSet as |result|}}
+            {{tree-table.row-cell product=result columns=columns settings=settings.innerTableSettings}}
+          {{/each}}
+        </div>
+    </div>
+  {{#if isMultiPage}}
+      <div class="ui secondary clearing segment">
+          <div class="ui right floated">
+              <div class="ui right floated pagination menu">
+                  <a class="icon item" {{action 'prevPage'}}>
+                      <i class="left chevron icon"></i>
+                  </a>
+                {{#each pageNumbers as |page|}}
+                    <a class="item" {{action 'goToPage' page}}>{{page}}</a>
+                {{/each}}
+                  <a class="icon item">
+                      <i class="right chevron icon" {{action 'nextPage'}}></i>
+                  </a>
+              </div>
+
+          </div>
+      </div>
+  {{/if}}
+
+</div>
+{{yield}}

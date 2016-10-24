@@ -12,6 +12,8 @@ public class ProductReviewWrapper {
 
     public String id;
 
+    public String identifier;
+
     public Collection<BaseReview> reviews;
 
     public ProductReviewWrapper() {
@@ -22,6 +24,12 @@ public class ProductReviewWrapper {
         this.id = id;
         return this;
     }
+
+    public ProductReviewWrapper setIdentifier(String id) {
+        this.identifier = id;
+        return this;
+    }
+
 
     public ProductReviewWrapper setName(String name) {
         this.name = name;

@@ -1,0 +1,67 @@
+<div class="ui basic modal {{data.contentId}}{{data.locationId}}">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit Review: {{data.title}}
+    </div>
+    <div class="image content">
+        <div class="image">
+            <i class="archive icon"></i>
+        </div>
+        <div class="description">
+            <form class="ui form">
+                <h4 class="ui dividing header">Product Information</h4>
+                <div class="field">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Description</label>
+                          {{input type="text" value=data.description placeholder="Product description" disabled=disableProductEditing}}
+                        </div>
+                        <div class="field">
+                            <label>Type</label>
+                          {{input type="text" value=data.type placeholder="Type" disabled=disableProductEditing}}
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Identifier/Barcode</label>
+                          {{input type="text" value=data.barcode placeholder="Product identifier" disabled=true}}
+                        </div>
+                        <div class="field">
+                            <label>Date Added</label>
+                          {{input type="text" value=data.created_at placeholder="Date added" disabled=true}}
+                        </div>
+                    </div>
+                </div>
+                <h4 class="ui dividing header">Review Information</h4>
+                <div class="fields">
+                    <div class="twelve wide field">
+                        <label>Customer Review</label>
+                      {{textarea value=data.review_content  placeholder="The review of the product" disabled=disableReviewEditing}}
+                    </div>
+                    <div class="four wide field">
+                        <label>Up Votes</label>
+                      {{input type="number" value=data.upvotes disabled=true}}
+                        <br>
+                        <label>Stars</label>
+                        <div class="ui star rating disabled review" data-rating="{{data.stars}}" data-max-rating="5">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="two fluid ui inverted buttons">
+            <div class="ui cancel red basic inverted button">
+                <i class="remove icon"></i>
+                Close
+            </div>
+            <div class="ui ok green basic inverted button" {{action "submitChanges"}}>
+                <i class="checkmark icon"></i>
+                Update Review
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,6 +17,7 @@ Router.map(function() {
       this.route('approval');
       this.route('inspect', {path: '/inspect/:reviewid'});
     });
+    this.route('loading');
   });
   this.route('approvals');
   this.route('settings');

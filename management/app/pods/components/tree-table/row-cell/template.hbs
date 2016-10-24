@@ -1,0 +1,48 @@
+<div class="title">
+    <i class="dropdown icon"></i>
+  {{productLabel}}
+</div>
+<div class="product content">
+    <table class="ui selectable celled table">
+        <thead>
+        {{#each columns as |column|}}
+            <th>{{column}}</th>
+        {{/each}}
+        </thead>
+
+      {{#each rows as |row|}}
+          <tr {{action "openEditModal" row.id}}>
+            {{#each row.data as |cell|}}
+                <td>
+                  {{cell}}
+                </td>
+            {{/each}}
+          </tr>
+      {{/each}}
+      {{#if isMultiPage}}
+          <tfoot>
+            <th colspan="{{numColumns}}">
+                <div class="ui right floated pagination menu">
+                    <a class="icon item" {{action 'prevPage'}}>
+                        <i class="left chevron icon"></i>
+                    </a>
+                  {{#each pageNumbers as |page|}}
+                      <a class="item" {{action 'goToPage' page}}>{{page}}</a>
+                  {{/each}}
+                    <a class="icon item">
+                        <i class="right chevron icon" {{action 'nextPage'}}></i>
+                    </a>
+                </div>
+            </th>
+          </tfoot>
+      {{/if}}
+
+    </table>
+</div>
+
+<div class="product-modals">
+    {{#each currentResultSet as |result|}}
+      {{tree-table.row-cell.row-modal data=result settings=settings}}
+    {{/each}}
+</div>
+{{yield}}

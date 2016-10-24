@@ -61,6 +61,9 @@ public class ProductServlet {
                                                     if (!Strings.isNullOrEmpty(basePointer.m_productName) && Strings.isNullOrEmpty(product.name)) {
                                                         product.setName(basePointer.m_productName);
                                                     }
+                                                    if (!Strings.isNullOrEmpty(basePointer.getIdentifier()) && Strings.isNullOrEmpty(product.identifier)) {
+                                                        product.setIdentifier(basePointer.getIdentifier());
+                                                    }
                                                     product.add(basePointer);
                                                 } catch (Exception e) {
                                                     LOGGER.error("Exception when trying to retrieve review object from Data: " + e.getMessage());
