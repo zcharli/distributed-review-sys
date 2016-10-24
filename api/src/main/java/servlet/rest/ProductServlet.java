@@ -12,10 +12,7 @@ import review.BaseReview;
 import review.ProductReviewWrapper;
 import wrapper.ProductRestWrapper;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
@@ -85,6 +82,17 @@ public class ProductServlet {
                     response.resume(Response.serverError().entity(new GenericReply<String>("500", "An error occured: " + ex.getMessage())).build());
                     return productList;
                 });
+    }
+
+    @GET
+    @Path("/search")
+    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    public void searchProducts(final @Suspended AsyncResponse response,
+                               @QueryParam("q") String query) {
+
+    }
+}
 
 
 //    @GET
@@ -157,9 +165,4 @@ public class ProductServlet {
 //                    response.resume(Response.serverError().entity(new GenericReply<String>("500", "An error occured: " + ex.getMessage())).build());
 //                    return jsonApiModel;
 //                });
-//    }
-    }
-}
-
-
 //    }
