@@ -7,5 +7,5 @@ moduleFor('controller:product', 'Unit | Controller | product', {
 
 // Replace this with your real tests.
 test('it exists', function(assert) {
-  assert.ok(1 === 1);
+  assert.ok(true);
 });

@@ -1,5 +1,4 @@
 import { moduleForComponent, test } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('search-api', 'Integration | Component | search api', {
   integration: true
