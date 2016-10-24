@@ -113,7 +113,7 @@ public class ReviewServlet {
                                           final @PathParam("identifier") String identifier) {
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
         Number160 locationKey = Number160.createHash(identifier);
-        Number160 newDomainKey = DHTConfig.PUBLISHED_DOMAIN;
+        Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = Number160.createHash(request.getContent());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
                 .locationKey( locationKey )
@@ -121,7 +121,7 @@ public class ReviewServlet {
                 .domainKey( newDomainKey )
                 .build();
         // The original review is updated since the only time editing is allowed is during acceptance.
-        Number640 fullKey = new Number640(locationKey, newDomainKey, contentKey, Number160.ZERO);
+        Number640 fullKey = new Number640(locationKey, DHTConfig.PUBLISHED_DOMAIN, contentKey, Number160.ZERO);
         request.fillInIds(locationKey, contentKey, newDomainKey, fullKey);
         DHTManager.instance().approveData(reviewKey, new AsyncComplete() {
             @Override
