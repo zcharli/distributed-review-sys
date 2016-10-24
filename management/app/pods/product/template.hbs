@@ -1,3 +1,20 @@
+<div id="product-main-header" class="ui masthead vertical segment">
+  <div class="ui container">
+      <div class="product-intro">
+          <h1 class="ui header">
+              Product Reviews
+
+              <div class="sub header">
+                  A non-modifiable display of all product reviews currently tracked by your app.
+              </div>
+              <div class="ui hidden divider"></div>
+              <div class="ui right floated main menu">
+                  {{search-api settings=searchSettings}}
+              </div>
+          </h1>
+      </div>
+  </div>
+</div>
 {{#if model}}
   {{tree-table settings=tableSettings}}
 {{/if}}

@@ -1,5 +1,6 @@
 package servlet.rest;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import config.DHTConfig;
 import core.DHTManager;
@@ -58,17 +59,46 @@ public class ReviewServlet {
                 .locationKey(Number160.createHash(request.getIdentifier()))
                 .contentKey(Number160.createHash(request.getContent()))
                 .domainKey(DHTConfig.ACCEPTANCE_DOMAIN).build();
-        DHTManager.instance().putContentOnStorage(barcodeKey, request, new AsyncComplete() {
+        putReview(barcodeKey, request, response);
+    }
+
+    @PUT
+    @Path("/update/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void updateReview(final @ExternalReview BaseReview request,
+                                final @Suspended AsyncResponse response,
+                                final @PathParam("id") String identifier) {
+        if (!identifier.equals(request.getIdentifier()) || request.m_contentId == null || request.m_locationId == null || request.m_domainId == null) {
+            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Invalid request parameters")));
+            return;
+        }
+
+        // TODO: Validate the identifier and the key to make sure it even exists first
+        // request.validateId(identifier);
+        DRSKey barcodeKey = DefaultDHTKeyPair.builder()
+                .locationKey( request.m_locationId )
+                .contentKey( request.m_contentId )
+                .domainKey( request.m_domainId ).build();
+
+        DHTManager.instance().getAllFromStorage(barcodeKey, new AsyncResult() {
             @Override
-            public Integer call() {
+            public Integer call() throws Exception {
+
                 if (!isSuccessful()) {
                     response.resume(Response.serverError()
                             .entity(new GenericReply<String>(
-                                    "DHT-PUT", "An error occurred when trying to put object into the DHT and thus has failed"))
+                                    "DHT-GET", "An error occurred when trying to get id " + identifier))
                             .build());
-                } else {
-                    response.resume(Response.ok(new ReviewOperationComplete<String>("DHT-PUT", "Success")).build());
+                    return 0;
                 }
+
+                if (payload().size() > 0) {
+                    putReview(barcodeKey, request, response);
+                } else {
+                    response.resume(Response.ok(new GenericReply<String>("500", "Could not find the respective review to update")).build());
+                }
+
                 return 0;
             }
         });
@@ -183,5 +213,22 @@ public class ReviewServlet {
     @Path("/ping")
     public String pong() {
         return "pong";
+    }
+
+    private void putReview(DRSKey barcodeKey, BaseReview request, AsyncResponse response) {
+        DHTManager.instance().putContentOnStorage(barcodeKey, request, new AsyncComplete() {
+            @Override
+            public Integer call() {
+                if (!isSuccessful()) {
+                    response.resume(Response.serverError()
+                            .entity(new GenericReply<String>(
+                                    "DHT-PUT", "An error occurred when trying to put object into the DHT and thus has failed"))
+                            .build());
+                } else {
+                    response.resume(Response.ok(new ReviewOperationComplete<>("DHT-PUT", "Success")).build());
+                }
+                return 0;
+            }
+        });
     }
 }

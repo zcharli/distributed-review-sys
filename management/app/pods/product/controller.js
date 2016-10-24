@@ -1,7 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  constants: Ember.service.inject('constants'),
   reviews: null,
+
+  searchSettings: function() {
+    return {
+      api: this.get('constants.baseApi'),
+      resource: "product"
+    };
+  }.property('model', 'constants'),
+
   tableSettings: function() {
     const model = this.get('model');
     console.log(model);

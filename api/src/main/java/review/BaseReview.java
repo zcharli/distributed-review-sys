@@ -66,12 +66,20 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     public String getContentId() {
         return m_contentId == null ? "" : m_contentId.toString();
     }
+    @JsonSetter("contentId")
+    public void setContentId(String content) {
+        m_contentId = new Number160(content);
+    }
 
     @JsonIgnore
     public Number160 m_locationId;
     @JsonProperty("locationId")
     public String getLocationId() {
         return m_locationId != null ? m_locationId.toString(true) : "";
+    }
+    @JsonSetter("locationId")
+    public void setLocationId(String location) {
+        m_locationId = new Number160(location);
     }
 
     @JsonIgnore
@@ -80,7 +88,10 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     public String getDomainId() {
         return m_domainId != null ? m_domainId.toString(true) : "";
     }
-
+    @JsonSetter("domainId")
+    public void setDomainId(String domain) {
+        m_domainId = new Number160(domain);
+    }
 
     @JsonIgnore
     public Number640 m_dhtKey;
@@ -114,7 +125,7 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
         m_contentId = con;
         m_domainId = dom;
         m_dhtKey = absoluteKey;
-        m_dhtAbsoluteKey = Integer.toString(absoluteKey.hashCode());
+        m_dhtAbsoluteKey = Number160.createHash(absoluteKey.toString()).toString();
     }
 
     @JsonIgnore
