@@ -8,5 +8,5 @@ moduleForComponent('search-api', 'Integration | Component | search api', {
 test('it renders', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
-  assert.equal(true,true);
+  assert.equal("","");
 });
