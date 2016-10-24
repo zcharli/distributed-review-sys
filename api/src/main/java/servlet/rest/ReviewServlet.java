@@ -48,7 +48,7 @@ public class ReviewServlet {
 //        }
         request.m_productName = identifier;
         Number160 locationKey = Number160.createHash(request.getIdentifier());
-        Number160 newDomainKey = DHTConfig.PUBLISHED_DOMAIN;
+        Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = Number160.createHash(request.getContent());
         Number640 reviewKey = new Number640(locationKey, newDomainKey, contentKey, Number160.ZERO);
 
@@ -56,8 +56,8 @@ public class ReviewServlet {
         // TODO: Validate the identifier
         // request.validateId(identifier);
         DRSKey barcodeKey = DefaultDHTKeyPair.builder()
-                .locationKey(Number160.createHash(request.getIdentifier()))
-                .contentKey(Number160.createHash(request.getContent()))
+                .locationKey( locationKey )
+                .contentKey( contentKey )
                 .domainKey(DHTConfig.ACCEPTANCE_DOMAIN).build();
         putReview(barcodeKey, request, response);
     }
@@ -77,9 +77,9 @@ public class ReviewServlet {
         // TODO: Validate the identifier and the key to make sure it even exists first
         // request.validateId(identifier);
         DRSKey barcodeKey = DefaultDHTKeyPair.builder()
-                .locationKey( request.m_locationId )
-                .contentKey( request.m_contentId )
-                .domainKey( request.m_domainId ).build();
+                .locationKey( Number160.createHash(request.getIdentifier()) )
+                .contentKey(  Number160.createHash(request.getContent()) )
+                .domainKey( DHTConfig.PUBLISHED_DOMAIN ).build();
 
         DHTManager.instance().getAllFromStorage(barcodeKey, new AsyncResult() {
             @Override
@@ -111,6 +111,10 @@ public class ReviewServlet {
     public void acceptReviewIntoPublished(final @ExternalReview BaseReview request,
                                           final @Suspended AsyncResponse response,
                                           final @PathParam("identifier") String identifier) {
+        if (!identifier.equals(request.getIdentifier()) || request.m_contentId == null || request.m_locationId == null || request.m_domainId == null) {
+            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Invalid request parameters")));
+            return;
+        }
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
         Number160 locationKey = Number160.createHash(identifier);
         Number160 newDomainKey = DHTConfig.PUBLISHED_DOMAIN;
