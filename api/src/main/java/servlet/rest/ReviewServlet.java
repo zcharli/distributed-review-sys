@@ -69,10 +69,6 @@ public class ReviewServlet {
     public void updateReview(final @ExternalReview BaseReview request,
                                 final @Suspended AsyncResponse response,
                                 final @PathParam("id") String identifier) {
-        if (!identifier.equals(request.getIdentifier()) || request.m_contentId == null || request.m_locationId == null || request.m_domainId == null) {
-            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Invalid request parameters")));
-            return;
-        }
 
         // TODO: Validate the identifier and the key to make sure it even exists first
         // request.validateId(identifier);
