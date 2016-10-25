@@ -52,6 +52,9 @@ export default Ember.Component.extend({
    return ret;
   }),
   productLabel: Ember.computed('product', function() {
+    if (!this.get('product.parentLevel.identifier')) {
+      return false;
+    }
     return `${this.get('product.parentLevel.identifier')} ${this.get("product.parentLevel.name")}`;
   }),
 

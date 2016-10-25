@@ -5,6 +5,8 @@ export default Ember.Component.extend({
 
   onDomLoad: Ember.on("didInsertElement", function() {
     const api = this.get('api');
+    const self = this;
+    console.log(this.get('action'));
     Ember.$("#" + this.elementId + " .search-api").search({
       apiSettings: {
         url: api + '/search?q={query}'
@@ -13,7 +15,11 @@ export default Ember.Component.extend({
       type: 'category',
       onSelect: function(result, response) {
         console.log(result, response);
-
+        if (!(result && result.route)) {
+          return;
+        }
+        console.log(self.get('action'));
+        self.sendAction("action", result.route, result.param);
       }
     });
   }),

@@ -14,6 +14,8 @@ public class ProductReviewWrapper {
 
     public String identifier;
 
+    public String type;
+
     public Collection<BaseReview> reviews;
 
     public ProductReviewWrapper() {
@@ -38,6 +40,11 @@ public class ProductReviewWrapper {
 
     public ProductReviewWrapper add(BaseReview review) {
         reviews.add(review);
+        return this;
+    }
+
+    public ProductReviewWrapper setType(String type) {
+        this.type = type;
         return this;
     }
 }

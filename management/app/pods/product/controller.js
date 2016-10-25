@@ -20,7 +20,6 @@ export default Ember.Controller.extend(Base, {
 
   tableSettings: function() {
     const model = this.get('model');
-    console.log(model);
     return {
       numResultsPerPage: 10,
       innerTableSettings: {
@@ -40,6 +39,7 @@ export default Ember.Controller.extend(Base, {
 
   actions: {
     transition(route, param) {
+      console.log("got action", route);
       if (!route) {
         return;
       }
@@ -50,6 +50,7 @@ export default Ember.Controller.extend(Base, {
           this.transitionToRoute(route);
         }
       } catch(e) {}
+      return false;
     }
   }
 });

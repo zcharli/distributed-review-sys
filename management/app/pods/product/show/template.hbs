@@ -1,1 +1,23 @@
-{{outlet}}
+{{#if model}}
+    <div class="ui product-show">
+        <h2 class="ui header">
+            <i class="shopping bag icon"></i>
+            <div class="content">
+              {{productName}}
+                <div class="sub header">{{productIdentifier}}</div>
+            </div>
+        </h2>
+        <div class="peek-product-review">
+          {{tree-table.row-cell product=tableSettings.data columns=tableSettings.headers settings=tableSettings.innerTableSettings}}
+        </div>
+
+    </div>
+{{else}}
+    <div class="ui product-show">
+        <h2 class="ui header">
+            No single product was found to show.
+        </h2>
+    </div>
+  {{outlet}}
+{{/if}}
+

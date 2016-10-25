@@ -1,1 +1,65 @@
-{{outlet}}
+{{#if model}}
+    <div class="ui product-show">
+        <h2 class="ui header">
+            <i class="write icon"></i>
+            <div class="content">
+              {{reviewTitle}}
+                <div class="sub header">{{reviewIdentifier}}</div>
+            </div>
+        </h2>
+        <div class="peek-product-review">
+            <form class="ui form">
+                <h4 class="ui dividing header">Product Information</h4>
+                <div class="field">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Description</label>
+                          {{input type="text" value=model.description placeholder="Product description" disabled=true}}
+                        </div>
+                        <div class="field">
+                            <label>Type</label>
+                          {{input type="text" value=model.type placeholder="Type" disabled=true}}
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Identifier/Barcode</label>
+                          {{input type="text" value=model.barcode placeholder="Product identifier" disabled=true}}
+                        </div>
+                        <div class="field">
+                            <label>Date Added</label>
+                          {{input type="text" value=model.created_at placeholder="Date added" disabled=true}}
+                        </div>
+                    </div>
+                </div>
+                <h4 class="ui dividing header">Review Information</h4>
+                <div class="fields">
+                    <div class="twelve wide field">
+                        <label>Customer Review</label>
+                      {{textarea value=model.review_content  placeholder="The review of the product" disabled=true}}
+                    </div>
+                    <div class="four wide field">
+                        <label>Up Votes</label>
+                      {{input type="number" value=model.upvotes disabled=true}}
+                        <br>
+                        <label>Stars</label>
+                        <div class="ui star rating disabled review" data-rating="{{model.stars}}" data-max-rating="5">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{{else}}
+    <div class="ui product-show">
+        <h2 class="ui header">
+            No single review was found to show.
+        </h2>
+    </div>
+    {{outlet}}
+{{/if}}
+
+
+

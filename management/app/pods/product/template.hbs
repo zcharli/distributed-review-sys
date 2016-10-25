@@ -10,7 +10,7 @@
             </div>
             <div class="ui hidden divider"></div>
             <div class="ui right floated main menu">
-              {{search-api settings=searchSettings}}
+              {{search-api settings=searchSettings action="transition"}}
             </div>
             <div class="left floated main menu">
               {{#ui-dropdown class="selection" selected=selected onChange=(action (mut selected)) as |execute mapper|}}
@@ -28,9 +28,10 @@
         </div>
     </div>
 </div>
+{{outlet}}
 {{#if model}}
     <div class="product-list">
-      {{tree-table settings=tableSettings perpage=numElementsPer transition=transition}}
+      {{tree-table settings=tableSettings perpage=numElementsPer}}
     </div>
 {{/if}}
 

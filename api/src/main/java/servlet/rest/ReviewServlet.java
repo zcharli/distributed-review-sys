@@ -48,7 +48,16 @@ public class ReviewServlet {
 //            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
 //            return;
 //        }
-        request.m_productName = identifier;
+        String productName = null;
+        try {
+            productName = WordUtils.capitalize(URLDecoder.decode(identifier, "utf-8"));
+            if (productName == null) {
+                throw new NullPointerException("URL decoder failed");
+            }
+        } catch (Exception e) {
+            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Malformed request parameter, please use utf-8 encoding.")));
+        }
+        request.m_productName = productName;
         Number160 locationKey = Number160.createHash(request.getIdentifier());
         Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = Number160.createHash(request.getContent());
@@ -117,17 +126,9 @@ public class ReviewServlet {
             response.resume(Response.serverError().entity(new GenericReply<String>("404", "No identifier in request was found")));
             return;
         }
-        String productName = null;
-        try {
-            productName = WordUtils.capitalize(URLDecoder.decode(identifier, "utf-8"));
-            if (productName == null) {
-                throw new NullPointerException("URL decoder failed");
-            }
-        } catch (Exception e) {
-            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Malformed request parameter, please use utf-8 encoding.")));
-        }
+
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
-        Number160 locationKey = Number160.createHash(productName);
+        Number160 locationKey = Number160.createHash(identifier);
         Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = Number160.createHash(request.getContent());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
@@ -201,6 +202,7 @@ public class ReviewServlet {
     }
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("approval")
     public void getTrackedReviewsNeedingApproval(final @Suspended AsyncResponse response) {
