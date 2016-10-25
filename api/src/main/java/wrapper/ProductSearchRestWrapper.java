@@ -23,4 +23,8 @@ public class ProductSearchRestWrapper {
     public void setCategories(String catName, CategorySearchResult category) {
         m_rootElement.put(catName, category);
     }
+
+    public void setAllCategories(Map<String, CategorySearchResult> map) {
+        m_rootElement = map;
+    }
 }

@@ -5,9 +5,11 @@ import com.google.common.collect.ImmutableMap;
 import config.APIConfig;
 import config.DHTConfig;
 import core.DHTManager;
+import core.GlobalContext;
 import error.GenericReply;
 import key.DefaultDHTKeyPair;
 import net.tomp2p.storage.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import review.BaseReview;
@@ -34,7 +36,6 @@ public class ProductServlet {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductServlet.class);
 
     // product cache is reloaded per /product/all request
-    private volatile Queue<ProductReviewWrapper> m_productCache;
     private final ExecutorService m_queryWorker = Executors.newFixedThreadPool(10);
 
     @GET
@@ -82,10 +83,11 @@ public class ProductServlet {
                                     .toArray(CompletableFuture[]::new);
                             CompletableFuture.allOf(productFutures).join();
                             response.resume(Response.ok().entity(new ProductRestWrapper().setProducts(productList)).build());
-                            m_productCache = productList;
+                            GlobalContext.instance().setState(productList);
                             return productList;
                         }
                 ).exceptionally(ex -> {
+                    LOGGER.error("Error occurred when fetching product models /product/all: " + ex.getMessage());
                     response.resume(Response.serverError().entity(new GenericReply<String>("500", "An error occured: " + ex.getMessage())).build());
                     return productList;
                 });
@@ -93,11 +95,11 @@ public class ProductServlet {
 
     @GET
     @Path("/search")
-    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
-    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public void searchProducts(final @Suspended AsyncResponse response,
                                final @QueryParam("q") String query) {
-        final Queue<ProductReviewWrapper> collectorRef = m_productCache;
+        final Queue<ProductReviewWrapper> collectorRef = GlobalContext.instance().getState();
 
         if (collectorRef.size() == 0) {
             response.resume(Response.ok(new ProductSearchRestWrapper()).build());
@@ -125,49 +127,64 @@ public class ProductServlet {
                         }
                         final ThreadSafeCategorySearchResult categoryResults = categories.get(category);
                         switch (category) {
-                            case "Review":
-                                final CompletableFuture<?>[] searchAllReviews = product.reviews.stream()
-                                        .map(review -> CompletableFuture.runAsync(()->{
-                                            final String reviewURL = "/product/review/"+product.identifier+"/inspect/"+review.getContentId();
-                                            if (!Strings.isNullOrEmpty(review.getIdentifier()) && review.getIdentifier().contains(query)) {
+                            case "Product ID":
+                                final CompletableFuture<?>[] searchAllReviewIDs = product.reviews.stream()
+                                        .map(review -> CompletableFuture.runAsync(() -> {
+                                            final String reviewURL = "/product/review/" + product.identifier + "/inspect/" + review.getContentId();
+                                            if (!Strings.isNullOrEmpty(review.getIdentifier()) && StringUtils.containsIgnoreCase(review.getIdentifier(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Identifier")
                                                         .setDescription(review.getIdentifier())
                                                         .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.m_productName) && review.m_productName.contains(query)) {
-                                                categoryResults.addCategory(new CategorySearchResultDescription()
-                                                        .setTitle("Matched Product Name")
-                                                        .setDescription(review.m_productName)
-                                                        .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.m_content) && review.m_content.contains(query)) {
-                                                categoryResults.addCategory(new CategorySearchResultDescription()
-                                                        .setTitle("Matched Review")
-                                                        .setDescription(review.m_content)
-                                                        .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.m_dhtAbsoluteKey) && review.m_dhtAbsoluteKey.contains(query)) {
-                                                categoryResults.addCategory(new CategorySearchResultDescription()
-                                                        .setTitle("Matched ID")
-                                                        .setDescription(review.m_dhtAbsoluteKey)
-                                                        .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.m_title) && review.m_title.contains(query)) {
-                                                categoryResults.addCategory(new CategorySearchResultDescription()
-                                                        .setTitle("Matched Title")
-                                                        .setDescription(review.m_title)
-                                                        .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.getAbsoluteId()) && review.getAbsoluteId().contains(query)) {
+                                            } else if (!Strings.isNullOrEmpty(review.getAbsoluteId()) && StringUtils.containsIgnoreCase(review.getAbsoluteId(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Absolute ID")
                                                         .setDescription(review.getAbsoluteId())
                                                         .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.getModelId()) && review.getModelId().contains(query)) {
+                                            } else if (!Strings.isNullOrEmpty(review.getContentId()) && StringUtils.containsIgnoreCase(review.getContentId(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
-                                                        .setTitle("Matched Model ID")
-                                                        .setDescription(review.getModelId())
+                                                        .setTitle("Matched Content Hash")
+                                                        .setDescription(review.getContentId())
                                                         .setURL(reviewURL));
-                                            } else if (!Strings.isNullOrEmpty(review.getType()) && review.getType().contains(query)) {
+                                            } else if (!Strings.isNullOrEmpty(review.getLocationId()) && StringUtils.containsIgnoreCase(review.getLocationId(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
-                                                        .setTitle("Matched Type")
-                                                        .setDescription(review.getType())
+                                                        .setTitle("Matched Identifier Hash")
+                                                        .setDescription(review.getLocationId())
+                                                        .setURL(reviewURL));
+                                            }
+                                        }, m_queryWorker)).toArray(CompletableFuture[]::new);
+
+                                CompletableFuture.allOf(searchAllReviewIDs).join();
+                                break;
+                            case "Review":
+                                final CompletableFuture<?>[] searchAllReviews = product.reviews.stream()
+                                        .map(review -> CompletableFuture.runAsync(() -> {
+                                            final String reviewURL = "/product/review/" + product.identifier + "/inspect/" + review.getContentId();
+
+//                                            else if (!Strings.isNullOrEmpty(review.m_productName) && review.m_productName.contains(query)) {
+//                                                categoryResults.addCategory(new CategorySearchResultDescription()
+//                                                        .setTitle("Matched Product Name")
+//                                                        .setDescription(review.m_productName)
+//                                                        .setURL(reviewURL));
+//                                            }
+
+                                            if (!Strings.isNullOrEmpty(review.m_content) && StringUtils.containsIgnoreCase(review.m_content, query)) {
+                                                categoryResults.addCategory(new CategorySearchResultDescription()
+                                                        .setTitle("Matched Review")
+                                                        .setDescription(review.m_content)
+                                                        .setURL(reviewURL));
+                                            }
+//                                            else if (!Strings.isNullOrEmpty(review.getType()) && review.getType().contains(query)) {
+//                                                categoryResults.addCategory(new CategorySearchResultDescription()
+//                                                        .setTitle("Matched Type")
+//                                                        .setDescription(review.getType())
+//                                                        .setURL(reviewURL));
+//                                            }
+
+                                            if (!Strings.isNullOrEmpty(review.m_title) && StringUtils.containsIgnoreCase(review.m_title, query)) {
+                                                categoryResults.addCategory(new CategorySearchResultDescription()
+                                                        .setTitle("Matched Title")
+                                                        .setDescription(review.m_title)
                                                         .setURL(reviewURL));
                                             }
                                         }, m_queryWorker)).toArray(CompletableFuture[]::new);
@@ -175,21 +192,21 @@ public class ProductServlet {
                                 CompletableFuture.allOf(searchAllReviews).join();
                                 break;
                             case "Product":
-                                if (!Strings.isNullOrEmpty(product.identifier) && product.identifier.contains(query)) {
+                                if (!Strings.isNullOrEmpty(product.identifier) && StringUtils.containsIgnoreCase(product.identifier, query)) {
                                     categoryResults.addCategory(new CategorySearchResultDescription()
                                             .setTitle("Matched Identifier")
                                             .setDescription(product.identifier)
-                                            .setURL("/product/review/"+product.identifier));
-                                } else if (!Strings.isNullOrEmpty(product.id) && product.id.contains(query)) {
+                                            .setURL("/product/review/" + product.identifier));
+                                } else if (!Strings.isNullOrEmpty(product.id) && StringUtils.containsIgnoreCase(product.id, query)) {
                                     categoryResults.addCategory(new CategorySearchResultDescription()
                                             .setTitle("Matched ID")
                                             .setDescription(product.id)
-                                            .setURL("/product/review/"+product.identifier));
-                                } else if (!Strings.isNullOrEmpty(product.name) && product.name.contains(query)) {
+                                            .setURL("/product/review/" + product.identifier));
+                                } else if (!Strings.isNullOrEmpty(product.name) && StringUtils.containsIgnoreCase(product.name, query)) {
                                     categoryResults.addCategory(new CategorySearchResultDescription()
-                                            .setTitle("Matched Name")
+                                            .setTitle("Matched Product Name")
                                             .setDescription(product.name)
-                                            .setURL("/product/review"+product.identifier));
+                                            .setURL("/product/review/" + product.identifier));
                                 }
                                 break;
                             default:
@@ -202,6 +219,7 @@ public class ProductServlet {
                     return null;
                 })).toArray(CompletableFuture[]::new);
         CompletableFuture.allOf(searchAllProducts).join();
+        searchResults.setAllCategories(categories);
         response.resume(Response.ok().entity(searchResults).build());
     }
 

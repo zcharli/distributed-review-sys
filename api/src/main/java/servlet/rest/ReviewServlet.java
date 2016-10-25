@@ -12,6 +12,7 @@ import msg.AsyncResult;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
+import org.apache.commons.lang3.text.WordUtils;
 import review.BaseReview;
 import review.ReviewIdentity;
 import review.comparator.ReviewTimestampComparator;
@@ -25,6 +26,7 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URLDecoder;
 import java.util.*;
 
 /**
@@ -111,8 +113,21 @@ public class ReviewServlet {
     public void acceptReviewIntoPublished(final @ExternalReview BaseReview request,
                                           final @Suspended AsyncResponse response,
                                           final @PathParam("identifier") String identifier) {
+        if (Strings.isNullOrEmpty(identifier)) {
+            response.resume(Response.serverError().entity(new GenericReply<String>("404", "No identifier in request was found")));
+            return;
+        }
+        String productName = null;
+        try {
+            productName = WordUtils.capitalize(URLDecoder.decode(identifier, "utf-8"));
+            if (productName == null) {
+                throw new NullPointerException("URL decoder failed");
+            }
+        } catch (Exception e) {
+            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Malformed request parameter, please use utf-8 encoding.")));
+        }
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
-        Number160 locationKey = Number160.createHash(identifier);
+        Number160 locationKey = Number160.createHash(productName);
         Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = Number160.createHash(request.getContent());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
@@ -207,6 +222,12 @@ public class ReviewServlet {
             }
         }
         response.resume(Response.ok().entity(new ReviewOperationComplete<List<BaseReview>>("200",results)).build());
+    }
+
+    @GET
+    @Path("/check")
+    public void checkProductId() {
+
     }
 
     @GET

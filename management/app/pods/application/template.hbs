@@ -1,12 +1,14 @@
 {{#if session.isAuthenticated}}
   {{top-nav}}
-    <div class="pusher fullscreen">
-        <div class="full height">
-          {{#side-nav}}
-            {{outlet}}
-          {{/side-nav}}
-        </div>
-    </div>
+  <div class="pusher fullscreen">
+      <div class="full height">
+        {{#side-nav}}
+          {{outlet}}
+        {{/side-nav}}
+      </div>
+  </div>
+{{else}}
+  {{outlet}}
 {{/if}}
 
 

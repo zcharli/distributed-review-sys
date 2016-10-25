@@ -3,6 +3,8 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   constants: Ember.inject.service('constants'),
   reviews: null,
+  selectedType: 10,
+  types: [10,25,50,100],
 
   searchSettings: function() {
     return {
@@ -29,5 +31,11 @@ export default Ember.Controller.extend({
 
   init() {
     console.log("product controller loaded");
+  },
+
+  actions: {
+    onChange(value) {
+      console.log(value);
+    }
   }
 });

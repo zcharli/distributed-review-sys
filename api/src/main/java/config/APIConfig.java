@@ -24,12 +24,12 @@ public class APIConfig {
 
     public static final ImmutableList<String> SEARCH_CATEGORIES;
     public static final Queue<String> CURRENT_SEARCH_CATEGORIES;
-    public static int MAX_RESULTS_PER_CATEGORY = 3;
+    public static int MAX_RESULTS_PER_CATEGORY = 5;
 
     public static final ImmutableSet<String> LIVE_PRODUCT_TYPES = ImmutableSet.of("commodity");
 
     static {
-        SEARCH_CATEGORIES = ImmutableList.of("Type", "Review", "Product");
+        SEARCH_CATEGORIES = ImmutableList.of("Type", "Review", "Product", "Product Identifier");
         CURRENT_SEARCH_CATEGORIES = new ConcurrentLinkedQueue<String>();
         CURRENT_SEARCH_CATEGORIES.addAll(SEARCH_CATEGORIES);
         INSTANCE = new APIConfig();
