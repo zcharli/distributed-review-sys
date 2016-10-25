@@ -264,7 +264,7 @@ public class DHT<KEY extends DRSKey> {
                     return false;
                 }
                 adapter.hset(DHTConfig.KEYSTORE_ADDR, json, json);
-                m_keystoreCache.put(locationKey, null);
+                m_keystoreCache.put(locationKey, 1);
             } catch (Exception e) {
                 LOGGER.error("Jedis resource fetch error on addToKeyStore: " + e.getMessage());
                 return false;
@@ -297,7 +297,7 @@ public class DHT<KEY extends DRSKey> {
                     int[] buffer = m_mapper.readValue(number160Buffer, int[].class);
                     Number160 locationKey = new Number160(buffer);
                     list.add(locationKey);
-                    m_keystoreCache.put(locationKey, null);
+                    m_keystoreCache.put(locationKey, 1);
                 } catch (Exception e) {
                     LOGGER.error("An error occured when trying to deserialize Number160 buffer: " + e.getMessage());
                 }
