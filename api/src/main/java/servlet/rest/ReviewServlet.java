@@ -202,8 +202,8 @@ public class ReviewServlet {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
     @Path("approval")
     public void getTrackedReviewsNeedingApproval(final @Suspended AsyncResponse response) {
         ImmutableList<Number160> trackedIds = DHTManager.instance().getTrackedFromAcceptanceDomain();
