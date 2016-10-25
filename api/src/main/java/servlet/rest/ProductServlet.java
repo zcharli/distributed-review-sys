@@ -159,7 +159,7 @@ public class ProductServlet {
                             case "Review":
                                 final CompletableFuture<?>[] searchAllReviews = product.reviews.stream()
                                         .map(review -> CompletableFuture.runAsync(() -> {
-                                            final String reviewURL = "/product/review/" + product.identifier + "/inspect/" + review.getContentId();
+                                            final String reviewURL = "/product/review/" + product.identifier + "/inspect/" + review.getAbsoluteId();
 
 //                                            else if (!Strings.isNullOrEmpty(review.m_productName) && review.m_productName.contains(query)) {
 //                                                categoryResults.addCategory(new CategorySearchResultDescription()
