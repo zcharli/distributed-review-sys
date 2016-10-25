@@ -4,7 +4,7 @@ export default Ember.Component.extend({
   numResultsPerPage: Ember.computed('settings.numResultsPerPage', function() {
     return this.get('settings.numResultsPerPage');
   }),
-  currentPage: 0,
+  currentPage: 1,
   maxPage: 0,
   isMultiPage: Ember.computed('product.childLevel', 'numResultsPerPage', function() {
     const data = this.get('product.childLevel');
@@ -23,7 +23,7 @@ export default Ember.Component.extend({
     return false;
   }),
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'product.childLevel', function() {
-    let page = this.get('currentPage');
+    let page = this.get('currentPage') - 1;
     const results = this.get('product.childLevel');
     const numResults = this.get('numResultsPerPage');
     const viewable = results.slice(page * numResults, (1 + page) * numResults );

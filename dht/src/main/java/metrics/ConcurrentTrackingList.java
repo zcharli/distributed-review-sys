@@ -60,7 +60,7 @@ public class ConcurrentTrackingList<K, V> {
 
     public void silentLoad(K key, V value) {
         m_cache.put(key, value);
-        m_indexMap.put(value, m_cache.size() - 1);
+        m_indexMap.put(value, 0); // TODO: a band - aid to a bigger problem. We need enums for types of tracking!
     }
 
     public V get(K key) {

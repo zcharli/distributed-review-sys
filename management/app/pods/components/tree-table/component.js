@@ -9,7 +9,7 @@ export default Ember.Component.extend({
   numResultsPerPage: Ember.computed('settings.numResultsPerPage', function() {
     return this.get('settings.numResultsPerPage');
   }),
-  currentPage: 0,
+  currentPage: 1,
   maxPage: 0,
   isMultiPage: Ember.computed('settings.data', 'numResultsPerPage', function() {
     const data = this.get('settings.data');
@@ -28,7 +28,7 @@ export default Ember.Component.extend({
     return [];
   }),
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'settings.data', function() {
-    let page = this.get('currentPage');
+    let page = this.get('currentPage') - 1;
     const results = this.get('settings.data');
     const numResults = this.get('numResultsPerPage');
     const viewable = results.slice(page * numResults, (1 + page) * numResults );
@@ -63,6 +63,8 @@ export default Ember.Component.extend({
     goToPage(pageNum) {
       const maxPage = this.get("maxPage");
       const curPage = this.get("currentPage");
+      console.log(maxPage, curPage);
+      console.log(pageNum);
       if (!pageNum && (curPage === pageNum || pageNum < 0 || pageNum > maxPage)) {
         return;
       }
