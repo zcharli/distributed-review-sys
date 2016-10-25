@@ -6,20 +6,21 @@ export default Ember.Component.extend({
     Ember.$(".product-list.accordion").accordion();
   }),
 
-  numResultsPerPage: Ember.computed('settings.numResultsPerPage', function() {
-    return this.get('settings.numResultsPerPage');
+  numResultsPerPage: Ember.computed('perpage', function() {
+    return this.get('perpage');
   }),
   currentPage: 1,
   maxPage: 0,
   isMultiPage: Ember.computed('settings.data', 'numResultsPerPage', function() {
+    const maxNum = this.get("numResultsPerPage") || 10;
     const data = this.get('settings.data');
-    return data.length && (data.length > this.get("numResultsPerPage"));
+    return data.length && (data.length > maxNum);
   }),
   pageNumbers: Ember.computed('isMultiPage', 'numResultsPerPage', function() {
     if (this.get('isMultiPage')) {
       let ret = [];
       const data = this.get('settings.data');
-      let numResults = this.get('numResultsPerPage');
+      let numResults = this.get("numResultsPerPage") || 10;
       const numPages = Math.ceil(data.length / numResults);
       this.set('maxPage', numPages);
       for (let i = 1; i <= numPages; ++i) { ret.push(i); }
@@ -30,7 +31,7 @@ export default Ember.Component.extend({
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'settings.data', function() {
     let page = this.get('currentPage') - 1;
     const results = this.get('settings.data');
-    const numResults = this.get('numResultsPerPage');
+    const numResults = this.get("numResultsPerPage") || 10;
     const viewable = results.slice(page * numResults, (1 + page) * numResults );
     return viewable;
   }),

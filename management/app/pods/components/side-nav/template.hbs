@@ -1,26 +1,27 @@
-
-<div class="ui vertical inverted sidebar menu left overlay visible" id="toc">
-    <div class="item">
-        <a class="ui logo icon image" href="/">
-            <img src="/images/logo.png">
-        </a>
-        <a href="/"><b>Management</b></a>
-    </div>
-    <div class="item">
-        <div class="header">Product Administration</div>
-        <div class="menu">
-          {{#link-to 'product' class='item'}}View all products{{/link-to}}
-          {{#link-to 'approvals' class='item'}}Approve reviews{{/link-to}}
+<div id="toc">
+    <div class="ui vertical inverted sidebar menu left overlay visible" >
+        <div class="item">
+            <a class="ui logo icon image" href="/">
+                <img src="/images/logo.png">
+            </a>
+            <a href="/"><b>Management</b></a>
         </div>
+        <div class="item">
+            <div class="header">Product Administration</div>
+            <div class="menu">
+              {{#link-to 'product' class='item'}}View all products{{/link-to}}
+              {{#link-to 'approvals' class='item'}}Approve reviews{{/link-to}}
+            </div>
 
-    </div>
-    <div class="item">
-        <div class="header">Settings</div>
-        <div class="menu">
-          {{#link-to 'account.settings' class='item'}}Account{{/link-to}}
         </div>
-        <div class="menu">
-          {{#link-to 'settings' class='item'}}System{{/link-to}}
+        <div class="item">
+            <div class="header">Settings</div>
+            <div class="menu">
+              {{#link-to 'account.settings' class='item'}}Account{{/link-to}}
+            </div>
+            <div class="menu">
+              {{#link-to 'settings' class='item'}}System{{/link-to}}
+            </div>
         </div>
     </div>
 </div>

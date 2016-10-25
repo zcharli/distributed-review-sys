@@ -13,11 +13,9 @@ Router.map(function() {
     this.route('settings');
   });
   this.route('product', function() {
-    this.route('review', {path:'review/:productid'},function() {
-      this.route('approval');
-      this.route('inspect', {path: '/inspect/:reviewid'});
-    });
+    this.route('review', {path:'review/:reviewid'});
     this.route('loading');
+    this.route('show', {path:'show/:productid'});
   });
   this.route('approvals');
   this.route('settings');

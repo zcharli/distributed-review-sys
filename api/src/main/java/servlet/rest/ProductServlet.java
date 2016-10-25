@@ -130,27 +130,35 @@ public class ProductServlet {
                             case "Product ID":
                                 final CompletableFuture<?>[] searchAllReviewIDs = product.reviews.stream()
                                         .map(review -> CompletableFuture.runAsync(() -> {
-                                            final String reviewURL = "/product/review/" + product.identifier + "/inspect/" + review.getContentId();
+                                            final String productRoute = "product.show";// + product.identifier + "/inspect/" + review.getContentId();
                                             if (!Strings.isNullOrEmpty(review.getIdentifier()) && StringUtils.containsIgnoreCase(review.getIdentifier(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Identifier")
                                                         .setDescription(review.getIdentifier())
-                                                        .setURL(reviewURL));
+                                                        .setURL(productRoute)
+                                                        .setModel("product")
+                                                        .setParam(review.getLocationId()));
                                             } else if (!Strings.isNullOrEmpty(review.getAbsoluteId()) && StringUtils.containsIgnoreCase(review.getAbsoluteId(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Absolute ID")
                                                         .setDescription(review.getAbsoluteId())
-                                                        .setURL(reviewURL));
+                                                        .setURL(productRoute)
+                                                        .setModel("product")
+                                                        .setParam(review.getLocationId()));
                                             } else if (!Strings.isNullOrEmpty(review.getContentId()) && StringUtils.containsIgnoreCase(review.getContentId(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Content Hash")
                                                         .setDescription(review.getContentId())
-                                                        .setURL(reviewURL));
+                                                        .setURL(productRoute)
+                                                        .setModel("product")
+                                                        .setParam(review.getLocationId()));
                                             } else if (!Strings.isNullOrEmpty(review.getLocationId()) && StringUtils.containsIgnoreCase(review.getLocationId(), query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Identifier Hash")
                                                         .setDescription(review.getLocationId())
-                                                        .setURL(reviewURL));
+                                                        .setURL(productRoute)
+                                                        .setModel("product")
+                                                        .setParam(review.getLocationId()));
                                             }
                                         }, m_queryWorker)).toArray(CompletableFuture[]::new);
 
@@ -159,7 +167,7 @@ public class ProductServlet {
                             case "Review":
                                 final CompletableFuture<?>[] searchAllReviews = product.reviews.stream()
                                         .map(review -> CompletableFuture.runAsync(() -> {
-                                            final String reviewURL = "/product/review/" + product.identifier + "/inspect/" + review.getAbsoluteId();
+                                            final String reviewURL = "product.review";// + product.identifier + "/inspect/" + review.getAbsoluteId();
 
 //                                            else if (!Strings.isNullOrEmpty(review.m_productName) && review.m_productName.contains(query)) {
 //                                                categoryResults.addCategory(new CategorySearchResultDescription()
@@ -172,7 +180,9 @@ public class ProductServlet {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Review")
                                                         .setDescription(review.m_content)
-                                                        .setURL(reviewURL));
+                                                        .setURL(reviewURL)
+                                                        .setModel("review")
+                                                        .setParam(review.getAbsoluteId()));
                                             }
 //                                            else if (!Strings.isNullOrEmpty(review.getType()) && review.getType().contains(query)) {
 //                                                categoryResults.addCategory(new CategorySearchResultDescription()
@@ -185,7 +195,9 @@ public class ProductServlet {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Title")
                                                         .setDescription(review.m_title)
-                                                        .setURL(reviewURL));
+                                                        .setURL(reviewURL)
+                                                        .setModel("review")
+                                                        .setParam(review.getAbsoluteId()));
                                             }
                                         }, m_queryWorker)).toArray(CompletableFuture[]::new);
 
@@ -196,17 +208,23 @@ public class ProductServlet {
                                     categoryResults.addCategory(new CategorySearchResultDescription()
                                             .setTitle("Matched Identifier")
                                             .setDescription(product.identifier)
-                                            .setURL("/product/review/" + product.identifier));
+                                            .setURL("product.show")
+                                            .setModel("product")
+                                            .setParam(product.id));
                                 } else if (!Strings.isNullOrEmpty(product.id) && StringUtils.containsIgnoreCase(product.id, query)) {
                                     categoryResults.addCategory(new CategorySearchResultDescription()
                                             .setTitle("Matched ID")
                                             .setDescription(product.id)
-                                            .setURL("/product/review/" + product.identifier));
+                                            .setURL("product.show")
+                                            .setModel("product")
+                                            .setParam(product.id));
                                 } else if (!Strings.isNullOrEmpty(product.name) && StringUtils.containsIgnoreCase(product.name, query)) {
                                     categoryResults.addCategory(new CategorySearchResultDescription()
                                             .setTitle("Matched Product Name")
                                             .setDescription(product.name)
-                                            .setURL("/product/review/" + product.identifier));
+                                            .setURL("product.show")
+                                            .setModel("product")
+                                            .setParam(product.id));
                                 }
                                 break;
                             default:

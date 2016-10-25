@@ -1,34 +1,36 @@
 <div id="product-main-header" class="ui masthead vertical segment">
-  <div class="ui container">
-      <div class="product-intro">
-          <h1 class="ui header">
-              Product Reviews
+    <div class="ui container">
+        <div class="product-intro">
+            <h1 class="ui header">
+                Product Reviews
+            </h1>
 
-              <div class="sub header">
-                  A non-modifiable display of all product reviews currently tracked by your app.
-              </div>
-              <div class="ui hidden divider"></div>
-              <div class="ui right floated main menu">
-                  {{search-api settings=searchSettings}}
-              </div>
-              <div class="left floated main menu">
-                {{#ui-dropdown class="selection" selected=selectedType onChange=(action (mut selectedType)) as |execute mapper|}}
-                    <div class="default text">Per Page</div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                      {{#each types as |type|}}
-                          <div class="item" data-value="{{map-value mapper type}}">
-                            {{type}}
-                          </div>
-                      {{/each}}
-                    </div>
-                {{/ui-dropdown}}
-              </div>
-          </h1>
-      </div>
-  </div>
+            <div class="sub header">
+                A non-modifiable display of all product reviews currently tracked by your app.
+            </div>
+            <div class="ui hidden divider"></div>
+            <div class="ui right floated main menu">
+              {{search-api settings=searchSettings}}
+            </div>
+            <div class="left floated main menu">
+              {{#ui-dropdown class="selection" selected=selected onChange=(action (mut selected)) as |execute mapper|}}
+                  <div class="default text">Per Page</div>
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    {{#each types as |type|}}
+                        <div class="item" data-value="{{map-value mapper type}}">
+                          {{type}}
+                        </div>
+                    {{/each}}
+                  </div>
+              {{/ui-dropdown}}
+            </div>
+        </div>
+    </div>
 </div>
 {{#if model}}
-  {{tree-table settings=tableSettings}}
+    <div class="product-list">
+      {{tree-table settings=tableSettings perpage=numElementsPer transition=transition}}
+    </div>
 {{/if}}
-{{outlet}}
+

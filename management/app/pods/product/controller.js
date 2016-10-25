@@ -1,10 +1,15 @@
 import Ember from 'ember';
+import Base from 'semantic-ui-ember/mixins/base';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(Base, {
   constants: Ember.inject.service('constants'),
   reviews: null,
-  selectedType: 10,
+  selected: 10,
   types: [10,25,50,100],
+
+  numElementsPer: Ember.computed("selected", function() {
+    return this.get('selected');
+  }),
 
   searchSettings: function() {
     return {
@@ -34,8 +39,17 @@ export default Ember.Controller.extend({
   },
 
   actions: {
-    onChange(value) {
-      console.log(value);
+    transition(route, param) {
+      if (!route) {
+        return;
+      }
+      try {
+        if (param) {
+          this.transitionToRoute(route, param);
+        } else {
+          this.transitionToRoute(route);
+        }
+      } catch(e) {}
     }
   }
 });

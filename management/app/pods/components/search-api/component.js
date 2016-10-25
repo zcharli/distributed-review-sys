@@ -10,7 +10,11 @@ export default Ember.Component.extend({
         url: api + '/search?q={query}'
       },
       searchDelay: 200,
-      type: 'category'
+      type: 'category',
+      onSelect: function(result, response) {
+        console.log(result, response);
+
+      }
     });
   }),
 

@@ -14,8 +14,14 @@ public class CategorySearchResultDescription {
     @JsonProperty("description")
     public String m_matchedString;
 
-    @JsonProperty("url")
-    public String m_clickUrl;
+    @JsonProperty("route")
+    public String m_route;
+
+    @JsonProperty("param")
+    public String m_routeParam;
+
+    @JsonProperty("model")
+    public String m_model;
 
     public CategorySearchResultDescription() {}
 
@@ -30,7 +36,17 @@ public class CategorySearchResultDescription {
     }
 
     public CategorySearchResultDescription setURL(String url) {
-        m_clickUrl = url;
+        m_route = url;
+        return this;
+    }
+
+    public CategorySearchResultDescription setParam(String param) {
+        m_routeParam = param;
+        return this;
+    }
+
+    public CategorySearchResultDescription setModel(String model) {
+        m_model = model;
         return this;
     }
 }

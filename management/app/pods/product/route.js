@@ -2,7 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
 
-  model() {
+  model(params, transition) {
+    console.log(params, transition);
     return this.store.findAll('product').then((data) => {
       console.log(data);
       // We need to do a loop to combine our data unfortunately

@@ -50,7 +50,7 @@ public class ConcurrentTrackingList<K, V> {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             try {
                 String buffer = objectMapper.writeValueAsString(value);
-                adapter.lset(DHTConfig.TRACKED_ID + key.toString(), m_indexMap.get(value), buffer);
+                adapter.lset(DHTConfig.TRACKED_ID + key.toString(), 0, buffer); // Bandaid
             } catch (Exception e) {
                 LOGGER.error("Json processing error update(): "  + key + " " + e.getMessage() + "\n");
                 e.printStackTrace();
