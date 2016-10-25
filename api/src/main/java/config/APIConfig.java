@@ -1,10 +1,14 @@
 package config;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by cli on 9/27/2016.
@@ -18,7 +22,16 @@ public class APIConfig {
     public static final String WEB_RESOURCE_PATH;
     public static final String DEFAULT_STEP = "5";
 
+    public static final ImmutableList<String> SEARCH_CATEGORIES;
+    public static final Queue<String> CURRENT_SEARCH_CATEGORIES;
+    public static int MAX_RESULTS_PER_CATEGORY = 3;
+
+    public static final ImmutableSet<String> LIVE_PRODUCT_TYPES = ImmutableSet.of("commodity");
+
     static {
+        SEARCH_CATEGORIES = ImmutableList.of("Type", "Review", "Product");
+        CURRENT_SEARCH_CATEGORIES = new ConcurrentLinkedQueue<String>();
+        CURRENT_SEARCH_CATEGORIES.addAll(SEARCH_CATEGORIES);
         INSTANCE = new APIConfig();
         String path = INSTANCE.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         try {

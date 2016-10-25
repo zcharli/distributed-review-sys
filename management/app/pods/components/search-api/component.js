@@ -24,7 +24,7 @@ export default Ember.Component.extend({
     if (!(settings && settings.api && settings.resource)) {
       return;
     }
-    return settings.api + settings.resource;
+    return settings.api + "/" + settings.resource;
   }.property('settings')
 
 });

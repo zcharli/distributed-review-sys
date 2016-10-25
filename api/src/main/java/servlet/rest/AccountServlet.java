@@ -78,6 +78,13 @@ public class AccountServlet {
     }
 
     @GET
+    @Path("/access")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void getAccountAccessInfo() {
+
+    }
+
+    @GET
     @Path("/ping")
     public String pong() {
         return "pong";

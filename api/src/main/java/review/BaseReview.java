@@ -132,6 +132,9 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     public abstract String getIdentifier();
 
     @JsonIgnore
+    public abstract String getType();
+
+    @JsonIgnore
     public String getAbsoluteId() {
         return Strings.isNullOrEmpty(m_dhtAbsoluteKey) ? "" : m_dhtAbsoluteKey;
     }

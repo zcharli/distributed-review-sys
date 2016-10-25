@@ -17,6 +17,9 @@ public class LocationReview extends BaseReview {
     @JsonProperty("latitude")
     public long m_longitude;
 
+    @JsonIgnore
+    public static final String m_locationType = "location";
+
     public LocationReview() {
         super();
     }
@@ -45,5 +48,10 @@ public class LocationReview extends BaseReview {
         int result = (int) (m_longitude ^ (m_longitude >>> 32));
         result = 31 * result + (int) (m_latitutde ^ (m_latitutde >>> 32));
         return Integer.toString(result);
+    }
+
+    @JsonIgnore
+    public String getType() {
+        return m_locationType;
     }
 }

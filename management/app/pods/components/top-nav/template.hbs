@@ -22,7 +22,22 @@
 </div>
 
 <div class="ui simple sidebar inverted vertical menu left">
-    <a class="item">Item 1</a>
-    <a class="item">Item 2</a>
-    <a class="item">Item 3</a>
+
+    <div class="item">
+        <div class="header">Product Administration</div>
+        <div class="menu">
+          {{#link-to 'product' class='item'}}View all products{{/link-to}}
+          {{#link-to 'approvals' class='item'}}Approve reviews{{/link-to}}
+        </div>
+
+    </div>
+    <div class="item">
+        <div class="header">Settings</div>
+        <div class="menu">
+          {{#link-to 'account.settings' class='item'}}Account{{/link-to}}
+        </div>
+        <div class="menu">
+          {{#link-to 'settings' class='item'}}System{{/link-to}}
+        </div>
+    </div>
 </div>

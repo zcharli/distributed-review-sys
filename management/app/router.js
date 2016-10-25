@@ -13,7 +13,7 @@ Router.map(function() {
     this.route('settings');
   });
   this.route('product', function() {
-    this.route('review', {path:'/:productid/review'},function() {
+    this.route('review', {path:'review/:productid'},function() {
       this.route('approval');
       this.route('inspect', {path: '/inspect/:reviewid'});
     });

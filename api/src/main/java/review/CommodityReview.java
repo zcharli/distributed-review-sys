@@ -16,6 +16,9 @@ public class CommodityReview extends BaseReview {
     @NotNull(message = "Review barcode is missing or null")
     public String m_upcCode;
 
+    @JsonIgnore
+    public static final String m_commodityType = "commodity";
+
     public CommodityReview() {
         this("","","",-1);
     }
@@ -56,6 +59,11 @@ public class CommodityReview extends BaseReview {
         productRelationship.get("product").put("data", relationshipRule);
         includedPayloadMap.put("relationships", productRelationship);
         return includedPayloadMap;
+    }
+
+    @JsonIgnore
+    public String getType() {
+        return m_commodityType;
     }
 
     @Override
