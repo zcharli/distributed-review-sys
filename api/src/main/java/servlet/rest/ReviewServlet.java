@@ -170,6 +170,42 @@ public class ReviewServlet {
         });
     }
 
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Path("deny/{identifier}")
+    public void denyReviewFromAcceptance(final @ExternalReview BaseReview request,
+                                         final @Suspended AsyncResponse response,
+                                         final @PathParam("identifier") String identifier) {
+        if (Strings.isNullOrEmpty(identifier)) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("404", "No identifier in request was found")));
+            return;
+        }
+        Number160 locationKey = new Number160(request.getLocationId());
+        Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
+        Number160 contentKey = new Number160(request.getContentId());
+        DRSKey reviewKey = DefaultDHTKeyPair.builder()
+                .locationKey(locationKey)
+                .contentKey(contentKey)
+                .domainKey(newDomainKey)
+                .build();
+        DHTManager.instance().removeFromStorage(reviewKey, new AsyncComplete() {
+            @Override
+            public Integer call() {
+                if (!isSuccessful()) {
+                    response.resume(Response.serverError().entity(
+                            new GenericReply<String>("DHT-ACCEPT", message())
+                    ).build());
+                } else {
+                    response.resume(Response.ok().entity(
+                            new ReviewOperationComplete<String>("200", "Success")
+                    ).build());
+                }
+                return 0;
+            }
+        });
+    }
+
     @GET
     @Path("get/{identifier}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -265,42 +301,6 @@ public class ReviewServlet {
         CompletableFuture.allOf(allAcceptanceReviews).join();
         response.resume(Response.ok().entity(new ReviewGetResponse(200, reviewsInAcceptance)).build());
 
-    }
-
-    @PUT
-    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
-    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
-    @Path("deny/{identifier}")
-    public void denyReviewFromAcceptance(final @ExternalReview BaseReview request,
-                                          final @Suspended AsyncResponse response,
-                                          final @PathParam("identifier") String identifier) {
-        if (Strings.isNullOrEmpty(identifier)) {
-            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("404", "No identifier in request was found")));
-            return;
-        }
-        Number160 locationKey = Number160.createHash(identifier);
-        Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
-        Number160 contentKey = Number160.createHash(request.getContent());
-        DRSKey reviewKey = DefaultDHTKeyPair.builder()
-                .locationKey(locationKey)
-                .contentKey(contentKey)
-                .domainKey(newDomainKey)
-                .build();
-        DHTManager.instance().removeFromStorage(reviewKey, new AsyncComplete() {
-            @Override
-            public Integer call() {
-                if (!isSuccessful()) {
-                    response.resume(Response.serverError().entity(
-                            new GenericReply<String>("DHT-ACCEPT", message())
-                    ).build());
-                } else {
-                    response.resume(Response.ok().entity(
-                            new ReviewOperationComplete<String>("200", "Success")
-                    ).build());
-                }
-                return 0;
-            }
-        });
     }
 
     @GET
