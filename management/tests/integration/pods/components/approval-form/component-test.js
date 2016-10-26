@@ -1,5 +1,4 @@
 import { moduleForComponent, test } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('approval-form', 'Integration | Component | approval form', {
 
