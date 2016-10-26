@@ -135,7 +135,7 @@ public class DHTProfile {
                     if (!fromDisk.containsKey(StorageTypes.METRIC)) {
                         fromDisk.put(StorageTypes.METRIC, new LinkedList<>());
                     }
-                    for (String jsonData : adapter.lrange(DHTConfig.TRACKED_ID, 0, -1)) {
+                    for (String jsonData : adapter.lrange(key, 0, -1)) {
                         try {
                             TrackingContext fromBuffer = objectMapper.readValue(jsonData, TrackingContext.class);
                             Number160 keyFromBuffer = new Number160(fromBuffer.locationBuffer);
