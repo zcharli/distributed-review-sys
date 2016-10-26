@@ -155,13 +155,11 @@ public class DHTManager {
         return ImmutableMap.copyOf(tempForImmutable);
     }
 
-    public void approveData(final DRSKey key, AsyncComplete asyncComplete) {
+    public void approveData(final DRSKey key, final DRSKey publishedKey, Object data, AsyncComplete asyncComplete) {
         if (isInvalidKey(key) || asyncComplete == null) {
             return;
         }
 
-        final DRSKey publishedKey = DefaultDHTKeyPair.builder().contentKey(key.getContentKey())
-                .domainKey(DHTConfig.PUBLISHED_DOMAIN).locationKey(key.getLocationKey()).build();
         m_dht.get(key, new AsyncResult() {
             @Override
             public Integer call() throws Exception {
@@ -174,9 +172,7 @@ public class DHTManager {
 
                 for (Map.Entry<Number640, Data> entry : payload().entrySet()) {
                     if (entry.getKey().contentKey().equals(key.getContentKey())) {
-                        final Object data = entry.getValue().object();
                         // Now remove it from acceptance and add it to published
-
                         m_dht.remove(key, new AsyncComplete() {
                             @Override
                             public Integer call()  throws Exception {

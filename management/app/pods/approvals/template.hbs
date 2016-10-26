@@ -1,1 +1,19 @@
+<div id="product-main-header" class="ui masthead vertical segment">
+    <div class="ui container">
+        <div class="product-intro">
+            <h1 class="ui header">
+                Product Review Approval
+            </h1>
+
+            <div class="sub header">
+                All reviews must be approved here in order to be published onto the decentralized network. Click to edit.
+            </div>
+        </div>
+    </div>
+</div>
 {{outlet}}
+{{#if model}}
+    <div class="product-list">
+      {{tree-table settings=tableSettings perpage=numElementsPer action="transition"}}
+    </div>
+{{/if}}

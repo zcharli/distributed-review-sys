@@ -21,6 +21,7 @@ export default Ember.Controller.extend(Base, {
   tableSettings: function() {
     const model = this.get('model');
     return {
+      component: "tree-table.row-cell",
       numResultsPerPage: 10,
       innerTableSettings: {
         numResultsPerPage: 10,

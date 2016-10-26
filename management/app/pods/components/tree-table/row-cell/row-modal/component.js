@@ -9,7 +9,7 @@ export default Ember.Component.extend({
   }),
 
   onDomLoad: Ember.on('didInsertElement', function() {
-    Ember.$(".ui.star.rating.disabled.review").rating();
+    Ember.$(".ui.star.rating.disabled.review").rating('disable');
   }),
 
   actions: {

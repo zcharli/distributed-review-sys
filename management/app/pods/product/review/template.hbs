@@ -37,16 +37,23 @@
                 <h4 class="ui dividing header">Review Information</h4>
                 <div class="fields">
                     <div class="twelve wide field">
+                        <label>Review Title</label>
+                      {{input type="text" value=model.title  placeholder="The review of the product"}}
+                    </div>
+                    <div class="four wide field">
+                        <label>Stars</label>
+                        <div class="ui star rating disabled review" data-rating="{{model.stars}}" data-max-rating="5">
+                        </div>
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="twelve wide field">
                         <label>Customer Review</label>
                       {{textarea value=model.review_content  placeholder="The review of the product" disabled=true}}
                     </div>
                     <div class="four wide field">
                         <label>Up Votes</label>
                       {{input type="number" value=model.upvotes disabled=true}}
-                        <br>
-                        <label>Stars</label>
-                        <div class="ui star rating disabled review" data-rating="{{model.stars}}" data-max-rating="5">
-                        </div>
                     </div>
                 </div>
             </form>

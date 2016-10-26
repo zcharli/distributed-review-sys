@@ -1,0 +1,114 @@
+{{#if productLabel}}
+    <div class="title">
+        <i class="dropdown icon"></i>
+      {{productLabel}}
+    </div>
+{{/if}}
+<div class="product content">
+    <form class="ui form">
+        <h4 class="ui dividing header">Product Information</h4>
+        <div class="field">
+            <div class="two fields">
+                <div class="field">
+                    <label>Description</label>
+                  {{input type="text" value=productInfo.description placeholder="Product description"}}
+                </div>
+                <div class="field">
+                    <label>Type</label>
+                  {{input type="text" value=productInfo.type placeholder="Type"}}
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="two fields">
+                <div class="field">
+                    <label>Identifier/Barcode</label>
+                  {{input type="text" value=productInfo.barcode placeholder="Product identifier" disabled=true}}
+                </div>
+                <div class="field">
+                    <label>Date Added</label>
+                  {{input type="text" value=dateAdded placeholder="Date added" disabled=true}}
+                </div>
+            </div>
+        </div>
+        <h4 class="ui dividing header">Review Information</h4>
+            <div class="fields">
+                <div class="twelve wide field">
+                    <label>Review Title</label>
+                  {{input type="text" value=productInfo.title  placeholder="The review of the product"}}
+                </div>
+                <div class="four wide field">
+                    <label>Stars</label>
+                    <div class="ui star rating disabled review" data-rating="{{productInfo.stars}}" data-max-rating="5">
+                    </div>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="twelve wide field">
+                    <label>Customer Review</label>
+                  {{textarea value=productInfo.review_content  placeholder="The review of the product"}}
+                </div>
+                <div class="four wide field">
+                    <label>Up Votes</label>
+                  {{input type="number" value=productInfo.upvotes disabled=true}}
+                </div>
+            </div>
+    </form>
+    <div class="actions">
+        <div class="two fluid ui buttons">
+            <div class="ui cancel red basic button denyHover" {{action "approveReview" false}}>
+                <i class="remove icon"></i>
+                Deny Review
+            </div>
+            <div class="ui ok green basic button acceptHover" {{action "approveReview" true}}>
+                <i class="checkmark icon"></i>
+                Approve Review
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui small basic modal deny {{product.childLevel.id}}">
+    <div class="ui icon header">
+        <i class="archive icon"></i>
+        Confirm Deny
+    </div>
+    <div class="content">
+        <p>Are you sure you would like to deny this review? Denied reviews will be deleted and never seen again.</p>
+    </div>
+    <div class="actions">
+        <div class="two fluid ui inverted buttons">
+            <div class="ui cancel red basic inverted button">
+                <i class="remove icon"></i>
+                No
+            </div>
+            <div class="ui ok green basic inverted button">
+                <i class="checkmark icon"></i>
+                Yes
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui basic modal accept {{product.childLevel.id}}">
+    <div class="ui icon header">
+        <i class="archive icon"></i>
+        Confirm Deny
+    </div>
+    <div class="content">
+        <p>Are you sure you would like to accept this review? Accepted reviews will be published into the network for
+            all to see.</p>
+    </div>
+    <div class="actions">
+        <div class="two fluid ui inverted buttons">
+            <div class="ui cancel red basic inverted button">
+                <i class="remove icon"></i>
+                No
+            </div>
+            <div class="ui ok green basic inverted button">
+                <i class="checkmark icon"></i>
+                Yes
+            </div>
+        </div>
+    </div>
+</div>
+{{yield}}

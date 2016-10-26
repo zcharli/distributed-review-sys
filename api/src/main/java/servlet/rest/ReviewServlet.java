@@ -127,30 +127,33 @@ public class ReviewServlet {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
     @Path("accept/{identifier}")
     public void acceptReviewIntoPublished(final @ExternalReview BaseReview request,
                                           final @Suspended AsyncResponse response,
                                           final @PathParam("identifier") String identifier) {
         if (Strings.isNullOrEmpty(identifier)) {
-            response.resume(Response.serverError().entity(new GenericReply<String>("404", "No identifier in request was found")));
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("404", "No identifier in request was found")));
             return;
         }
 
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
         Number160 locationKey = Number160.createHash(identifier);
         Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
-        Number160 contentKey = Number160.createHash(request.getContent());
+        Number160 contentKey = new Number160(request.getContentId());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
                 .locationKey(locationKey)
                 .contentKey(contentKey)
                 .domainKey(newDomainKey)
                 .build();
         // The original review is updated since the only time editing is allowed is during acceptance.
-        Number640 fullKey = new Number640(locationKey, DHTConfig.PUBLISHED_DOMAIN, contentKey, Number160.ZERO);
+        Number640 fullKey = new Number640(locationKey, DHTConfig.PUBLISHED_DOMAIN, Number160.createHash(request.getContent()), Number160.ZERO);
         request.fillInIds(locationKey, contentKey, newDomainKey, fullKey);
-        DHTManager.instance().approveData(reviewKey, new AsyncComplete() {
+
+        final DRSKey publishedKey = DefaultDHTKeyPair.builder().contentKey(fullKey.contentKey())
+                .domainKey(DHTConfig.PUBLISHED_DOMAIN).locationKey(fullKey.locationKey()).build();
+        DHTManager.instance().approveData(reviewKey, publishedKey, request, new AsyncComplete() {
             @Override
             public Integer call() {
                 if (!isSuccessful()) {
@@ -262,6 +265,42 @@ public class ReviewServlet {
         CompletableFuture.allOf(allAcceptanceReviews).join();
         response.resume(Response.ok().entity(new ReviewGetResponse(200, reviewsInAcceptance)).build());
 
+    }
+
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Path("deny/{identifier}")
+    public void denyReviewFromAcceptance(final @ExternalReview BaseReview request,
+                                          final @Suspended AsyncResponse response,
+                                          final @PathParam("identifier") String identifier) {
+        if (Strings.isNullOrEmpty(identifier)) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("404", "No identifier in request was found")));
+            return;
+        }
+        Number160 locationKey = Number160.createHash(identifier);
+        Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
+        Number160 contentKey = Number160.createHash(request.getContent());
+        DRSKey reviewKey = DefaultDHTKeyPair.builder()
+                .locationKey(locationKey)
+                .contentKey(contentKey)
+                .domainKey(newDomainKey)
+                .build();
+        DHTManager.instance().removeFromStorage(reviewKey, new AsyncComplete() {
+            @Override
+            public Integer call() {
+                if (!isSuccessful()) {
+                    response.resume(Response.serverError().entity(
+                            new GenericReply<String>("DHT-ACCEPT", message())
+                    ).build());
+                } else {
+                    response.resume(Response.ok().entity(
+                            new ReviewOperationComplete<String>("200", "Success")
+                    ).build());
+                }
+                return 0;
+            }
+        });
     }
 
     @GET
