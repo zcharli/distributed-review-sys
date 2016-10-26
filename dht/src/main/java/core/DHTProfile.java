@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
 import exceptions.InitializationFailedException;
 import metrics.ConcurrentTrackingList;
+import metrics.MetricsCollector;
 import metrics.TrackingContext;
+import msg.RedisElementContainer;
 import net.tomp2p.connection.Bindings;
 import net.tomp2p.dht.PeerBuilderDHT;
 import net.tomp2p.dht.PeerDHT;
@@ -12,29 +14,66 @@ import net.tomp2p.futures.FutureBootstrap;
 import net.tomp2p.futures.FutureDiscover;
 import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
+import net.tomp2p.peers.Number640;
 import net.tomp2p.peers.PeerAddress;
+import net.tomp2p.storage.Data;
+import org.mapdb.Fun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
-import java.util.Random;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Created by czl on 20/09/16.
  */
 public class DHTProfile {
 
+    public static enum StorageTypes {
+        DHT,
+        METRIC,
+        KEYSTORE
+    }
+
     private static DHTProfile INSTANCE;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DHTProfile.class);
 
+    private final ObjectMapper objectMapper;
+
     public final PeerDHT MY_PROFILE;
 
+    private final MetricsCollector m_metricsCollector;
+
+    private final Set<Number160> m_keystore;
+
     private DHTProfile(boolean isBootStrap, boolean isPersistent) throws InitializationFailedException {
+        m_keystore = new ConcurrentSkipListSet<>();
         PeerDHT currentClient = null;
+        MetricsCollector metrics = null;
+        objectMapper = new ObjectMapper();
         try {
             // OffHeapStorage can be configured for versions and version check intervals
-            OffHeapStorage storageLayer = isPersistent ? new OffHeapStorage().loadFromDisk() : null;
+            Map<StorageTypes, List<Object>> persistedData = loadDataFromStorage();
+            OffHeapStorage storageLayer = isPersistent ? new OffHeapStorage()
+                    .setLoadedValues(persistedData.containsKey(StorageTypes.DHT)
+                            ? persistedData.get(StorageTypes.DHT) : new LinkedList<>()) : null;
+            metrics = new MetricsCollector(persistedData.containsKey(StorageTypes.METRIC)
+                    ? persistedData.get(StorageTypes.METRIC) : new LinkedList<Object>());
+
+            if (persistedData.containsKey(StorageTypes.KEYSTORE)) {
+                for (Object keys : persistedData.get(StorageTypes.KEYSTORE)) {
+                    try {
+                        Number160 castedKeys = (Number160) keys;
+                        m_keystore.add(castedKeys);
+                    } catch (Exception e) {
+                        LOGGER.error("Unabled to cast up Num160 keys for keystore during load");
+                    }
+                }
+            }
+
             Bindings b = new Bindings();
             // TODO: Make add interface set-able on boot up
             b.addInterface(DHTConfig.DHT_LISTEN_INTERFACE);
@@ -56,7 +95,80 @@ public class DHTProfile {
             e.printStackTrace();
         } finally {
             MY_PROFILE = currentClient;
+            m_metricsCollector = metrics;
         }
+    }
+
+    public Set<Number160> getKeyStore() {
+        return m_keystore;
+    }
+
+    public MetricsCollector getMetricsCollector() {
+        return m_metricsCollector;
+    }
+
+    public Map<StorageTypes, List<Object>> loadDataFromStorage() {
+        Map<StorageTypes, List<Object>> fromDisk = new HashMap<>();
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+            Set<String> allKeys = adapter.keys("*");
+            for (String key : allKeys) {
+                if (key.startsWith("drs")) {
+                    if (!fromDisk.containsKey(StorageTypes.DHT)) {
+                        fromDisk.put(StorageTypes.DHT, new LinkedList<>());
+                    }
+                    for (String jsonData : adapter.lrange(key, 0, -1)) {
+                        try {
+                            RedisElementContainer data = objectMapper.readValue(jsonData, RedisElementContainer.class);
+                            Number640 mapKey = new Number640(
+                                    new Number160(data.getLocationBuffer())
+                                    , new Number160(data.getDomainBuffer())
+                                    , new Number160(data.getContentBuffer())
+                                    , new Number160(data.getVersionBuffer()));
+                            Fun.Tuple2<Number640, RedisElementContainer> entry = new Fun.Tuple2<>(mapKey, data);
+                            fromDisk.get(StorageTypes.DHT).add(entry);
+                            LOGGER.debug("Loaded a element from disk: " + mapKey.toString());
+                        } catch (IOException e) {
+                            LOGGER.error("Failed to deserialize data json: " + e.getMessage());
+                        }
+                    }
+                } else if (key.startsWith(DHTConfig.TRACKED_ID)) {
+                    if (!fromDisk.containsKey(StorageTypes.METRIC)) {
+                        fromDisk.put(StorageTypes.METRIC, new LinkedList<>());
+                    }
+                    for (String jsonData : adapter.lrange(DHTConfig.TRACKED_ID, 0, -1)) {
+                        try {
+                            TrackingContext fromBuffer = objectMapper.readValue(jsonData, TrackingContext.class);
+                            Number160 keyFromBuffer = new Number160(fromBuffer.locationBuffer);
+                            Fun.Tuple2<Number160, TrackingContext> entry = new Fun.Tuple2<>(keyFromBuffer, fromBuffer);
+                            fromDisk.get(StorageTypes.METRIC).add(entry);
+                        } catch (Exception e) {
+                            LOGGER.error("Error reading in load tracked data");
+                        }
+                    }
+                } else if (key.equals(DHTConfig.KEYSTORE_ADDR)) {
+                    if (!fromDisk.containsKey(StorageTypes.KEYSTORE)) {
+                        fromDisk.put(StorageTypes.KEYSTORE, new LinkedList<>());
+                    }
+
+                    Set<String> serializedIntArrays = adapter.hkeys(DHTConfig.KEYSTORE_ADDR);
+                    for (String number160Buffer : serializedIntArrays) {
+                        try {
+                            int[] buffer = objectMapper.readValue(number160Buffer, int[].class);
+                            Number160 locationKey = new Number160(buffer);
+                            fromDisk.get(StorageTypes.KEYSTORE).add(locationKey);
+                        } catch (Exception e) {
+                            LOGGER.error("An error occured when trying to deserialize Number160 buffer: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("Redis was not found on the system. At the present time, on memory storage is not supported.");
+            e.printStackTrace();
+            System.exit(0);
+        }
+        LOGGER.debug("Finished loading elements from disk.");
+        return fromDisk;
     }
 
     public static DHTProfile instance()  {
@@ -94,6 +206,7 @@ public class DHTProfile {
         ConcurrentTrackingList<Number160, TrackingContext> cache = new ConcurrentTrackingList<Number160, TrackingContext>();
         final ObjectMapper objectMapper = new ObjectMapper();
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+
             for (String jsonData : adapter.lrange(DHTConfig.TRACKED_ID, 0, -1)) {
                 try {
                     TrackingContext fromBuffer = objectMapper.readValue(jsonData, TrackingContext.class);

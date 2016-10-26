@@ -68,7 +68,7 @@ public class DHTManager {
         DHTConfig.instance().isBootstrap = isBootstrap;
         m_profile = DHTProfile.init(isBootstrap, isPersistent);
         m_dht = new DHT<>();
-        m_metricsCollector = new MetricsCollector(m_profile.loadTrackedData());
+        m_metricsCollector = DHTProfile.instance().getMetricsCollector();
     }
 
     public DHTConfig getGlobalConfig() {

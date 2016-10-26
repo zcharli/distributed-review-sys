@@ -12,9 +12,11 @@ import net.tomp2p.peers.Number320;
 import net.tomp2p.peers.Number480;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
+import org.mapdb.Fun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
 
 import java.io.IOException;
 import java.security.PublicKey;
@@ -63,6 +65,20 @@ public class OffHeapStorage implements Storage {
         this.maxVersions = maxVersions;
     }
 
+    public OffHeapStorage setLoadedValues(List<Object> entries) {
+        for (Object entry : entries) {
+            try {
+                Fun.Tuple2<Number640, RedisElementContainer> castedEntry = (Fun.Tuple2<Number640, RedisElementContainer>) entry;
+                dataMap.put(castedEntry.a, new Data(castedEntry.b.buffer));
+            } catch (Exception e) {
+                LOGGER.error("Unabled to load values from storage due to a cast error.");
+            }
+        }
+        LOGGER.debug("Finished loading elements from disk.");
+        return this;
+    }
+
+    @Deprecated
     public OffHeapStorage loadFromDisk() {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             Set<String> allKeys = adapter.keys("*");

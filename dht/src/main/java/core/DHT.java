@@ -32,7 +32,7 @@ public class DHT<KEY extends DRSKey> {
     private final DHTProfile m_profile;
     private final ExecutorService m_persistentWorker;
     private final ObjectMapper m_mapper;
-    private final ConcurrentMap<Number160, Integer> m_keystoreCache;
+    private final Set<Number160> m_keystoreCache;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DHT.class);
 
@@ -40,7 +40,7 @@ public class DHT<KEY extends DRSKey> {
         m_profile = DHTProfile.instance();
         m_persistentWorker = Executors.newSingleThreadExecutor();
         m_mapper = new ObjectMapper();
-        m_keystoreCache = new ConcurrentHashMap<>();
+        m_keystoreCache = m_profile.getKeyStore();
         // Initializes keyStore cache
         getKeyStore();
         if (m_profile == null) {
@@ -250,7 +250,7 @@ public class DHT<KEY extends DRSKey> {
     }
 
     public void addToKeyStore(final Number160 locationKey, Function<Boolean, Boolean> callback) {
-        if (m_keystoreCache.containsKey(locationKey)) {
+        if (m_keystoreCache.contains(locationKey)) {
             return;
         }
         final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
@@ -264,7 +264,7 @@ public class DHT<KEY extends DRSKey> {
                     return false;
                 }
                 adapter.hset(DHTConfig.KEYSTORE_ADDR, json, json);
-                m_keystoreCache.put(locationKey, 1);
+                m_keystoreCache.add(locationKey);
             } catch (Exception e) {
                 LOGGER.error("Jedis resource fetch error on addToKeyStore: " + e.getMessage());
                 return false;
@@ -284,25 +284,6 @@ public class DHT<KEY extends DRSKey> {
      * @return
      */
     public Collection<Number160> getKeyStore() {
-        if (m_keystoreCache.size() > 0) {
-            // keystore cache is initialized, return it.
-            Collection<Number160> keyCollection = m_keystoreCache.keySet();
-            return keyCollection;
-        }
-        final Collection<Number160> list = new LinkedList<>();
-        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
-            Set<String> serializedIntArrays = adapter.hkeys(DHTConfig.KEYSTORE_ADDR);
-            for (String number160Buffer : serializedIntArrays) {
-                try {
-                    int[] buffer = m_mapper.readValue(number160Buffer, int[].class);
-                    Number160 locationKey = new Number160(buffer);
-                    list.add(locationKey);
-                    m_keystoreCache.put(locationKey, 1);
-                } catch (Exception e) {
-                    LOGGER.error("An error occured when trying to deserialize Number160 buffer: " + e.getMessage());
-                }
-            }
-        }
-        return list;
+        return m_keystoreCache;
     }
 }
