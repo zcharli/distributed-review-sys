@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  dimmerContainer: null,
+  hasLoaded: false,
 
   afterDomLoad: Ember.on('didInsertElement', function() {
     Ember.$(".product-list.accordion").accordion();
@@ -29,6 +31,11 @@ export default Ember.Component.extend({
     return [];
   }),
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'settings.data', function() {
+    if (this.get("hasLoaded")) {
+      this.send("dimAndShowLoader");
+    } else {
+      this.set("hasLoaded", true);
+    }
     let page = this.get('currentPage') - 1;
     const results = this.get('settings.data');
     const numResults = this.get("numResultsPerPage") || 10;
@@ -46,7 +53,30 @@ export default Ember.Component.extend({
     return names;
   }).property('settings.headers'),
 
+  onDomLoad: Ember.on("didInsertElement", function() {
+    console.log('didInsertElement');
+    const dimmerContainer = Ember.$(".tree-table-list-load-dimmer");
+    this.set("dimmerContainer", dimmerContainer);
+  }),
+
+  updatedDom: Ember.on("didUpdate", function() {
+    console.log('didUpdate');
+    this.send("removeDimAndLoader");
+  }),
+
   actions: {
+
+    dimAndShowLoader() {
+      const dimmer = this.get("dimmerContainer");
+      dimmer.addClass("active");
+      console.log(dimmer);
+    },
+
+    removeDimAndLoader() {
+      const dimmer = this.get("dimmerContainer");
+      dimmer.removeClass("active");
+      console.log(dimmer);
+    },
 
     nextPage() {
       const maxPage = this.get("maxPage");

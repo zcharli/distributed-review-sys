@@ -35,7 +35,7 @@ export default Ember.Component.extend({
           },
           onApprove: function () {
             const data = self.get('product.childLevel');
-            const url = self.get("constants.baseApi") + "/review/" +apprv + "/" + data.id;
+            const url = self.get("constants.baseApi") + "/review/" +apprv + "/" + data.locationId;
             const opts = {
               url: url,
               contentType : "application/json",

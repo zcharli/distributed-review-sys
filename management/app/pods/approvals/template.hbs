@@ -6,7 +6,8 @@
             </h1>
 
             <div class="sub header">
-                All reviews must be approved here in order to be published onto the decentralized network. Click to edit.
+                All reviews must be approved here in order to be published onto the decentralized network. Click to
+                edit.
             </div>
         </div>
     </div>
@@ -15,5 +16,17 @@
 {{#if model}}
     <div class="product-list">
       {{tree-table settings=tableSettings perpage=numElementsPer action="transition"}}
+    </div>
+{{else}}
+    <div class="ui basic segment">
+        <div class="ui icon message">
+            <i class="inbox icon"></i>
+            <div class="content">
+                <div class="header">
+                    Everything is ok for the moment.
+                </div>
+                <p>There are no outstanding approvals currently needed to be made.</p>
+            </div>
+        </div>
     </div>
 {{/if}}

@@ -139,7 +139,7 @@ public class ReviewServlet {
         }
 
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
-        Number160 locationKey = Number160.createHash(identifier);
+        Number160 locationKey = new Number160(request.getLocationId());
         Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = new Number160(request.getContentId());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()

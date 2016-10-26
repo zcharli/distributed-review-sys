@@ -1,25 +1,31 @@
-<div class="ui fluid styled product-list accordion">
-  {{#each currentResultSet as |result|}}
-    {{component settings.component product=result columns=columns settings=settings.innerTableSettings}}
-  {{/each}}
-</div>
-{{#if isMultiPage}}
-    <div class="ui secondary clearing segment">
-        <div class="ui right floated">
-            <div class="ui right floated pagination menu">
-                <a class="icon item" {{action 'prevPage'}}>
-                    <i class="left chevron icon"></i>
-                </a>
-              {{#each pageNumbers as |page|}}
-                  <a class="item" {{action 'goToPage' page }}>{{page}}</a>
-              {{/each}}
-                <a class="icon item">
-                    <i class="right chevron icon" {{action 'nextPage'}}></i>
-                </a>
-            </div>
+<div class="ui dimmer-list blurring basic segment no-margin no-padding">
 
+    <div class="ui fluid styled product-list accordion">
+        <div class="ui tree-table-list-load-dimmer inverted dimmer">
+            <div class="ui medium text loader">Loading</div>
         </div>
-    </div>
-{{/if}}
 
+      {{#each currentResultSet as |result|}}
+        {{component settings.component product=result columns=columns settings=settings.innerTableSettings}}
+      {{/each}}
+    </div>
+  {{#if isMultiPage}}
+      <div class="ui secondary clearing segment">
+          <div class="ui right floated">
+              <div class="ui right floated pagination menu">
+                  <a class="icon item" {{action 'prevPage'}}>
+                      <i class="left chevron icon"></i>
+                  </a>
+                {{#each pageNumbers as |page|}}
+                    <a class="item" {{action 'goToPage' page }}>{{page}}</a>
+                {{/each}}
+                  <a class="icon item">
+                      <i class="right chevron icon" {{action 'nextPage'}}></i>
+                  </a>
+              </div>
+
+          </div>
+      </div>
+  {{/if}}
+</div>
 {{yield}}

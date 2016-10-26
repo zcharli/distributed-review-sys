@@ -8,6 +8,10 @@ export default Ember.Controller.extend({
     return this.get('selected');
   }),
 
+  hasRecordsToApprove: Ember.computed("model", function() {
+    return this.get('model.length') > 0;
+  }),
+
   tableSettings: function() {
     const model = this.get('model');
     return {
