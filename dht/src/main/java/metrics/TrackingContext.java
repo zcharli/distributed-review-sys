@@ -10,6 +10,8 @@ public class TrackingContext {
     public long numberOfHits;
     public String trackedDomain;
 
+    public TrackingContext() { }
+
     public TrackingContext(int[] locationBuf) {
         locationBuffer = locationBuf;
         numberOfHits = 1;
