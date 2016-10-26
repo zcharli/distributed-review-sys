@@ -23,6 +23,7 @@ export default Ember.Component.extend({
     return false;
   }),
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'product.childLevel', function() {
+    console.log("resultSet for table changed")
     let page = this.get('currentPage') - 1;
     const results = this.get('product.childLevel');
     const numResults = this.get('numResultsPerPage');

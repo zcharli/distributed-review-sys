@@ -35,35 +35,36 @@ export default Ember.Component.extend({
           },
           onApprove: function () {
             const data = self.get('product.childLevel');
-            const url = self.get("constants.baseApi") + "/review/" +apprv + "/" + data.locationId;
+            const url = self.get("constants.baseApi") + "/review/" + apprv + "/" + data.locationId;
             const opts = {
               url: url,
-              contentType : "application/json",
-              dataType: "application/json",
+              contentType: "application/json",
+              dataType: "json",
               method: "PUT",
               data: JSON.stringify(data),
-              success: (response) => {
+            };
+
+            Ember.$.ajax(opts).then((response) => {
+              console.log("ok");
                 if (response.status === "200") {
                   self.get('notifications').success("Review was updated successfully.", {
                     autoClear: true,
-                    clearDuration: 1200
+                    clearDuration: 2000
                   });
-                  self.sendAction("action", "approvals");
+                  self.sendAction("action", data , apprv);
                 } else {
                   self.get('notifications').warn("Query fired successfully but server returned an error.", {
                     autoClear: true,
-                    clearDuration: 1200
+                    clearDuration: 2000
                   });
                 }
-              },
-              error: () => {
+              }, (response) => {
                 self.get('notifications').error("There was an error in the request.", {
                   autoClear: true,
-                  clearDuration: 1200
+                  clearDuration: 2000
                 });
               }
-            };
-            Ember.$.ajax(opts);
+            );
           }
         }).modal('show');
     }

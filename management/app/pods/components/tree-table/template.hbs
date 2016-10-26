@@ -6,7 +6,7 @@
         </div>
 
       {{#each currentResultSet as |result|}}
-        {{component settings.component product=result columns=columns settings=settings.innerTableSettings}}
+        {{component settings.component product=result columns=columns settings=settings.innerTableSettings action="passAction"}}
       {{/each}}
     </div>
   {{#if isMultiPage}}

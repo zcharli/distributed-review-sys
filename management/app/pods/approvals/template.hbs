@@ -1,3 +1,4 @@
+{{notification-container position="top-right"}}
 <div id="product-main-header" class="ui masthead vertical segment">
     <div class="ui container">
         <div class="product-intro">
@@ -15,7 +16,7 @@
 {{outlet}}
 {{#if model}}
     <div class="product-list">
-      {{tree-table settings=tableSettings perpage=numElementsPer action="transition"}}
+      {{tree-table settings=tableSettings perpage=numElementsPer action="reviewFinished"}}
     </div>
 {{else}}
     <div class="ui basic segment">

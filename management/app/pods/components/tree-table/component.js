@@ -14,6 +14,7 @@ export default Ember.Component.extend({
   currentPage: 1,
   maxPage: 0,
   isMultiPage: Ember.computed('settings.data', 'numResultsPerPage', function() {
+    console.log("change detected multipage");
     const maxNum = this.get("numResultsPerPage") || 10;
     const data = this.get('settings.data');
     return data.length && (data.length > maxNum);
@@ -31,6 +32,7 @@ export default Ember.Component.extend({
     return [];
   }),
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'settings.data', function() {
+    console.log("change detected");
     if (this.get("hasLoaded")) {
       this.send("dimAndShowLoader");
     } else {
@@ -65,6 +67,12 @@ export default Ember.Component.extend({
   }),
 
   actions: {
+    passAction(param) {
+      const parentAction = this.get('action');
+      if (parentAction) {
+        this.sendAction("action", param);
+      }
+    },
 
     dimAndShowLoader() {
       const dimmer = this.get("dimmerContainer");

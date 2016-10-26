@@ -3,6 +3,7 @@ package servlet.rest;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import config.DHTConfig;
+import core.DHT;
 import core.DHTManager;
 import core.GlobalContext;
 import error.GenericReply;
@@ -139,10 +140,10 @@ public class ReviewServlet {
         }
 
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
-        Number160 locationKey = new Number160(request.getLocationId());
-        Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
-        Number160 contentKey = new Number160(request.getContentId());
-        DRSKey reviewKey = DefaultDHTKeyPair.builder()
+        final Number160 locationKey = new Number160(request.getLocationId());
+        final Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
+        final Number160 contentKey = new Number160(request.getContentId());
+        final DRSKey reviewKey = DefaultDHTKeyPair.builder()
                 .locationKey(locationKey)
                 .contentKey(contentKey)
                 .domainKey(newDomainKey)
@@ -161,8 +162,9 @@ public class ReviewServlet {
                             new GenericReply<String>("DHT-ACCEPT", message())
                     ).build());
                 } else {
+                    request.fillInIds(publishedKey.getLocationKey(), publishedKey.getLocationKey(), DHTConfig.PUBLISHED_DOMAIN , fullKey);
                     response.resume(Response.ok().entity(
-                            new ReviewOperationComplete<String>("200", "Success")
+                            new ReviewOperationComplete<BaseReview>("200", request)
                     ).build());
                 }
                 return 0;

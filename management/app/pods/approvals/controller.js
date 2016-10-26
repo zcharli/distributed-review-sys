@@ -14,6 +14,7 @@ export default Ember.Controller.extend({
 
   tableSettings: function() {
     const model = this.get('model');
+    console.log("recomputing tablesettings");
     return {
       component: "approval-form",
       numResultsPerPage: 10,
@@ -22,6 +23,24 @@ export default Ember.Controller.extend({
   }.property('model'),
 
   actions: {
+    reviewFinished(review, add) {
+      const model = this.get("model");
+      console.log(model);
+
+      let i = 0;
+      let found = false;
+      for (i = 0; i < model.length; ++i) {
+        if (model[i].childLevel.id === review.id) {
+          found = true;
+          break;
+        }
+      }
+      if (found) {
+        model.removeAt(i);
+        this.notifyPropertyChange("model");
+      }
+    },
+
     transition(route, param) {
       console.log("got action", route);
       if (!route) {

@@ -8,8 +8,8 @@ export default Ember.Controller.extend({
       let {identification, password} = this.getProperties('identification', 'password');
       this.get('session').authenticate('authenticator:drsauth', identification, password)
         .then((response) => {
-          if (response.staus === 200 && !!response.clientId) {
-            this.get('session').set("clientId", response.clientId);
+          if (response.staus === 200 && response.result) {
+            this.get('session').set("account", response.result);
             this.set('session.isAuthenticated', true);
           } else {
             this.set('errorMessage', response.responseText);
