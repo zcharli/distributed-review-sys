@@ -22,7 +22,7 @@ public class BaseAccount {
     @JsonProperty("lname")
     public String m_lastName;
 
-    @JsonIgnore
+    @JsonProperty("password")
     public String m_password;
 
     public BaseAccount() {}

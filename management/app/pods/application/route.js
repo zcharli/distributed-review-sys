@@ -8,7 +8,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
   model() {
     if (this.get("session.isAuthenticated")) {
       const user = this.get("session.account");
-      console.log(user);
+      alert(user);
       if (!user) {
         this.get("session").invalidate();
       } else {

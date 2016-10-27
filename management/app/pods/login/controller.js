@@ -8,9 +8,20 @@ export default Ember.Controller.extend({
       let {identification, password} = this.getProperties('identification', 'password');
       this.get('session').authenticate('authenticator:drsauth', identification, password)
         .then((response) => {
-          if (response.staus === 200 && response.result) {
-            this.get('session').set("account", response.result);
-            this.store.pushPayload({account: response.result}).then((r)=>{console.log(r);});
+          if (response.status === 200 && response.result) {
+            this.set('session.account', response.result);
+
+            const id = response.result.id;
+            this.set('session.accountId', id);
+            delete response.result.id;
+            this.store.pushPayload({
+              data: [{
+                id: id,
+                type: 'account',
+                attributes: response.result,
+                relationships: {}
+              }]
+            });
             this.set('session.isAuthenticated', true);
           } else {
             this.set('errorMessage', response.responseText);

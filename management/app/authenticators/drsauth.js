@@ -4,11 +4,11 @@ import Ember from 'ember';
 const {RSVP, isEmpty, run} = Ember;
 
 export default BaseAuthenticator.extend({
-  endpoint: 'http://134.117.26.5:9090',
+  endpoint: 'http://134.117.26.135:9090',
   serverLoginEndpoint: 'http://134.117.26.135:9090' + '/api/account/login',
   serverLogoutEndpoint: 'http://134.117.26.135:9090' + '/api/account/logout',
   loggedIn: false,
-  clientId: null,
+  account: null,
 
   restore() {
     return new RSVP.Promise((resolve) => {
@@ -27,7 +27,7 @@ export default BaseAuthenticator.extend({
       this.makeRequest(serverLoginEndpoint, data).then((response) => {
         if (response.status === 200) {
           this.set("loggedIn", true);
-          this.set("clientId", response.clientId);
+          this.set("account", response.result);
           resolve(response);
         } else {
           run(null, reject, response.responseJSON || response.responseText);
@@ -49,12 +49,12 @@ export default BaseAuthenticator.extend({
         success.apply(this, [resolve]);
       } else {
         this.makeRequest(serverLogoutEndpoint, {
-          'clientId': this.clientId
+          'account': this.account
         }).then((response) => {
           run(() => {
             if (response.status === 200) {
               this.set("loggedIn", false);
-              this.set("clientId", null);
+              this.set("account", response.result);
               success.apply(this, [resolve]);
             } else {
               reject();

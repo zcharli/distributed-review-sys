@@ -39,8 +39,18 @@ export default Ember.Controller.extend({
           autoClear: true,
           clearDuration: 1200
         });
-        this.get('session').set("account", response.result);
-        this.store.pushPayload({account: response.result}).then((r)=>{console.log(r);});
+        this.set('session.account', response.result);
+        const id = response.result.id;
+        delete response.result.id;
+        this.set('session.accountId', id);
+        this.store.pushPayload({
+          data: [{
+            id: id,
+            type: 'account',
+            attributes: response.result,
+            relationships: {}
+          }]
+        });
         this.set('session.isAuthenticated', true);
         this.transitionToRoute('index');
       }, (xhr) => {
