@@ -12,6 +12,11 @@ export default Ember.Component.extend(Base, {
   },
 
   actions: {
+
+    logout() {
+      this.sendAction("action");
+    },
+
     toggle: function(el) {
       console.log(el);
       this.sideBarElement.sidebar('toggle');

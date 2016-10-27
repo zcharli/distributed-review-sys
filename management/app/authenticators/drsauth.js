@@ -29,6 +29,7 @@ export default BaseAuthenticator.extend({
           if (response.status === 200) {
             this.set("loggedIn", true);
             this.set("account", response.result);
+            this.set("clientId", response.token);
             resolve(response);
           } else {
             run(null, reject, response.responseJSON || response.responseText);
@@ -57,6 +58,7 @@ export default BaseAuthenticator.extend({
             if (response.status === 200) {
               this.set("loggedIn", false);
               this.set("account", null);
+              this.set("clientId", null);
               success.apply(this, [resolve]);
             } else {
               reject();

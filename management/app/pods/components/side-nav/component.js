@@ -11,4 +11,10 @@ export default Ember.Component.extend({
     //     mobileTransition : 'uncover'
     //   });
   }),
+
+  actions: {
+    logout() {
+      this.sendAction("action");
+    }
+  }
 });

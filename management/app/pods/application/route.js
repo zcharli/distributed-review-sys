@@ -13,6 +13,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
       } else {
         const user = JSON.parse(userJson);
         this.store.pushPayload(user);
+        return this.store.peekRecord("account", user.user_id);
       }
     }
   },

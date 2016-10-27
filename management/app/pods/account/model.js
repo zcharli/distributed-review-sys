@@ -5,5 +5,6 @@ export default DS.Model.extend({
   fname: DS.attr("string"),
   lname: DS.attr("string"),
   profile: DS.attr("string"),
-  token: DS.attr("string")
+  token: DS.attr("string"),
+  user_id: DS.attr("string")
 });

@@ -3,8 +3,13 @@ package user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
+import config.APIConfig;
 import net.tomp2p.peers.Number160;
 import validator.Validatable;
+
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -27,18 +32,25 @@ public class BaseAccount implements Validatable {
     @JsonProperty("password")
     public String m_password;
 
-    @JsonProperty("profile")
+    @JsonProperty("profile" +
+            "")
     public String m_profilePicUrl;
 
     @JsonProperty("token")
     public Long m_loginToken;
 
-    public BaseAccount() {}
+    @JsonProperty("tokens")
+    Deque<Long> m_prevTokens;
+
+    public BaseAccount() {
+        m_prevTokens = new LinkedList<>();
+    }
 
     public BaseAccount(String email, String password) {
         m_email = email;
         m_password = password;
         m_userId = Number160.createHash(email).toString();
+        m_prevTokens = new LinkedList<>();
     }
 
     public boolean validate() {
@@ -46,5 +58,13 @@ public class BaseAccount implements Validatable {
             return false;
         }
         return true;
+    }
+
+    public void addToken(Long token) {
+        m_loginToken = token;
+        if (m_prevTokens.size() > APIConfig.MAX_TOKEN_SESSIONS) {
+            m_prevTokens.removeLast();
+        }
+        m_prevTokens.addFirst(token);
     }
 }

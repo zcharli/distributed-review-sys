@@ -1,8 +1,8 @@
 {{#if session.isAuthenticated}}
-  {{top-nav}}
+  {{top-nav action=(action "invalidateSession") user=model}}
   <div class="pusher fullscreen">
       <div class="full height">
-        {{#side-nav}}
+        {{#side-nav action=(action "invalidateSession") user=model}}
           {{outlet}}
         {{/side-nav}}
       </div>

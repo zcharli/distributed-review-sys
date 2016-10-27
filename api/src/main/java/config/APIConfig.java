@@ -25,6 +25,7 @@ public class APIConfig {
     public static final ImmutableList<String> SEARCH_CATEGORIES;
     public static final Queue<String> CURRENT_SEARCH_CATEGORIES;
     public static int MAX_RESULTS_PER_CATEGORY = 5;
+    public static int MAX_TOKEN_SESSIONS = 10;
 
     public static final ImmutableSet<String> LIVE_PRODUCT_TYPES = ImmutableSet.of("commodity");
 

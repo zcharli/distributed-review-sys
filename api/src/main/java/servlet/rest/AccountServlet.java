@@ -14,6 +14,7 @@ import review.request.LoginRequest;
 import review.response.LoginResponse;
 import review.response.ReviewOperationComplete;
 import user.BaseAccount;
+import validator.ExternalAccount;
 import validator.ExternalCreateAccount;
 import validator.ExternalLogin;
 import validator.PasswordAuthentication;
@@ -43,6 +44,39 @@ public class AccountServlet {
     public AccountServlet() {
     }
 
+    @PUT
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateAccountInfo(final @ExternalAccount BaseAccount request) {
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+            String accountJson = adapter.get(createUsernameKey(request.m_email));
+            final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
+            if (account == null || Strings.isNullOrEmpty(account.m_password)) {
+                return Response.accepted().entity(new GenericReply<String>("404", "User was not found.")).build();
+            } else {
+                if (!request.m_loginToken.equals(account.m_loginToken)) {
+                    return Response.accepted().entity(new GenericReply<String>("404", "There was an error while processing your last request, please signout and sign in again.")).build();
+                }
+            }
+            account.addToken(random.nextLong());
+            CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
+                if (saveAccount(account, adapter)) {
+                    LOGGER.debug("Save account successful during saveUserFuture");
+                }else {
+                    LOGGER.error("Error during saveUserFuture, user was not saved");
+                }
+            }, executor).exceptionally(ex -> {
+                LOGGER.error("There was an error saving user future in updateAccount: " + ex.getMessage());
+                ex.printStackTrace();
+                return null;
+            });
+            return Response.accepted().entity(new LoginResponse<BaseAccount>(200, account)).build();
+        } catch (Exception e) {
+            return Response.serverError().entity(new GenericReply<String>("500", "An error occurred during the request: " + e.getMessage())).build();
+        }
+    }
+
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -58,7 +92,7 @@ public class AccountServlet {
                     return Response.accepted().entity(new GenericReply<String>("404", "Password or username is incorrect.")).build();
                 }
             }
-            account.m_loginToken = random.nextLong();
+            account.addToken(random.nextLong());
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
                 saveAccount(account, adapter);
             }, executor);

@@ -23,6 +23,31 @@
               {{#link-to 'settings' class='item'}}System{{/link-to}}
             </div>
         </div>
+
+        <div class="item">
+            <div class="header">Session</div>
+            <div class="menu">
+              <a  class='item' {{action "logout"}} >Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="right menu">
+        <div class="item">
+          {{#if user.profile}}
+              <img class="ui mini ciruclar image" src="{{user.profile}}"/>
+          {{else}}
+              <i class="user mini white icon image"></i>
+          {{/if}}
+        </div>
+
+        <div class="item">
+          {{#if user.fname}}
+            {{user.fname}} {{user.lname}}
+          {{else}}
+            &lt; no name &gt;
+          {{/if}}
+        </div>
     </div>
 </div>
 
