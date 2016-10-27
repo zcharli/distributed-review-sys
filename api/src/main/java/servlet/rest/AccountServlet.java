@@ -6,6 +6,8 @@ import com.google.common.base.Strings;
 import com.google.common.primitives.Booleans;
 import config.DHTConfig;
 import error.GenericReply;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import review.request.CreateAccountRequest;
 import review.request.LoginRequest;
@@ -24,10 +26,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * Created by czl on 19/09/16.
@@ -35,32 +34,38 @@ import java.util.concurrent.Future;
 
 @Path("/account")
 public class AccountServlet {
+    private final static Logger LOGGER = LoggerFactory.getLogger(AccountServlet.class);
 
     private Random random = new Random();
     ExecutorService executor = Executors.newSingleThreadExecutor();
     private ObjectMapper objectMapper = new ObjectMapper();
-    public AccountServlet() { }
+
+    public AccountServlet() {
+    }
 
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response loginUser(final @ExternalLogin LoginRequest request) {
-        BaseAccount account = null;
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(request.username));
-            account = objectMapper.readValue(accountJson, BaseAccount.class);
-            if (Strings.isNullOrEmpty(account.m_password)) {
+            final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
+            if (account == null || Strings.isNullOrEmpty(account.m_password)) {
                 return Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build();
             } else {
                 if (!PasswordAuthentication.instance().authenticate(request.password.toCharArray(), account.m_password)) {
                     return Response.accepted().entity(new GenericReply<String>("404", "Password or username is incorrect.")).build();
                 }
-             }
+            }
+            account.m_loginToken = random.nextLong();
+            CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
+                saveAccount(account, adapter);
+            }, executor);
+            return Response.accepted().entity(new LoginResponse<BaseAccount>(200, account)).build();
         } catch (Exception e) {
             return Response.serverError().entity(new GenericReply<String>("500", "An error occurred during the request: " + e.getMessage())).build();
         }
-        return Response.accepted().entity(new LoginResponse<BaseAccount>(200, account)).build();
     }
 
     @POST
@@ -77,9 +82,7 @@ public class AccountServlet {
             }
             String saltyPassword = hashedPassword.get();
             BaseAccount account = new BaseAccount(request.identification, saltyPassword);
-            String accountJson = objectMapper.writeValueAsString(account);
-            String reply = adapter.set(createUsernameKey(request.identification), accountJson);
-            if (reply.equals("OK")) {
+            if (saveAccount(account, adapter)) {
                 return Response.accepted().entity(new LoginResponse(200, account)).build();
             } else {
                 return Response.serverError().entity(new GenericReply<String>("500", "Account creation has failed.")).build();
@@ -133,11 +136,26 @@ public class AccountServlet {
         return DHTConfig.REDIS_USERNAME_PREFIX + user;
     }
 
+    private boolean saveAccount(BaseAccount user, Jedis adapter) {
+        try {
+            String accountJson = objectMapper.writeValueAsString(user);
+            String reply = adapter.set(createUsernameKey(user.m_email), accountJson);
+            if (!reply.equals("OK")) {
+                return false;
+            }
+        } catch (Exception e) {
+            LOGGER.error("There was a json mapper exception error when saving new account: " + e.getMessage());
+        }
+        return true;
+    }
+
     public static class SaltedPasswordGenThread implements Callable<String> {
         String m_nonSaltedPassword;
+
         public SaltedPasswordGenThread(String password) {
             m_nonSaltedPassword = password;
         }
+
         @Override
         public String call() {
             return PasswordAuthentication.instance().hash(m_nonSaltedPassword.toCharArray());
