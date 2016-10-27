@@ -10,7 +10,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
       const user = this.get("session.account");
       console.log(user);
       if (!user) {
-        this.send("invalidateSession");
+        this.get("session").invalidate();
       } else {
         this.store.pushPayload({account: user});
       }

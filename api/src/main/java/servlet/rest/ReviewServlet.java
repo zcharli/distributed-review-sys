@@ -140,7 +140,7 @@ public class ReviewServlet {
         }
 
         // TODO: handle fail case where identifier has already been approved or does not exist, atm it will never end cause of this
-        final Number160 locationKey = new Number160(request.getLocationId());
+        final Number160 locationKey = Number160.createHash(identifier);
         final Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         final Number160 contentKey = new Number160(request.getContentId());
         final DRSKey reviewKey = DefaultDHTKeyPair.builder()
@@ -183,7 +183,7 @@ public class ReviewServlet {
             response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("404", "No identifier in request was found")));
             return;
         }
-        Number160 locationKey = new Number160(request.getLocationId());
+        Number160 locationKey = Number160.createHash(identifier);
         Number160 newDomainKey = DHTConfig.ACCEPTANCE_DOMAIN;
         Number160 contentKey = new Number160(request.getContentId());
         DRSKey reviewKey = DefaultDHTKeyPair.builder()
