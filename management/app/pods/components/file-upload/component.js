@@ -6,7 +6,7 @@ export default EmberUploader.FileField.extend({
     const postObj = this.get("url");
     console.log(postObj);
     const uploader = EmberUploader.Uploader.create({
-      url: postObj.url
+      url: postObj.url + "?user=" + postObj.data.key
     });
     const self = this;
     if (!Ember.isEmpty(files)) {

@@ -3,6 +3,7 @@ package servlet.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
+import com.google.common.io.Files;
 import config.APIConfig;
 import config.DHTConfig;
 import error.GenericReply;
@@ -29,6 +30,8 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by czl on 19/09/16.
@@ -37,12 +40,17 @@ import java.util.concurrent.*;
 @Path("/account")
 public class AccountServlet {
     private final static Logger LOGGER = LoggerFactory.getLogger(AccountServlet.class);
+    private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
+
+    private Pattern pattern;
+    private Matcher matcher;
 
     private Random random = new Random();
     ExecutorService executor = Executors.newSingleThreadExecutor();
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public AccountServlet() {
+        pattern = Pattern.compile(IMAGE_PATTERN);
     }
 
     @PUT
@@ -56,6 +64,9 @@ public class AccountServlet {
         }
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(request.m_email));
+            if (Strings.isNullOrEmpty(accountJson) || accountJson.equals("(nil)")) {
+                return Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build();
+            }
             final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
             if (account == null || Strings.isNullOrEmpty(account.m_password)) {
                 return Response.accepted().entity(new GenericReply<String>("404", "User was not found.")).build();
@@ -91,6 +102,9 @@ public class AccountServlet {
     public Response loginUser(final @ExternalLogin LoginRequest request) {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(request.username));
+            if (Strings.isNullOrEmpty(accountJson) || accountJson.equals("(nil)")) {
+                return Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build();
+            }
             final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
             if (account == null || Strings.isNullOrEmpty(account.m_password)) {
                 return Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build();
@@ -118,13 +132,13 @@ public class AccountServlet {
         Future<String> hashedPassword = executor.submit(new SaltedPasswordGenThread(request.password));
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountExistance = adapter.get(createUsernameKey(request.identification));
-            if (!Strings.isNullOrEmpty(accountExistance)) {
+            if (!Strings.isNullOrEmpty(accountExistance) || accountExistance.equals("(nil)")) {
                 return Response.status(Response.Status.CONFLICT).entity(new GenericReply<String>("400", "A user has already registered that email.")).build();
             }
             String saltyPassword = hashedPassword.get();
             BaseAccount account = new BaseAccount(request.identification, saltyPassword);
             if (saveAccount(account, adapter)) {
-                return Response.accepted().entity(new LoginResponse(200, account)).build();
+                return Response.accepted().entity(new LoginResponse<BaseAccount>(200, account)).build();
             } else {
                 return Response.serverError().entity(new GenericReply<String>("500", "Account creation has failed.")).build();
             }
@@ -145,7 +159,7 @@ public class AccountServlet {
         BaseAccount account = null;
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(email));
-            if (Strings.isNullOrEmpty(accountJson)) {
+            if (Strings.isNullOrEmpty(accountJson) || accountJson.equals("(nil)")) {
                 response.resume(Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build());
             } else {
                 account = objectMapper.readValue(accountJson, BaseAccount.class);
@@ -164,37 +178,54 @@ public class AccountServlet {
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadFile(
-            @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
-
-        String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + fileDetail.getFileName();
-        writeToFile(uploadedInputStream, uploadedFileLocation);
-        String output =  uploadedFileLocation;
-        return Response.status(200).entity(new OperationCompleteResponse<String>("200", output)).build();
+    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+                               @FormDataParam("file") FormDataContentDisposition fileDetail,
+                               final @QueryParam("user") String userName) {
+        if (Strings.isNullOrEmpty(userName)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Missing user identification")).build();
+        }
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+            String userIdentifier = createUsernameKey(userName);
+            String userJson = adapter.get(userIdentifier);
+            if (Strings.isNullOrEmpty(userJson) || userJson.equals("(nil)")) {
+                return Response.status(400).entity(new GenericReply<>("500", "There was no user by the username " + userName)).build();
+            }
+            if (Strings.isNullOrEmpty(APIConfig.IMAGE_UPLOAD_LOCATION)) {
+                APIConfig.IMAGE_UPLOAD_LOCATION = getClass().getResource("/webapp/images").getPath();
+            }
+            matcher = pattern.matcher(fileDetail.getFileName());
+            if (!matcher.matches()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Not a valid image file type")).build();
+            }
+            String extension = Files.getFileExtension(fileDetail.getFileName());
+            String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + userName + extension;
+            try {
+                writeToFile(uploadedInputStream, uploadedFileLocation);
+                BaseAccount userAccount = objectMapper.readValue(userJson, BaseAccount.class);
+                userAccount.m_profilePicUrl = uploadedFileLocation;
+                String newAccountJson = objectMapper.writeValueAsString(userAccount);
+                String result = adapter.set(userIdentifier, newAccountJson);
+                if (!result.equals("OK")) {
+                    throw new IOException("Failed to write new user info to disk");
+                }
+                return Response.status(200).entity(new OperationCompleteResponse<String>("200", uploadedFileLocation)).build();
+            } catch (Exception e) {
+                return Response.status(500).entity(new GenericReply<>("500", "Server error while writing upload to disk: " + e.getMessage())).build();
+            }
+        }
     }
 
     // save uploaded file to new location
-    private void writeToFile(InputStream uploadedInputStream,
-                             String uploadedFileLocation) {
-
-        try {
-            OutputStream out = new FileOutputStream(new File(
-                    uploadedFileLocation));
+    private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws IOException {
+            OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
             int read = 0;
             byte[] bytes = new byte[1024];
-
             out = new FileOutputStream(new File(uploadedFileLocation));
             while ((read = uploadedInputStream.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
             out.flush();
             out.close();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
     }
 
     @GET
