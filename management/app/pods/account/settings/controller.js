@@ -29,6 +29,12 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
+
+    handleUploadError(jqXHR, textStatus, errorThrown) {
+      // Handle unsuccessful upload
+      console.log(jqXHR, textStatus, errorThrown);
+    },
+
     showProgressBar() {
       this.set("isUploading", true);
     },

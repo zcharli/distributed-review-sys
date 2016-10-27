@@ -32,7 +32,7 @@
                 <div class="two fields">
                     <div class="field profile-upload" data-tooltip="Your picture will be hosted on a private (Cloudinary) cloud." data-position="right center">
                         <label>Profile picture</label>
-                      {{file-upload url=imgurPostObj completion=profileCompletion uploadStart="showProgressBar" uploadComplete="profileUploadComplete"}}
+                      {{file-upload url=imgurPostObj completion=profileCompletion uploadError="handleUploadError" uploadStart="showProgressBar" uploadComplete="profileUploadComplete"}}
                       {{#if isUploading}}
                         {{#ui-progress percent=profileCompletionDisplay class="teal indicating"}}
                             <div class="bar"></div>

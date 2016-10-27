@@ -25,7 +25,7 @@ export default EmberUploader.FileField.extend({
 
       uploader.on('didError', (jqXHR, textStatus, errorThrown) => {
         // Handle unsuccessful upload
-        console.log(jqXHR, textStatus, errorThrown);
+        self.sendAction("uploadError",jqXHR, textStatus, errorThrown);
       });
     }
   }
