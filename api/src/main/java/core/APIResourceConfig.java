@@ -6,6 +6,7 @@ import exception.JsonMappingExceptionMapper;
 import exception.JsonProcessingExceptionMapper;
 import exception.ValidationExceptionMapper;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationFeature;
