@@ -55,7 +55,7 @@ public class AccountServlet {
             if (account == null || Strings.isNullOrEmpty(account.m_password)) {
                 return Response.accepted().entity(new GenericReply<String>("404", "User was not found.")).build();
             } else {
-                if (!request.m_loginToken.equals(account.m_loginToken)) {
+                if (!account.hasToken(request.m_loginToken)) {
                     return Response.accepted().entity(new GenericReply<String>("404", "There was an error while processing your last request, please signout and sign in again.")).build();
                 }
             }

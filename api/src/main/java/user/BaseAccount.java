@@ -67,4 +67,8 @@ public class BaseAccount implements Validatable {
         }
         m_prevTokens.addFirst(token);
     }
+
+    public boolean hasToken(Long token) {
+        return m_prevTokens.contains(token);
+    }
 }
