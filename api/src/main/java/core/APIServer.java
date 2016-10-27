@@ -94,6 +94,7 @@ public class APIServer {
         if (m_resourceConfig == null) {
             configure();
         }
-        m_apiServer.start();;
+        m_apiServer.start();
+        DHTManager.instance();
     }
 }
