@@ -58,7 +58,7 @@ export default Ember.Component.extend({
                     clearDuration: 2000
                   });
                 }
-              }, (response) => {
+              }, () => {
                 self.get('notifications').error("There was an error in the request.", {
                   autoClear: true,
                   clearDuration: 2000

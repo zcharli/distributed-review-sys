@@ -71,6 +71,10 @@ public class AccountServlet {
         // Maybe this isn't as fast as I thought...
         Future<String> hashedPassword = executor.submit(new SaltedPasswordGenThread(request.password));
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
+            String accountExistance = adapter.get(createUsernameKey(request.identification));
+            if (!Strings.isNullOrEmpty(accountExistance)) {
+                return Response.status(Response.Status.CONFLICT).entity(new GenericReply<String>("400", "A user has already registered that email.")).build();
+            }
             String saltyPassword = hashedPassword.get();
             BaseAccount account = new BaseAccount(request.identification, saltyPassword);
             String accountJson = objectMapper.writeValueAsString(account);

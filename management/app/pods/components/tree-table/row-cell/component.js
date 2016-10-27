@@ -23,12 +23,10 @@ export default Ember.Component.extend({
     return false;
   }),
   currentResultSet: Ember.computed('currentPage', 'numResultsPerPage', 'product.childLevel', function() {
-    console.log("resultSet for table changed")
     let page = this.get('currentPage') - 1;
     const results = this.get('product.childLevel');
     const numResults = this.get('numResultsPerPage');
-    const viewable = results.slice(page * numResults, (1 + page) * numResults );
-    return viewable;
+    return results.slice(page * numResults, (1 + page) * numResults );
   }),
   numColumns: Ember.computed('columns', function() {
     const cols = this.get('columns');

@@ -23,7 +23,7 @@ export default Ember.Controller.extend({
   }.property('model'),
 
   actions: {
-    reviewFinished(review, add) {
+    reviewFinished(review) {
       const model = this.get("model");
       console.log(model);
 

@@ -10,6 +10,7 @@ export default Ember.Controller.extend({
         .then((response) => {
           if (response.staus === 200 && response.result) {
             this.get('session').set("account", response.result);
+            this.store.pushPayload({account: response.result}).then((r)=>{console.log(r);});
             this.set('session.isAuthenticated', true);
           } else {
             this.set('errorMessage', response.responseText);

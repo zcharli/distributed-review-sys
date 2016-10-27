@@ -2,6 +2,7 @@ package user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.tomp2p.peers.Number160;
 
 import javax.annotation.Nullable;
 
@@ -9,6 +10,9 @@ import javax.annotation.Nullable;
  * Created by cli on 10/26/2016.
  */
 public class BaseAccount {
+
+    @JsonProperty("id")
+    public String m_userId;
 
     @JsonProperty("email")
     public String m_email;
@@ -28,5 +32,6 @@ public class BaseAccount {
     public BaseAccount(String email, String password) {
         m_email = email;
         m_password = password;
+        m_userId = Number160.createHash(email).toString();
     }
 }
