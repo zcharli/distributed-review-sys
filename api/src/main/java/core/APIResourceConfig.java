@@ -1,6 +1,5 @@
 package core;
 
-import com.sun.jersey.multipart.MultiPart;
 import exception.ApplicationExceptionMapper;
 import exception.JsonMappingExceptionMapper;
 import exception.JsonProcessingExceptionMapper;
