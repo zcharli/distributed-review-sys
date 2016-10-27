@@ -43,8 +43,8 @@ public class AccountServlet {
 
     @POST
     @Path("/login")
-    @Consumes({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
-    @Produces({MediaType.APPLICATION_JSON, "application/vnd.api+json"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response loginUser(final @ExternalLogin LoginRequest request) {
         BaseAccount account = null;
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
