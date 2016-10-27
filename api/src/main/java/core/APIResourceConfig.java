@@ -1,5 +1,6 @@
 package core;
 
+import com.sun.jersey.multipart.MultiPart;
 import exception.ApplicationExceptionMapper;
 import exception.JsonMappingExceptionMapper;
 import exception.JsonProcessingExceptionMapper;
@@ -29,6 +30,7 @@ public class APIResourceConfig extends ResourceConfig {
         register(JsonMappingExceptionMapper.class);
         register(ApplicationExceptionMapper.class);
         register(CORSResponseFilter.class);
+        register(MultiPart.class);
 
         register(JacksonFeature.class);
         register(ValidationFeature.class);
