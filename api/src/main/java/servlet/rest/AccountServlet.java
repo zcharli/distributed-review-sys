@@ -80,7 +80,7 @@ public class AccountServlet {
             String accountJson = objectMapper.writeValueAsString(account);
             String reply = adapter.set(createUsernameKey(request.identification), accountJson);
             if (reply.equals("OK")) {
-                return Response.accepted().entity(new LoginResponse(200, "Success", Long.toString(random.nextLong()))).build();
+                return Response.accepted().entity(new LoginResponse(200, account)).build();
             } else {
                 return Response.serverError().entity(new GenericReply<String>("500", "Account creation has failed.")).build();
             }

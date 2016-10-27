@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.tomp2p.peers.Number160;
 
-import javax.annotation.Nullable;
 
 /**
  * Created by cli on 10/26/2016.
@@ -18,7 +17,6 @@ public class BaseAccount {
     public String m_email;
 
     @JsonProperty("fname")
-    @Nullable
     public String m_firstName;
 
     @JsonProperty("lname")
