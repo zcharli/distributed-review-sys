@@ -7,28 +7,32 @@ export default Ember.Controller.extend({
     authenticate() {
       let {identification, password} = this.getProperties('identification', 'password');
       this.get('session').authenticate('authenticator:drsauth', identification, password)
-        .then((response) => {
-          if (response.status === 200 && response.result) {
-            this.set('session.account', response.result);
+        .then(() => {
+          var loginResult = this.get("session.session.content.authenticated");
 
-            const id = response.result.id;
-            this.set('session.accountId', id);
-            delete response.result.id;
-            this.store.pushPayload({
+          if (loginResult) {
+            const sessionStore = this.get("session.store");
+            sessionStore.set('account', loginResult.result);
+            const newUser = {
               data: [{
-                id: id,
+                id: loginResult.result.id,
                 type: 'account',
-                attributes: response.result,
+                attributes: loginResult.result,
                 relationships: {}
               }]
-            });
-            this.set('session.isAuthenticated', true);
+            };
+            localStorage["loggedInUser"] = JSON.stringify(newUser);
+            const id = loginResult.result.id;
+            sessionStore.set('accountId', id);
+            delete loginResult.result.id;
+            this.store.pushPayload(newUser);
           } else {
-            this.set('errorMessage', response.responseText);
+            this.set('errorMessage', "Oops, an error occured while authenticating.");
           }
+          // this.set('session.isAuthenticated', true);
         })
-        .catch((reason) => {
-          this.set('errorMessage', reason.error || reason);
+        .catch(() => {
+          this.set('errorMessage', "Oops, an error occured while authenticating.");
         });
     }
   }

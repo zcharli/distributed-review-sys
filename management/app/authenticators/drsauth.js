@@ -25,13 +25,15 @@ export default BaseAuthenticator.extend({
         data.scope = scopesString;
       }
       this.makeRequest(serverLoginEndpoint, data).then((response) => {
-        if (response.status === 200) {
-          this.set("loggedIn", true);
-          this.set("account", response.result);
-          resolve(response);
-        } else {
-          run(null, reject, response.responseJSON || response.responseText);
-        }
+        run(() => {
+          if (response.status === 200) {
+            this.set("loggedIn", true);
+            this.set("account", response.result);
+            resolve(response);
+          } else {
+            run(null, reject, response.responseJSON || response.responseText);
+          }
+        });
       }, (xhr) => {
         run(null, reject, xhr.responseJSON || xhr.responseText);
       });
@@ -54,7 +56,7 @@ export default BaseAuthenticator.extend({
           run(() => {
             if (response.status === 200) {
               this.set("loggedIn", false);
-              this.set("account", response.result);
+              this.set("account", null);
               success.apply(this, [resolve]);
             } else {
               reject();

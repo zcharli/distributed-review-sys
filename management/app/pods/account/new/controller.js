@@ -39,22 +39,40 @@ export default Ember.Controller.extend({
           autoClear: true,
           clearDuration: 1200
         });
-        this.set('session.account', response.result);
-        const id = response.result.id;
-        delete response.result.id;
-        this.set('session.accountId', id);
-        this.store.pushPayload({
-          data: [{
-            id: id,
-            type: 'account',
-            attributes: response.result,
-            relationships: {}
-          }]
-        });
-        this.set('session.isAuthenticated', true);
-        this.transitionToRoute('index');
-      }, (xhr) => {
-        this.set('errorMessage', xhr.errorMessage);
+        if (response.status === 200) {
+          this.get('session').authenticate('authenticator:drsauth', identification, password)
+            .then(() => {
+              var loginResult = this.get("session.session.content.authenticated");
+
+              if (loginResult) {
+                const sessionStore = this.get("session.store");
+                sessionStore.set('account', loginResult.result);
+                const newUser = {
+                  data: [{
+                    id: loginResult.result.id,
+                    type: 'account',
+                    attributes: loginResult.result,
+                    relationships: {}
+                  }]
+                };
+                localStorage["loggedInUser"] = JSON.stringify(newUser);
+                const id = loginResult.result.id;
+                sessionStore.set('accountId', id);
+                delete loginResult.result.id;
+                this.store.pushPayload(newUser);
+              } else {
+                this.set('errorMessage', "Oops, an error occured while authenticating.");
+              }
+              // this.set('session.isAuthenticated', true);
+            })
+            .catch(() => {
+              this.set('errorMessage', "Oops, an error occured while authenticating.");
+            });
+        } else {
+          this.set('errorMessage', "Oops, an error occured while creating your account.");
+        }
+      }, () => {
+        this.set('errorMessage', "Oops, an error occured while creating your account.");
       });
     }
   }

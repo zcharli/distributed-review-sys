@@ -7,18 +7,19 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
 
   model() {
     if (this.get("session.isAuthenticated")) {
-      const user = this.get("session.account");
-      alert(user);
-      if (!user) {
+      const userJson = localStorage["loggedInUser"];
+      if (!userJson) {
         this.get("session").invalidate();
       } else {
-        this.store.pushPayload({account: user});
+        const user = JSON.parse(userJson);
+        this.store.pushPayload(user);
       }
     }
   },
 
   actions: {
     invalidateSession() {
+      delete localStorage["loggedInUser"];
       this.session.invalidate();
     }
   }
