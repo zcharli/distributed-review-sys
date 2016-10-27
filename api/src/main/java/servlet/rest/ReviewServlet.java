@@ -302,12 +302,6 @@ public class ReviewServlet {
     }
 
     @GET
-    @Path("/check")
-    public void checkProductId() {
-
-    }
-
-    @GET
     @Path("/ping")
     public String pong() {
         return "pong";
