@@ -3,9 +3,7 @@ package servlet.rest;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import config.DHTConfig;
-import core.DHT;
 import core.DHTManager;
-import core.GlobalContext;
 import error.GenericReply;
 import key.DRSKey;
 import key.DefaultDHTKeyPair;
@@ -18,14 +16,12 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import review.BaseReview;
-import review.ProductReviewWrapper;
 import review.ReviewIdentity;
 import review.comparator.ReviewTimestampComparator;
 import review.request.LimitQueryParam;
+import review.response.OperationCompleteResponse;
 import review.response.ReviewGetResponse;
-import review.response.ReviewOperationComplete;
 import validator.ExternalReview;
-import wrapper.ProductRestWrapper;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
@@ -164,7 +160,7 @@ public class ReviewServlet {
                 } else {
                     request.fillInIds(publishedKey.getLocationKey(), publishedKey.getLocationKey(), DHTConfig.PUBLISHED_DOMAIN , fullKey);
                     response.resume(Response.ok().entity(
-                            new ReviewOperationComplete<BaseReview>("200", request)
+                            new OperationCompleteResponse<BaseReview>("200", request)
                     ).build());
                 }
                 return 0;
@@ -200,7 +196,7 @@ public class ReviewServlet {
                     ).build());
                 } else {
                     response.resume(Response.ok().entity(
-                            new ReviewOperationComplete<String>("200", "Success")
+                            new OperationCompleteResponse<String>("200", "Success")
                     ).build());
                 }
                 return 0;
@@ -275,7 +271,7 @@ public class ReviewServlet {
 //                }
 //            }
 //        }
-//        response.resume(Response.ok().entity(new ReviewOperationComplete<List<BaseReview>>("200",results)).build());
+//        response.resume(Response.ok().entity(new OperationCompleteResponse<List<BaseReview>>("200",results)).build());
         final List<BaseReview> reviewsInAcceptance = new LinkedList<>();
         final CompletableFuture<?>[] allAcceptanceReviews = trackedIds.stream()
                 .map(key -> CompletableFuture.runAsync(() -> {
@@ -327,7 +323,7 @@ public class ReviewServlet {
                                     "DHT-PUT", "An error occurred when trying to put object into the DHT and thus has failed"))
                             .build());
                 } else {
-                    response.resume(Response.ok(new ReviewOperationComplete<>("DHT-PUT", "Success")).build());
+                    response.resume(Response.ok(new OperationCompleteResponse<>("DHT-PUT", "Success")).build());
                 }
                 return 0;
             }

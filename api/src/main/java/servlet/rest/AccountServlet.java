@@ -3,7 +3,9 @@ package servlet.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
-import com.google.common.primitives.Booleans;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import config.APIConfig;
 import config.DHTConfig;
 import error.GenericReply;
 import org.slf4j.Logger;
@@ -12,20 +14,19 @@ import redis.clients.jedis.Jedis;
 import review.request.CreateAccountRequest;
 import review.request.LoginRequest;
 import review.response.LoginResponse;
-import review.response.ReviewOperationComplete;
+import review.response.OperationCompleteResponse;
 import user.BaseAccount;
 import validator.ExternalAccount;
 import validator.ExternalCreateAccount;
 import validator.ExternalLogin;
 import validator.PasswordAuthentication;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.*;
 import java.util.Random;
 import java.util.concurrent.*;
 
@@ -49,15 +50,21 @@ public class AccountServlet {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateAccountInfo(final @ExternalAccount BaseAccount request) {
+        Future<String> hashedPassword = null;
+        if (!Strings.isNullOrEmpty(request.m_password)) {
+            hashedPassword = executor.submit(new SaltedPasswordGenThread(request.m_password));
+        }
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(request.m_email));
             final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
             if (account == null || Strings.isNullOrEmpty(account.m_password)) {
                 return Response.accepted().entity(new GenericReply<String>("404", "User was not found.")).build();
-            } else {
-                if (!account.hasToken(request.m_loginToken)) {
-                    return Response.accepted().entity(new GenericReply<String>("404", "There was an error while processing your last request, please signout and sign in again.")).build();
-                }
+            }
+            if (!account.hasToken(request.m_loginToken)) {
+                return Response.accepted().entity(new GenericReply<String>("404", "There was an error while processing your last request, please signout and sign in again.")).build();
+            }
+            if (!account.m_password.equals(request.m_password) && hashedPassword != null) {
+                account.m_password = hashedPassword.get();
             }
             account.addToken(random.nextLong());
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
@@ -151,6 +158,43 @@ public class AccountServlet {
         } catch (Exception e) {
             response.resume(Response.serverError().entity(new GenericReply<String>("500", "An error occurred during the request: " + e.getMessage())).build());
         }
+    }
+
+    @POST
+    @Path("/upload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response uploadFile(
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+
+        String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + fileDetail.getFileName();
+        writeToFile(uploadedInputStream, uploadedFileLocation);
+        String output =  uploadedFileLocation;
+        return Response.status(200).entity(new OperationCompleteResponse<String>("200", output)).build();
+    }
+
+    // save uploaded file to new location
+    private void writeToFile(InputStream uploadedInputStream,
+                             String uploadedFileLocation) {
+
+        try {
+            OutputStream out = new FileOutputStream(new File(
+                    uploadedFileLocation));
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            out = new FileOutputStream(new File(uploadedFileLocation));
+            while ((read = uploadedInputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
     }
 
     @GET

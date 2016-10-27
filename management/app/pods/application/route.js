@@ -19,9 +19,10 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
-    invalidateSession() {
+    sessionInvalidate() {
+      console.log("application route invalidating the session");
       delete localStorage["loggedInUser"];
-      this.session.invalidate();
+      this.get("session").invalidate();
     }
   }
 });

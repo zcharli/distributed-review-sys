@@ -5,4 +5,55 @@
         <div class="sub header">Manage your account settings and set e-mail preferences.</div>
     </div>
 </h2>
+<div class="ui basic segment">
+    <h2 class="ui header">
+        <i class="write icon"></i>
+        <div class="content">
+          {{model.email}}
+            <div class="sub header">Editing profile info for this user.</div>
+        </div>
+    </h2>
+    <div class="peek-product-review">
+        <form class="ui form">
+            <h4 class="ui dividing header">General Info</h4>
+            <div class="field">
+                <div class="two fields">
+                    <div class="field">
+                        <label>First Name</label>
+                      {{input type="text" value=model.fname placeholder="First name" }}
+                    </div>
+                    <div class="field">
+                        <label>Type</label>
+                      {{input type="text" value=model.lname placeholder="Last name"}}
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="two fields">
+                    <div class="field profile-upload" data-tooltip="Your picture will be hosted on a private (Cloudinary) cloud." data-position="right center">
+                        <label>Profile picture</label>
+                      {{file-upload url=imgurPostObj completion=profileCompletion uploadStart="showProgressBar" uploadComplete="profileUploadComplete"}}
+                      {{#if isUploading}}
+                        {{#ui-progress percent=profileCompletionDisplay class="teal indicating"}}
+                            <div class="bar"></div>
+                        {{/ui-progress}}
+                      {{/if}}
+                    </div>
+                </div>
+            </div>
+            <h4 class="ui dividing header">Change Password</h4>
+            <div class="two fields">
+                <div class="field">
+                    <label>New Password</label>
+                  {{input type="text" value=newPassword  placeholder="New password"}}
+                </div>
+                <div class="field">
+                    <label>Confirm Password</label>
+                  {{input type="text" value=confirmPassword  placeholder="Confirm password"}}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 {{outlet}}

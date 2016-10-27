@@ -5,5 +5,13 @@ export default Ember.Controller.extend({
   classNames: ["fullscreen"],
 
   actions: {
+    invalidateSession() {
+      console.log("hit");
+      console.log(this.get("actions"));
+      Ember.run.next(function() {
+        this.send('sessionInvalidate');
+      }.bind(this));
+      return true;
+    }
   }
 });
