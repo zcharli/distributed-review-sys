@@ -198,17 +198,19 @@ public class AccountServlet {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Not a valid image file type")).build();
             }
             String extension = Files.getFileExtension(fileDetail.getFileName());
-            String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + userName + "." + extension;
+            String fileName = userName + "." + extension;
+            String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + fileName;
+            String resourcePath = APIConfig.IMAGE_RESOURCE_PATH + "/" + fileName;
             try {
                 writeToFile(uploadedInputStream, uploadedFileLocation);
                 BaseAccount userAccount = objectMapper.readValue(userJson, BaseAccount.class);
-                userAccount.m_profilePicUrl = uploadedFileLocation;
+                userAccount.m_profilePicUrl = resourcePath;
                 String newAccountJson = objectMapper.writeValueAsString(userAccount);
                 String result = adapter.set(userIdentifier, newAccountJson);
                 if (!result.equals("OK")) {
                     throw new IOException("Failed to write new user info to disk");
                 }
-                return Response.status(200).entity(new OperationCompleteResponse<String>("200", uploadedFileLocation)).build();
+                return Response.status(200).entity(new OperationCompleteResponse<String>("200", resourcePath)).build();
             } catch (Exception e) {
                 return Response.status(500).entity(new GenericReply<>("500", "Server error while writing upload to disk: " + e.getMessage())).build();
             }

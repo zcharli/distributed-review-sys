@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
+import java.io.File;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -47,7 +48,7 @@ public class APIServer {
         InetSocketAddress currentAddress = null;
         try {
             currentAddress = new InetSocketAddress(InetAddress.getByName(host), APIConfig.API_PORT);
-        } catch(UnknownHostException e) {
+        } catch (UnknownHostException e) {
             LOGGER.error("Could not find host on boot: " + e.getMessage());
             System.exit(0);
         }
@@ -58,6 +59,7 @@ public class APIServer {
      * Default configuration
      */
     public void configure() {
+        makeStaticDynamicIfNotExist();
         configureApi();
         configureManagementWeb();
         configureContextHandler();
@@ -72,7 +74,7 @@ public class APIServer {
 
     private void configureManagementWeb() {
         m_webServletHolder = new ServletHolder("management", DefaultServlet.class);
-        m_webServletHolder.setInitParameter("dirAllowed","true");
+        m_webServletHolder.setInitParameter("dirAllowed", "true");
     }
 
     private void configureContextHandler() {
@@ -82,9 +84,9 @@ public class APIServer {
         // Set up the base path
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
-        ResourceCollection resources = new ResourceCollection(new String[] {
+        ResourceCollection resources = new ResourceCollection(new String[]{
                 APIConfig.WEB_RESOURCE_PATH,
-                "/home/ubuntu/static",
+                APIConfig.STATIC_DYNAMIC_HOME,
         });
         m_servletContextHandler.setBaseResource(resources);
         m_servletContextHandler.setErrorHandler(new SPAErrorRedirectModule());
@@ -94,6 +96,31 @@ public class APIServer {
         m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
 
+    public void makeStaticDynamicIfNotExist() {
+        File theDir = new File(APIConfig.STATIC_DYNAMIC_HOME);
+        if (!theDir.exists()) {
+            boolean result = false;
+            try {
+                theDir.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                System.out.println("Error when creating dynamic upload location, make sure there is priveleges to make "
+                        + APIConfig.STATIC_DYNAMIC_HOME);
+                System.exit(0);
+            }
+        } else {
+            theDir = new File(APIConfig.IMAGE_UPLOAD_LOCATION);
+            if (!theDir.exists()) {
+                try {
+                    theDir.mkdir();
+                } catch (SecurityException se) {
+                    System.out.println("Error when creating dynamic upload location, make sure there is priveleges to make "
+                            + APIConfig.IMAGE_UPLOAD_LOCATION);
+                    System.exit(0);
+                }
+            }
+        }
+    }
 
     public void start() throws Exception {
         if (m_resourceConfig == null) {
