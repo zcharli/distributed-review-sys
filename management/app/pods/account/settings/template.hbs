@@ -1,3 +1,4 @@
+{{notification-container position="top-right"}}
 <h2 class="ui center aligned icon header">
     <i class="settings icon"></i>
     <div class="content">
@@ -7,7 +8,11 @@
 </h2>
 <div class="ui basic segment">
     <h2 class="ui header">
-        <i class="write icon"></i>
+      {{#if profilePicture}}
+          <img class="ui tiny circular image" src="{{profilePicture}}"/>
+      {{else}}
+          <i class="write icon"></i>
+      {{/if}}
         <div class="content">
           {{model.email}}
             <div class="sub header">Editing profile info for this user.</div>
@@ -23,14 +28,16 @@
                       {{input type="text" value=model.fname placeholder="First name" }}
                     </div>
                     <div class="field">
-                        <label>Type</label>
+                        <label>Last Name</label>
                       {{input type="text" value=model.lname placeholder="Last name"}}
                     </div>
                 </div>
             </div>
             <div class="field">
                 <div class="two fields">
-                    <div class="field profile-upload" data-tooltip="Your picture will be hosted on a private (Cloudinary) cloud." data-position="right center">
+                    <div class="field profile-upload"
+                         data-tooltip="Your picture will be hosted on a private (Cloudinary) cloud."
+                         data-position="right center">
                         <label>Profile picture</label>
                       {{file-upload url=imgurPostObj completion=profileCompletion uploadError="handleUploadError" uploadStart="showProgressBar" uploadComplete="profileUploadComplete"}}
                       {{#if isUploading}}
@@ -45,13 +52,15 @@
             <div class="two fields">
                 <div class="field">
                     <label>New Password</label>
-                  {{input type="text" value=newPassword  placeholder="New password"}}
+                  {{input type="password" value=newPassword  placeholder="New password"}}
                 </div>
                 <div class="field">
                     <label>Confirm Password</label>
-                  {{input type="text" value=confirmPassword  placeholder="Confirm password"}}
+                  {{input type="password" value=confirmPassword  placeholder="Confirm password"}}
                 </div>
             </div>
+            <div class="ui error message">{{errorMessage}}</div>
+            <button class="ui button" {{action "saveAccount"}}>Submit Changes</button>
         </form>
     </div>
 </div>

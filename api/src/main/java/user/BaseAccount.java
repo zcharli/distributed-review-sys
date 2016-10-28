@@ -32,8 +32,7 @@ public class BaseAccount implements Validatable {
     @JsonProperty("password")
     public String m_password;
 
-    @JsonProperty("profile" +
-            "")
+    @JsonProperty("profile")
     public String m_profilePicUrl;
 
     @JsonProperty("token")

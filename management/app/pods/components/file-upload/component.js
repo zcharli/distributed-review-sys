@@ -14,12 +14,10 @@ export default EmberUploader.FileField.extend({
       uploader.upload(files[0], { name: postObj.data.key });
       self.sendAction("uploadStart");
       uploader.on('progress', e => {
-        console.log(e.percent);
         self.set('completion', e.percent);
       });
 
       uploader.on('didUpload', e => {
-        console.log(e);
         self.sendAction("uploadComplete", e);
       });
 

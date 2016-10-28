@@ -6,7 +6,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model() {
     try {
       const localUser = localStorage['loggedInUser'] && JSON.parse(localStorage['loggedInUser']);
-      console.log(localUser);
       return this.store.peekRecord("account", localUser.data[0].id);
     } catch (e) {
       console.log("Oops");
@@ -14,5 +13,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   onBeforeModel: function() {
-  }.on("beforeModel")
+  }.on("beforeModel"),
+
+  actions: {
+
+  }
 });

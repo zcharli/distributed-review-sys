@@ -115,6 +115,7 @@ public class AccountServlet {
                 }
             }
             account.addToken(random.nextLong());
+//            account.m_userId = Number160.createHash(account.m_email).toString();
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
                 saveAccount(account, adapter);
             }, executor);
