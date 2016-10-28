@@ -30,6 +30,9 @@ public class DRSClient {
     @Parameter(names = "-host", description = "Host address for API")
     private String host;
 
+    @Parameter(names = "-floatingip", description = "Address of REST Server behind a floating IP used for debugging")
+    private String floatingIP;
+
     @Parameter(names = "-custombootstrap", description = "Used for client nodes to connect to the custom bootstrap address,")
     private String customBootstrap;
 
@@ -73,7 +76,9 @@ public class DRSClient {
         if (host == null) {
             host = APIConfig.DEFAULT_HOST;
         } else {
-            APIConfig.setDynamicResourcePath(host);
+            if (!Strings.isNullOrEmpty(floatingIP)) {
+                APIConfig.setDynamicResourcePath(floatingIP);
+            }
         }
         if (port == -1) {
             port = APIConfig.API_PORT;
