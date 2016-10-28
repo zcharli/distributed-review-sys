@@ -201,7 +201,7 @@ public class AccountServlet {
             String extension = Files.getFileExtension(fileDetail.getFileName());
             String fileName = Number160.createHash(userName) + "." + extension;
             String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + fileName;
-            String resourcePath = APIConfig.IMAGE_RESOURCE_PATH + "/" + fileName;
+            String resourcePath = APIConfig.ABSOLUTE_IMAGE_RESOURCE_PATH + "/" + fileName;
             try {
                 writeToFile(uploadedInputStream, uploadedFileLocation);
                 BaseAccount userAccount = objectMapper.readValue(userJson, BaseAccount.class);
