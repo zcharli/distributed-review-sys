@@ -78,6 +78,8 @@ public class AccountServlet {
             if (!account.m_password.equals(request.m_password) && hashedPassword != null) {
                 account.m_password = hashedPassword.get();
             }
+            account.m_firstName = request.m_firstName;
+            account.m_lastName = request.m_lastName;
             account.addToken(random.nextLong());
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
                 if (saveAccount(account)) {
