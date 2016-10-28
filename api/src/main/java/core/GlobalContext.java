@@ -1,6 +1,7 @@
 package core;
 
 import config.APIConfig;
+import metric.BaseMetric;
 import review.ProductReviewWrapper;
 
 import java.util.Queue;
@@ -12,10 +13,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GlobalContext {
 
     // At least one collection will exisst containing the last product review wrapper
-    private volatile Queue<ProductReviewWrapper> m_cache;
+    private Queue<ProductReviewWrapper> m_productCache;
+    private Queue<BaseMetric> m_metricCache;
     private static GlobalContext context;
     private static long TEN_SECONDS_IN_MILI = 10000;
-    private long lastModified = 0;
+    private volatile long lastModifiedProduct = 0;
+    private volatile long lastModifiedMetric = 0;
 
     public static GlobalContext instance() {
         if (context == null) {
@@ -24,26 +27,45 @@ public class GlobalContext {
         return context;
     }
 
-    private GlobalContext() {
-    }
+    private GlobalContext() {}
 
-    public synchronized void setState(Queue<ProductReviewWrapper> state) {
+    public void setMetricState(Queue<BaseMetric> state) {
         long currentTimeMillis = System.currentTimeMillis();
-        if (currentTimeMillis - lastModified < TEN_SECONDS_IN_MILI) {
+        if (currentTimeMillis - lastModifiedProduct < TEN_SECONDS_IN_MILI) {
             return;
         }
-        lastModified = currentTimeMillis;
-        m_cache = state;
+        lastModifiedMetric = currentTimeMillis;
+        m_metricCache = state;
     }
 
-    public synchronized Queue<ProductReviewWrapper> getState() {
-        if (m_cache == null) {
+    public Queue<BaseMetric> getMetricState() {
+        if (m_metricCache == null) {
             return new ConcurrentLinkedQueue<>();
         }
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastModified > APIConfig.CACHE_REFRESH_MILISECONDS) {
-            m_cache = new ConcurrentLinkedQueue<>();
+        if (currentTime - lastModifiedMetric > APIConfig.CACHE_REFRESH_MILISECONDS) {
+            m_metricCache = new ConcurrentLinkedQueue<>();
         }
-        return m_cache;
+        return m_metricCache;
+    }
+
+    public void setProductState(Queue<ProductReviewWrapper> state) {
+        long currentTimeMillis = System.currentTimeMillis();
+        if (currentTimeMillis - lastModifiedProduct < TEN_SECONDS_IN_MILI) {
+            return;
+        }
+        lastModifiedProduct = currentTimeMillis;
+        m_productCache = state;
+    }
+
+    public Queue<ProductReviewWrapper> getProductState() {
+        if (m_productCache == null) {
+            return new ConcurrentLinkedQueue<>();
+        }
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastModifiedProduct > APIConfig.CACHE_REFRESH_MILISECONDS) {
+            m_productCache = new ConcurrentLinkedQueue<>();
+        }
+        return m_productCache;
     }
 }

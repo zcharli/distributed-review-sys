@@ -36,7 +36,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "";
+            return "comment icon";
         }
     },
     TOTAL_PRODUCTS_TRACKED {
@@ -53,7 +53,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "";
+            return "shopping basket icon";
         }
     },
     TOTAL_REVIEWS_TRACKED {
@@ -70,7 +70,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "";
+            return "list icon";
         }
     },
     AVG_REVIEWS_PER_PRODUCT {
@@ -87,7 +87,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "";
+            return "comments outline icon";
         }
     },
     AVG_REVIEW_LENGTH {
@@ -104,7 +104,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "";
+            return "write icon";
         }
     },
     AVG_PRODUCT_STARS {
@@ -121,7 +121,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "";
+            return "star icon";
         }
     },
     REVIEWS_SUBMITTED_LAST_7 {
@@ -138,7 +138,7 @@ public enum MetricType {
             return "middle";
         }
         public String getIcon() {
-            return "";
+            return "history icon";
         }
     },
     TOP_10_VIEWED_PRODUCT {
@@ -155,7 +155,7 @@ public enum MetricType {
             return "middle";
         }
         public String getIcon() {
-            return "";
+            return "ordered list icon";
         }
     },
     TOP_10_UPVOTED_PRODUCT {
@@ -169,10 +169,10 @@ public enum MetricType {
             return "Across all product categories";
         }
         public String getPagePosition() {
-            return "";
+            return "middle";
         }
         public String getIcon() {
-            return "";
+            return "thumbs up icon";
         }
     },
     TOP_10_NEWEST_REVIEWS {
@@ -186,10 +186,10 @@ public enum MetricType {
             return "Across all product categories";
         }
         public String getPagePosition() {
-            return "";
+            return "middle";
         }
         public String getIcon() {
-            return "";
+            return "refresh icon";
         }
     },
     PERCENT_PRODUCT_TYPE {
@@ -200,13 +200,13 @@ public enum MetricType {
             return "Product by Type";
         }
         public String getDescription() {
-            return "Across all tracked products";
+            return "Across all tracked products types";
         }
         public String getPagePosition() {
-            return "";
+            return "bottom";
         }
         public String getIcon() {
-            return "";
+            return "cubes icon";
         }
     },
     AVG_STARS_PER_PRODUCT_TYPE {
@@ -217,13 +217,13 @@ public enum MetricType {
             return "Average Stars Per Product Type";
         }
         public String getDescription() {
-            return "";
+            return "Across all tracked products types";
         }
         public String getPagePosition() {
-            return "";
+            return "bottom";
         }
         public String getIcon() {
-            return "";
+            return "heart icon";
         }
     },
     AMOUNT_DISK_SPACE {
@@ -234,13 +234,13 @@ public enum MetricType {
             return "Disk Space Left";
         }
         public String getDescription() {
-            return "";
+            return "A warning to determine if more disk space is needed";
         }
         public String getPagePosition() {
-            return "";
+            return "bottom";
         }
         public String getIcon() {
-            return "";
+            return "dashboard icon";
         }
     };
 

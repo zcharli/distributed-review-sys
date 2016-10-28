@@ -43,7 +43,7 @@ public class ProductServlet {
     public void getAllProducts(final @Suspended AsyncResponse response,
                                final @QueryParam("type") String type) {
 
-        Queue<ProductReviewWrapper> productList = GlobalContext.instance().getState();
+        Queue<ProductReviewWrapper> productList = GlobalContext.instance().getProductState();
         if (productList.size() > 0) {
             response.resume(Response.ok().entity(new ProductRestWrapper().setProducts(productList)).build());
             return;
@@ -68,7 +68,7 @@ public class ProductServlet {
     @Produces(MediaType.APPLICATION_JSON)
     public void searchProducts(final @Suspended AsyncResponse response,
                                final @QueryParam("q") String query) {
-        final Queue<ProductReviewWrapper> collectorRef = GlobalContext.instance().getState();
+        final Queue<ProductReviewWrapper> collectorRef = GlobalContext.instance().getProductState();
         if (collectorRef.size() == 0) {
             getAllReviewsForProduct(DHTManager.instance().getKeysFromKeyStore(), collectorRef, m_queryWorker);
         }
@@ -232,7 +232,7 @@ public class ProductServlet {
                 }))
                 .toArray(CompletableFuture[]::new);
         CompletableFuture.allOf(productFutures).join();
-        GlobalContext.instance().setState(productList);
+        GlobalContext.instance().setProductState(productList);
     }
 
     public Map<String, CategorySearchResult> generateSearchMap() {

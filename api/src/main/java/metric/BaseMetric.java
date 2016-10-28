@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Created by cli on 10/28/2016.
  */
-public class BaseMetric {
+public abstract class BaseMetric {
 
     @JsonIgnore
-    private MetricType metricType;
+    protected MetricType metricType;
 
     public String name;
 
@@ -16,8 +16,14 @@ public class BaseMetric {
 
     public String id;
 
+    public String position;
+
+    public String description;
+
+    public String icon;
+
     public static final String type = "metric";
-    
+
     public BaseMetric() { }
 
     public BaseMetric setId(String id) {
@@ -32,6 +38,30 @@ public class BaseMetric {
 
     public BaseMetric setMetricType(MetricType metricType) {
         this.metricType = metricType;
+        component = metricType.getComponent();
+        icon = metricType.getIcon();
+        name = metricType.getName();
+        position = metricType.getPagePosition();
+        return this;
+    }
+
+    public BaseMetric setComponent(String in) {
+        component = in;
+        return this;
+    }
+
+    public BaseMetric setIcon(String in) {
+        icon = in;
+        return this;
+    }
+
+    public BaseMetric setDescription(String in) {
+        description = in;
+        return this;
+    }
+
+    public BaseMetric setPagePosition(String in) {
+        position = in;
         return this;
     }
 }

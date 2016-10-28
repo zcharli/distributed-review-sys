@@ -51,7 +51,7 @@ public class MetricServlet {
         // Average number of stars per product type
         // Amount of disk space used
 
-        final Queue<ProductReviewWrapper> productList = GlobalContext.instance().getState();
+        final Queue<ProductReviewWrapper> productList = GlobalContext.instance().getProductState();
         if (productList.size() == 0) {
             Collection<Number160> locationKeys = DHTManager.instance().getKeysFromKeyStore();
             ProductServlet.getAllReviewsForProduct(locationKeys, productList, m_queryWorker);
