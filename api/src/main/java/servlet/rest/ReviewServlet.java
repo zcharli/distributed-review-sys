@@ -78,7 +78,7 @@ public class ReviewServlet {
     }
 
     @PUT
-    @Path("/upvote/{locationId}/{contentId")
+    @Path("/upvote/{locationId}/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
     public void upvoteReview(final @Suspended AsyncResponse response,
                              final @PathParam("locationgId") String locationId,
