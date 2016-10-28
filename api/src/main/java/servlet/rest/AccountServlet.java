@@ -198,7 +198,7 @@ public class AccountServlet {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Not a valid image file type")).build();
             }
             String extension = Files.getFileExtension(fileDetail.getFileName());
-            String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + userName + extension;
+            String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + userName + "." + extension;
             try {
                 writeToFile(uploadedInputStream, uploadedFileLocation);
                 BaseAccount userAccount = objectMapper.readValue(userJson, BaseAccount.class);
