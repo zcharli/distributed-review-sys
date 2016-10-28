@@ -27,8 +27,9 @@ public class APIConfig {
     public static int MAX_RESULTS_PER_CATEGORY = 5;
     public static int MAX_TOKEN_SESSIONS = 10;
     public static String STATIC_DYNAMIC_HOME = System.getProperty("user.home") + "/static";
-    public static String IMAGE_UPLOAD_LOCATION = STATIC_DYNAMIC_HOME + "/images";
-    public static String IMAGE_RESOURCE_PATH = "static/images";
+    public static String IMAGE_RESOURCE_PATH = "/images";
+    public static String IMAGE_UPLOAD_LOCATION = STATIC_DYNAMIC_HOME + IMAGE_RESOURCE_PATH;
+
 
     public static final ImmutableSet<String> LIVE_PRODUCT_TYPES = ImmutableSet.of("commodity");
 
