@@ -9,6 +9,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
@@ -81,7 +82,11 @@ public class APIServer {
         // Set up the base path
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
-        m_servletContextHandler.setResourceBase(APIConfig.WEB_RESOURCE_PATH);
+        ResourceCollection resources = new ResourceCollection(new String[] {
+                APIConfig.WEB_RESOURCE_PATH,
+                "/home/ubuntu/static",
+        });
+        m_servletContextHandler.setBaseResource(resources);
         m_servletContextHandler.setErrorHandler(new SPAErrorRedirectModule());
         m_servletContextHandler.addFilter(ContextInjectionFilter.class, "/api/review/*", EnumSet.of(DispatcherType.REQUEST));
         m_servletContextHandler.addFilter(AuthorizationFilter.class, "/api/*", EnumSet.of(DispatcherType.REQUEST));
