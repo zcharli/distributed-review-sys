@@ -80,7 +80,7 @@ public class AccountServlet {
             }
             account.addToken(random.nextLong());
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
-                if (saveAccount(account, adapter)) {
+                if (saveAccount(account)) {
                     LOGGER.debug("Save account successful during saveUserFuture");
                 }else {
                     LOGGER.error("Error during saveUserFuture, user was not saved");
@@ -117,7 +117,7 @@ public class AccountServlet {
             account.addToken(random.nextLong());
 //            account.m_userId = Number160.createHash(account.m_email).toString();
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
-                saveAccount(account, adapter);
+                saveAccount(account);
             }, executor);
             return Response.accepted().entity(new LoginResponse<BaseAccount>(200, account)).build();
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public class AccountServlet {
             }
             String saltyPassword = hashedPassword.get();
             BaseAccount account = new BaseAccount(request.identification, saltyPassword);
-            if (saveAccount(account, adapter)) {
+            if (saveAccount(account)) {
                 return Response.accepted().entity(new LoginResponse<BaseAccount>(200, account)).build();
             } else {
                 return Response.serverError().entity(new GenericReply<String>("500", "Account creation has failed.")).build();
@@ -249,8 +249,8 @@ public class AccountServlet {
         return DHTConfig.REDIS_USERNAME_PREFIX + user;
     }
 
-    private boolean saveAccount(BaseAccount user, Jedis adapter) {
-        try {
+    private boolean saveAccount(BaseAccount user) {
+        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()){
             String accountJson = objectMapper.writeValueAsString(user);
             String reply = adapter.set(createUsernameKey(user.m_email), accountJson);
             if (!reply.equals("OK")) {
