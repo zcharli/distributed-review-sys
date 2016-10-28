@@ -2,12 +2,8 @@ package core;
 
 import config.APIConfig;
 import review.ProductReviewWrapper;
-import wrapper.ProductRestWrapper;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**

@@ -1,12 +1,14 @@
 package review;
 
+import review.response.RESTResponse;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
 /**
  * Created by cli on 10/22/2016.
  */
-public class ProductReviewWrapper {
+public class ProductReviewWrapper implements RESTResponse {
 
     public String name;
 

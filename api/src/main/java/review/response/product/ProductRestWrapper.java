@@ -1,9 +1,8 @@
-package wrapper;
+package review.response.product;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import review.BaseReview;
 import review.ProductReviewWrapper;
+import review.response.BaseRestWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -12,10 +11,10 @@ import java.util.LinkedList;
 /**
  * Created by cli on 10/22/2016.
  */
-public class ProductRestWrapper {
+public class ProductRestWrapper extends BaseRestWrapper {
 
     @JsonProperty("type")
-    public static final String type = "products";
+    public final String type = "products";
 
     @Nullable
     public Collection<ProductReviewWrapper> products;

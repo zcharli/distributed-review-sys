@@ -1,4 +1,4 @@
-package wrapper;
+package review.response.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
