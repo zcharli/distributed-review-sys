@@ -7,6 +7,7 @@ import com.google.common.io.Files;
 import config.APIConfig;
 import config.DHTConfig;
 import error.GenericReply;
+import net.tomp2p.peers.Number160;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -198,7 +199,7 @@ public class AccountServlet {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Not a valid image file type")).build();
             }
             String extension = Files.getFileExtension(fileDetail.getFileName());
-            String fileName = userName + "." + extension;
+            String fileName = Number160.createHash(userName) + "." + extension;
             String uploadedFileLocation = APIConfig.IMAGE_UPLOAD_LOCATION + "/" + fileName;
             String resourcePath = APIConfig.IMAGE_RESOURCE_PATH + "/" + fileName;
             try {
