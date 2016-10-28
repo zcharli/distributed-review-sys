@@ -78,7 +78,7 @@ public class AccountServlet {
             if (!account.m_password.equals(request.m_password) && hashedPassword != null) {
                 account.m_password = hashedPassword.get();
             }
-            account.addToken(random.nextInt());
+            account.addToken(random.nextLong());
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
                 if (saveAccount(account)) {
                     LOGGER.debug("Save account successful during saveUserFuture");
@@ -114,7 +114,7 @@ public class AccountServlet {
                     return Response.accepted().entity(new GenericReply<String>("404", "Password or username is incorrect.")).build();
                 }
             }
-            account.addToken(random.nextInt());
+            account.addToken(random.nextLong());
 //            account.m_userId = Number160.createHash(account.m_email).toString();
             CompletableFuture saveUserFuture = CompletableFuture.runAsync(() -> {
                 saveAccount(account);

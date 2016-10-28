@@ -6,7 +6,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
   constants: Ember.inject.service("constants"),
 
   model() {
-    console.log("application model hit");
     if (this.get("session.isAuthenticated")) {
       const userJson = localStorage["loggedInUser"];
       if (!userJson) {
@@ -22,14 +21,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     }
   },
 
-  hasLoggedIn: Ember.computed("session.isAuthenticated", function () {
-    console.log("session.isAuthenticated");
-  }),
-
-
   actions: {
     didTransition() {
-      console.log("transitioned");
       if (!this.controller.get("model") && this.get("session.isAuthenticated")) {
         const userJson = localStorage["loggedInUser"];
         if (!userJson) {
@@ -45,7 +38,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     },
 
     sessionInvalidate() {
-      console.log("application route invalidating the session");
       delete localStorage["loggedInUser"];
       this.get("session").invalidate();
     }

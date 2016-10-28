@@ -36,10 +36,10 @@ public class BaseAccount implements Validatable {
     public String m_profilePicUrl;
 
     @JsonProperty("token")
-    public Integer m_loginToken;
+    public String m_loginToken;
 
     @JsonProperty("tokens")
-    Deque<Integer> m_prevTokens;
+    Deque<String> m_prevTokens;
 
     public BaseAccount() {
         m_prevTokens = new LinkedList<>();
@@ -59,15 +59,15 @@ public class BaseAccount implements Validatable {
         return true;
     }
 
-    public void addToken(Integer token) {
-        m_loginToken = token;
+    public void addToken(Long token) {
+        m_loginToken = token.toString();
         if (m_prevTokens.size() > APIConfig.MAX_TOKEN_SESSIONS) {
             m_prevTokens.removeLast();
         }
-        m_prevTokens.addFirst(token);
+        m_prevTokens.addFirst(m_loginToken);
     }
 
-    public boolean hasToken(Integer token) {
+    public boolean hasToken(String token) {
         return m_prevTokens.contains(token);
     }
 }
