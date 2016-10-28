@@ -99,10 +99,10 @@ public class APIServer {
     public void makeStaticDynamicIfNotExist() {
         File theDir = new File(APIConfig.STATIC_DYNAMIC_HOME);
         if (!theDir.exists()) {
-            boolean result = false;
             try {
                 theDir.mkdir();
-                result = true;
+                theDir = new File(APIConfig.IMAGE_UPLOAD_LOCATION);
+                theDir.mkdir();
             } catch (SecurityException se) {
                 System.out.println("Error when creating dynamic upload location, make sure there is priveleges to make "
                         + APIConfig.STATIC_DYNAMIC_HOME);
