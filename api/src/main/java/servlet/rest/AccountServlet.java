@@ -64,7 +64,7 @@ public class AccountServlet {
         }
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(request.m_email));
-            if (Strings.isNullOrEmpty(accountJson) || accountJson.equals("(nil)")) {
+            if (Strings.isNullOrEmpty(accountJson)) {
                 return Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build();
             }
             final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
@@ -102,7 +102,7 @@ public class AccountServlet {
     public Response loginUser(final @ExternalLogin LoginRequest request) {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(request.username));
-            if (Strings.isNullOrEmpty(accountJson) || accountJson.equals("(nil)")) {
+            if (Strings.isNullOrEmpty(accountJson)) {
                 return Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build();
             }
             final BaseAccount account = objectMapper.readValue(accountJson, BaseAccount.class);
@@ -132,7 +132,7 @@ public class AccountServlet {
         Future<String> hashedPassword = executor.submit(new SaltedPasswordGenThread(request.password));
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountExistance = adapter.get(createUsernameKey(request.identification));
-            if (Strings.isNullOrEmpty(accountExistance) || accountExistance.equals("(nil)")) {
+            if (!Strings.isNullOrEmpty(accountExistance)) {
                 return Response.status(Response.Status.CONFLICT).entity(new GenericReply<String>("400", "A user has already registered that email.")).build();
             }
             String saltyPassword = hashedPassword.get();
@@ -159,7 +159,7 @@ public class AccountServlet {
         BaseAccount account = null;
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String accountJson = adapter.get(createUsernameKey(email));
-            if (Strings.isNullOrEmpty(accountJson) || accountJson.equals("(nil)")) {
+            if (Strings.isNullOrEmpty(accountJson)) {
                 response.resume(Response.noContent().entity(new GenericReply<String>("404", "User was not found.")).build());
             } else {
                 account = objectMapper.readValue(accountJson, BaseAccount.class);
@@ -187,7 +187,7 @@ public class AccountServlet {
         try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
             String userIdentifier = createUsernameKey(userName);
             String userJson = adapter.get(userIdentifier);
-            if (Strings.isNullOrEmpty(userJson) || userJson.equals("(nil)")) {
+            if (Strings.isNullOrEmpty(userJson)) {
                 return Response.status(400).entity(new GenericReply<>("500", "There was no user by the username " + userName)).build();
             }
             if (Strings.isNullOrEmpty(APIConfig.IMAGE_UPLOAD_LOCATION)) {
