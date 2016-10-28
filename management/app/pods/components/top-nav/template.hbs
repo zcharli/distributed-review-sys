@@ -12,7 +12,7 @@
         <div class="right menu">
             <div class="item">
               {{#if user.profile}}
-                  <img class="ui mini ciruclar image" src="{{user.profile}}"/>
+                  <img class="ui mini circular image" src="{{user.profile}}"/>
               {{else}}
                   <i class="user mini white icon image"></i>
               {{/if}}
@@ -20,7 +20,7 @@
 
             <div class="item">
               {{#if user.fname}}
-                {{user.fname}} {{user.lname}}
+                {{user.fullName}}
               {{else}}
                   &lt; no name &gt;
               {{/if}}

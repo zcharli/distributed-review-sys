@@ -32,7 +32,6 @@ public class ProductReviewWrapper {
         return this;
     }
 
-
     public ProductReviewWrapper setName(String name) {
         this.name = name;
         return this;

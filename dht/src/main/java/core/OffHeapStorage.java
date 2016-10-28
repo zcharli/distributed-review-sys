@@ -2,9 +2,8 @@ package core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.DHTConfig;
-import key.AcceptanceOffHeapKey;
 import key.DefaultOffHeapKey;
-import key.PublishedOffHeapKey;
+import metrics.Tuple;
 import msg.RedisElementContainer;
 import net.tomp2p.dht.Storage;
 import net.tomp2p.peers.Number160;
@@ -12,11 +11,9 @@ import net.tomp2p.peers.Number320;
 import net.tomp2p.peers.Number480;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
-import org.mapdb.Fun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Tuple;
 
 import java.io.IOException;
 import java.security.PublicKey;
@@ -68,7 +65,7 @@ public class OffHeapStorage implements Storage {
     public OffHeapStorage setLoadedValues(List<Object> entries) {
         for (Object entry : entries) {
             try {
-                Fun.Tuple2<Number640, RedisElementContainer> castedEntry = (Fun.Tuple2<Number640, RedisElementContainer>) entry;
+                Tuple<Number640, RedisElementContainer> castedEntry = (Tuple<Number640, RedisElementContainer>) entry;
                 dataMap.put(castedEntry.a, new Data(castedEntry.b.buffer));
             } catch (Exception e) {
                 LOGGER.error("Unabled to load values from storage due to a cast error.");

@@ -59,7 +59,7 @@ public class APIServer {
      * Default configuration
      */
     public void configure() {
-        makeStaticDynamicIfNotExist();
+        makeStaticExternalFolderINE();
         configureApi();
         configureManagementWeb();
         configureContextHandler();
@@ -85,8 +85,8 @@ public class APIServer {
         m_servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         m_servletContextHandler.setContextPath("/");
         ResourceCollection resources = new ResourceCollection(new String[]{
-                APIConfig.WEB_RESOURCE_PATH,
-                APIConfig.STATIC_DYNAMIC_HOME,
+                APIConfig.WEB_RESOURCE_PATH,   // Internal Web Resources
+                APIConfig.STATIC_DYNAMIC_HOME, // External Web Resoources
         });
         m_servletContextHandler.setBaseResource(resources);
         m_servletContextHandler.setErrorHandler(new SPAErrorRedirectModule());
@@ -96,7 +96,7 @@ public class APIServer {
         m_servletContextHandler.addServlet(m_webServletHolder, "/*");
     }
 
-    public void makeStaticDynamicIfNotExist() {
+    public void makeStaticExternalFolderINE() {
         File theDir = new File(APIConfig.STATIC_DYNAMIC_HOME);
         if (!theDir.exists()) {
             try {

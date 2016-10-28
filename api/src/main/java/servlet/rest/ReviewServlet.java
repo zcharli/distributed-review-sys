@@ -52,10 +52,6 @@ public class ReviewServlet {
     public void createNewReview(final @ExternalReview BaseReview request,
                                 final @Suspended AsyncResponse response,
                                 final @PathParam("m_productName") String identifier) {
-//        if (!identifier.equals(request.getIdentifier())) {
-//            response.resume(Response.serverError().entity(new GenericReply<String>("500", "Miss match identifier ID for creating new review.")));
-//            return;
-//        }
         String productName = null;
         try {
             productName = WordUtils.capitalize(URLDecoder.decode(identifier, "utf-8"));
@@ -79,6 +75,59 @@ public class ReviewServlet {
                 .contentKey(contentKey)
                 .domainKey(DHTConfig.ACCEPTANCE_DOMAIN).build();
         putReview(barcodeKey, request, response);
+    }
+
+    @PUT
+    @Path("/upvote/{locationId}/{contentId")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void upvoteReview(final @Suspended AsyncResponse response,
+                             final @PathParam("locationgId") String locationId,
+                             final @PathParam("contentId") String contentId) {
+        if (Strings.isNullOrEmpty(locationId) || Strings.isNullOrEmpty(contentId)) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Missing essential identifiers")));
+            return;
+        }
+
+        try {
+            final Number160 location = new Number160(locationId);
+            final Number160 content = new Number160(contentId);
+
+            final DRSKey reviewKey = DefaultDHTKeyPair.builder().contentKey(content)
+                    .domainKey(DHTConfig.PUBLISHED_DOMAIN).locationKey(location).build();
+            DHTManager.instance().getAllFromStorage(reviewKey, new AsyncResult() {
+                @Override
+                public Integer call() throws Exception {
+                    if (!isSuccessful()) {
+                        response.resume(Response.serverError()
+                                .entity(new GenericReply<String>(
+                                        "DHT-GET", "An error occurred when trying to handle the upload request"))
+                                .build());
+                        return 0;
+                    }
+                    if (payload().size() > 0) {
+                        BaseReview review = null;
+                        for (Map.Entry<Number640, Data> entry : payload().entrySet()) {
+                            if (entry.getKey().contentKey().equals(content)) {
+                                review = ((ReviewIdentity) entry.getValue().object()).identity();
+                                review.m_upvotes++;
+                                putReview(reviewKey, review, response);
+                                break;
+                            }
+                        }
+                        if (review == null) {
+                            response.resume(Response.status(Response.Status.NOT_FOUND)
+                                    .entity(new GenericReply<String>("500", "Could not find the respective review to upvote")).build());
+                        }
+                    } else {
+                        response.resume(Response.ok(new GenericReply<String>("500", "Could not find the respective review to update")).build());
+                    }
+                    return 0;
+                }
+            });
+        } catch (Exception e) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Malformatted identifiers")));
+            return;
+        }
     }
 
     @PUT
@@ -158,7 +207,7 @@ public class ReviewServlet {
                             new GenericReply<String>("DHT-ACCEPT", message())
                     ).build());
                 } else {
-                    request.fillInIds(publishedKey.getLocationKey(), publishedKey.getLocationKey(), DHTConfig.PUBLISHED_DOMAIN , fullKey);
+                    request.fillInIds(publishedKey.getLocationKey(), publishedKey.getLocationKey(), DHTConfig.PUBLISHED_DOMAIN, fullKey);
                     response.resume(Response.ok().entity(
                             new OperationCompleteResponse<BaseReview>("200", request)
                     ).build());

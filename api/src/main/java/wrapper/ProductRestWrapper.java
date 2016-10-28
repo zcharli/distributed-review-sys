@@ -17,9 +17,6 @@ public class ProductRestWrapper {
     @JsonProperty("type")
     public static final String type = "products";
 
-//    @JsonProperty("identifier")
-//    public String productIdentity;
-
     @Nullable
     public Collection<ProductReviewWrapper> products;
 
@@ -34,12 +31,6 @@ public class ProductRestWrapper {
         }
         return this;
     }
-
-//    public ProductRestWrapper setIdentifier(String id) {
-//        this.productIdentity = id;
-//        return this;
-//    }
-
     public ProductRestWrapper add(ProductReviewWrapper product) {
         if (this.products == null) {
             this.products = new LinkedList<>();

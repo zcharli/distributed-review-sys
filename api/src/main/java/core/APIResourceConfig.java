@@ -10,6 +10,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationFeature;
 import servlet.rest.AccountServlet;
+import servlet.rest.MetricServlet;
 import servlet.rest.ProductServlet;
 import servlet.rest.ReviewServlet;
 import validator.ValidationConfigContext;
@@ -23,6 +24,7 @@ public class APIResourceConfig extends ResourceConfig {
         packages(AccountServlet.class.getPackage().getName());
         packages(ReviewServlet.class.getPackage().getName());
         packages(ProductServlet.class.getPackage().getName());
+        packages(MetricServlet.class.getPackage().getName());
 
         register(ValidationConfigContext.class);
         register(ValidationExceptionMapper.class);

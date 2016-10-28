@@ -6,6 +6,7 @@ import exceptions.InitializationFailedException;
 import metrics.ConcurrentTrackingList;
 import metrics.MetricsCollector;
 import metrics.TrackingContext;
+import metrics.Tuple;
 import msg.RedisElementContainer;
 import net.tomp2p.connection.Bindings;
 import net.tomp2p.dht.PeerBuilderDHT;
@@ -16,8 +17,6 @@ import net.tomp2p.p2p.PeerBuilder;
 import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.peers.PeerAddress;
-import net.tomp2p.storage.Data;
-import org.mapdb.Fun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -124,7 +123,7 @@ public class DHTProfile {
                                     , new Number160(data.getDomainBuffer())
                                     , new Number160(data.getContentBuffer())
                                     , new Number160(data.getVersionBuffer()));
-                            Fun.Tuple2<Number640, RedisElementContainer> entry = new Fun.Tuple2<>(mapKey, data);
+                            Tuple<Number640, RedisElementContainer> entry = new Tuple<>(mapKey, data);
                             fromDisk.get(StorageTypes.DHT).add(entry);
                             LOGGER.debug("Loaded a element from disk: " + mapKey.toString());
                         } catch (IOException e) {
@@ -135,11 +134,17 @@ public class DHTProfile {
                     if (!fromDisk.containsKey(StorageTypes.METRIC)) {
                         fromDisk.put(StorageTypes.METRIC, new LinkedList<>());
                     }
+                    String[] split = key.split(":");
+                    if (split.length < 3) {
+                        LOGGER.error("Location key found less than 3 parts. Invalid, required trk:loc:id...");
+                        continue;
+                    }
+                    Number160 locationKey = new Number160(split[2]);
                     for (String jsonData : adapter.lrange(key, 0, -1)) {
                         try {
-                            TrackingContext fromBuffer = objectMapper.readValue(jsonData, TrackingContext.class);
-                            Number160 keyFromBuffer = new Number160(fromBuffer.locationBuffer);
-                            Fun.Tuple2<Number160, TrackingContext> entry = new Fun.Tuple2<>(keyFromBuffer, fromBuffer);
+                            TrackingContext[] fromBuffer = objectMapper.readValue(jsonData, TrackingContext[].class);
+                            Number160 keyFromBuffer = locationKey;
+                            Tuple<Number160, TrackingContext[]> entry = new Tuple<>(keyFromBuffer, fromBuffer);
                             fromDisk.get(StorageTypes.METRIC).add(entry);
                         } catch (Exception e) {
                             LOGGER.error("Error reading in load tracked data");
@@ -200,24 +205,6 @@ public class DHTProfile {
         } else {
             LOGGER.info("Client successfully connected to bootstrap server.");
         }
-    }
-
-    public ConcurrentTrackingList<Number160, TrackingContext> loadTrackedData() {
-        ConcurrentTrackingList<Number160, TrackingContext> cache = new ConcurrentTrackingList<Number160, TrackingContext>();
-        final ObjectMapper objectMapper = new ObjectMapper();
-        try (Jedis adapter = DHTConfig.REDIS_RESOURCE_POOL.getResource()) {
-
-            for (String jsonData : adapter.lrange(DHTConfig.TRACKED_ID, 0, -1)) {
-                try {
-                    TrackingContext fromBuffer = objectMapper.readValue(jsonData, TrackingContext.class);
-                    Number160 keyFromBuffer = new Number160(fromBuffer.locationBuffer);
-                    cache.silentLoad(keyFromBuffer, fromBuffer);
-                } catch (Exception e) {
-                    LOGGER.error("Error reading in load tracked data");
-                }
-            }
-        }
-        return cache;
     }
 
     /**

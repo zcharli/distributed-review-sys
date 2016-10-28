@@ -1,13 +1,13 @@
 package servlet.rest;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 import config.APIConfig;
 import config.DHTConfig;
 import core.DHTManager;
 import core.GlobalContext;
 import error.GenericReply;
 import key.DefaultDHTKeyPair;
+import net.tomp2p.peers.Number160;
 import net.tomp2p.storage.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,7 +24,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,48 +44,16 @@ public class ProductServlet {
     public void getAllProducts(final @Suspended AsyncResponse response,
                                final @QueryParam("type") String type) {
 
-        Queue<ProductReviewWrapper> productList = new ConcurrentLinkedQueue<>();
+        Queue<ProductReviewWrapper> productList = GlobalContext.instance().getState();
+        if (productList.size() > 0) {
+            response.resume(Response.ok().entity(new ProductRestWrapper().setProducts(productList)).build());
+            return;
+        }
         // TODO: Limit the number of possible keys we can fetch at a time, say MAX 10
         final CompletableFuture<?> fetchAllProducts = CompletableFuture.supplyAsync(() -> DHTManager.instance().getKeysFromKeyStore(), m_queryWorker)
                 .thenApply(locationKeys -> {
-                            final CompletableFuture<?>[] productFutures = locationKeys.stream()
-                                    .map(key -> CompletableFuture.runAsync(() -> {
-                                        final ProductReviewWrapper product = new ProductReviewWrapper().setId(key.toString());
-                                        // TODO: look into returning just a fixed number of reviews to paginate
-                                        final Collection<Data> reviews = DHTManager.instance()
-                                                .getAllFromStorage(DefaultDHTKeyPair.builder()
-                                                        .locationKey(key)
-                                                        .domainKey(DHTConfig.PUBLISHED_DOMAIN)
-                                                        .build());
-                                        if (reviews != null) {
-                                            reviews.forEach(review -> {
-                                                try {
-                                                    final BaseReview basePointer = (BaseReview) review.object();
-                                                    if (!Strings.isNullOrEmpty(basePointer.m_productName) && Strings.isNullOrEmpty(product.name)) {
-                                                        product.setName(basePointer.m_productName);
-                                                    }
-                                                    if (!Strings.isNullOrEmpty(basePointer.getIdentifier()) && Strings.isNullOrEmpty(product.identifier)) {
-                                                        product.setIdentifier(basePointer.getIdentifier());
-                                                    }
-                                                    if (!Strings.isNullOrEmpty(basePointer.getType()) && Strings.isNullOrEmpty(product.type)) {
-                                                        product.setType(basePointer.getType());
-                                                    }
-                                                    product.add(basePointer);
-                                                } catch (Exception e) {
-                                                    LOGGER.error("Exception when trying to retrieve review object from Data: " + e.getMessage());
-                                                }
-                                            });
-                                            productList.add(product);
-                                        }
-                                    }, m_queryWorker).exceptionally(ex -> {
-                                        LOGGER.error("An error occured when fetch all reviews from locations: " + ex.getMessage());
-                                        ex.printStackTrace();
-                                        return null;
-                                    }))
-                                    .toArray(CompletableFuture[]::new);
-                            CompletableFuture.allOf(productFutures).join();
+                            getAllReviewsForProduct(locationKeys, productList, m_queryWorker);
                             response.resume(Response.ok().entity(new ProductRestWrapper().setProducts(productList)).build());
-                            GlobalContext.instance().setState(productList);
                             return productList;
                         }
                 ).exceptionally(ex -> {
@@ -103,10 +70,10 @@ public class ProductServlet {
     public void searchProducts(final @Suspended AsyncResponse response,
                                final @QueryParam("q") String query) {
         final Queue<ProductReviewWrapper> collectorRef = GlobalContext.instance().getState();
-
         if (collectorRef.size() == 0) {
-            response.resume(Response.ok(new ProductSearchRestWrapper()).build());
+            getAllReviewsForProduct(DHTManager.instance().getKeysFromKeyStore(), collectorRef, m_queryWorker);
         }
+
         final ProductSearchRestWrapper searchResults = new ProductSearchRestWrapper();
 
         // Fill in this search map in parallel
@@ -170,15 +137,7 @@ public class ProductServlet {
                             case "Review":
                                 final CompletableFuture<?>[] searchAllReviews = product.reviews.stream()
                                         .map(review -> CompletableFuture.runAsync(() -> {
-                                            final String reviewURL = "product.review";// + product.identifier + "/inspect/" + review.getAbsoluteId();
-
-//                                            else if (!Strings.isNullOrEmpty(review.m_productName) && review.m_productName.contains(query)) {
-//                                                categoryResults.addCategory(new CategorySearchResultDescription()
-//                                                        .setTitle("Matched Product Name")
-//                                                        .setDescription(review.m_productName)
-//                                                        .setURL(reviewURL));
-//                                            }
-
+                                            final String reviewURL = "product.review";
                                             if (!Strings.isNullOrEmpty(review.m_content) && StringUtils.containsIgnoreCase(review.m_content, query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Review")
@@ -187,13 +146,6 @@ public class ProductServlet {
                                                         .setModel("review")
                                                         .setParam(review.getAbsoluteId()));
                                             }
-//                                            else if (!Strings.isNullOrEmpty(review.getType()) && review.getType().contains(query)) {
-//                                                categoryResults.addCategory(new CategorySearchResultDescription()
-//                                                        .setTitle("Matched Type")
-//                                                        .setDescription(review.getType())
-//                                                        .setURL(reviewURL));
-//                                            }
-
                                             if (!Strings.isNullOrEmpty(review.m_title) && StringUtils.containsIgnoreCase(review.m_title, query)) {
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Title")
@@ -242,6 +194,46 @@ public class ProductServlet {
         CompletableFuture.allOf(searchAllProducts).join();
         searchResults.setAllCategories(categories);
         response.resume(Response.ok().entity(searchResults).build());
+    }
+
+    public static void getAllReviewsForProduct(Collection<Number160> locationKeys, final Queue<ProductReviewWrapper> productList, ExecutorService queryWorker) {
+        final CompletableFuture<?>[] productFutures = locationKeys.stream()
+                .map(key -> CompletableFuture.runAsync(() -> {
+                    final ProductReviewWrapper product = new ProductReviewWrapper().setId(key.toString());
+                    // TODO: look into returning just a fixed number of reviews to paginate
+                    final Collection<Data> reviews = DHTManager.instance()
+                            .getAllFromStorage(DefaultDHTKeyPair.builder()
+                                    .locationKey(key)
+                                    .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                                    .build());
+                    if (reviews != null) {
+                        reviews.forEach(review -> {
+                            try {
+                                final BaseReview basePointer = (BaseReview) review.object();
+                                if (!Strings.isNullOrEmpty(basePointer.m_productName) && Strings.isNullOrEmpty(product.name)) {
+                                    product.setName(basePointer.m_productName);
+                                }
+                                if (!Strings.isNullOrEmpty(basePointer.getIdentifier()) && Strings.isNullOrEmpty(product.identifier)) {
+                                    product.setIdentifier(basePointer.getIdentifier());
+                                }
+                                if (!Strings.isNullOrEmpty(basePointer.getType()) && Strings.isNullOrEmpty(product.type)) {
+                                    product.setType(basePointer.getType());
+                                }
+                                product.add(basePointer);
+                            } catch (Exception e) {
+                                LOGGER.error("Exception when trying to retrieve review object from Data: " + e.getMessage());
+                            }
+                        });
+                        productList.add(product);
+                    }
+                }, queryWorker).exceptionally(ex -> {
+                    LOGGER.error("An error occured when fetch all reviews from locations: " + ex.getMessage());
+                    ex.printStackTrace();
+                    return null;
+                }))
+                .toArray(CompletableFuture[]::new);
+        CompletableFuture.allOf(productFutures).join();
+        GlobalContext.instance().setState(productList);
     }
 
     public Map<String, CategorySearchResult> generateSearchMap() {

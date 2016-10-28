@@ -22,6 +22,8 @@ public class APIConfig {
     public static final String WEB_RESOURCE_PATH;
     public static final String DEFAULT_STEP = "5";
 
+
+    public static long CACHE_REFRESH_MILISECONDS = 900000;
     public static final ImmutableList<String> SEARCH_CATEGORIES;
     public static final Queue<String> CURRENT_SEARCH_CATEGORIES;
     public static int MAX_RESULTS_PER_CATEGORY = 5;

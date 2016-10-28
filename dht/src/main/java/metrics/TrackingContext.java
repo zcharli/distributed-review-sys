@@ -1,20 +1,36 @@
 package metrics;
 
 import config.DHTConfig;
+import net.tomp2p.peers.Number160;
 
 /**
  * Created by cli on 10/10/2016.
  */
-public class TrackingContext {
-    public int[] locationBuffer;
+public class TrackingContext implements TrackingContextView {
+    public Number160 locationKey;
     public long numberOfHits;
     public String trackedDomain;
+    public MetricsCollector.TrackingType trackingType;
+    public long lastModified;
 
     public TrackingContext() { }
 
-    public TrackingContext(int[] locationBuf) {
-        locationBuffer = locationBuf;
+    public TrackingContext(Number160 locationBuf, MetricsCollector.TrackingType type) {
+        locationKey = locationBuf;
         numberOfHits = 1;
         trackedDomain = DHTConfig.MY_DOMAIN;
+        trackingType = type;
+    }
+    public Number160 getPrimary() {
+        return locationKey;
+    }
+
+    public MetricsCollector.TrackingType getType() {
+        return trackingType;
+    }
+
+    public void incrementHits() {
+        numberOfHits++;
+        lastModified = System.currentTimeMillis();
     }
 }
