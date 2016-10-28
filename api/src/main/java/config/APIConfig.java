@@ -29,7 +29,7 @@ public class APIConfig {
     public static String STATIC_DYNAMIC_HOME = System.getProperty("user.home") + "/static";
     public static String IMAGE_RESOURCE_PATH = "/images";
     public static String IMAGE_UPLOAD_LOCATION = STATIC_DYNAMIC_HOME + IMAGE_RESOURCE_PATH;
-    public static String ABSOLUTE_IMAGE_RESOURCE_PATH = DEFAULT_HOST + IMAGE_UPLOAD_LOCATION;
+    public static String ABSOLUTE_IMAGE_RESOURCE_PATH = DEFAULT_HOST + IMAGE_RESOURCE_PATH;
 
 
     public static final ImmutableSet<String> LIVE_PRODUCT_TYPES = ImmutableSet.of("commodity");
@@ -56,6 +56,10 @@ public class APIConfig {
             LOGGER.debug("Set web resource path to: " + WEB_RESOURCE_PATH);
         }
         System.out.println("Set web resource path to: " + WEB_RESOURCE_PATH);
+    }
+
+    public static void setDynamicResourcePath(String host) {
+        ABSOLUTE_IMAGE_RESOURCE_PATH = host + IMAGE_RESOURCE_PATH;
     }
 
     private APIConfig() {}

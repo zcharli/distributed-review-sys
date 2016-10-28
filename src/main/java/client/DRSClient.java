@@ -72,6 +72,8 @@ public class DRSClient {
 
         if (host == null) {
             host = APIConfig.DEFAULT_HOST;
+        } else {
+            APIConfig.setDynamicResourcePath(host);
         }
         if (port == -1) {
             port = APIConfig.API_PORT;
