@@ -191,7 +191,7 @@ public class AccountServlet {
                 return Response.status(400).entity(new GenericReply<>("500", "There was no user by the username " + userName)).build();
             }
             if (Strings.isNullOrEmpty(APIConfig.IMAGE_UPLOAD_LOCATION)) {
-                APIConfig.IMAGE_UPLOAD_LOCATION = getClass().getResource("/webapp/images").getPath();
+                APIConfig.IMAGE_UPLOAD_LOCATION = getClass().getResource("/webapp/images").getPath(); // TODO: remove!
             }
             matcher = pattern.matcher(fileDetail.getFileName());
             if (!matcher.matches()) {

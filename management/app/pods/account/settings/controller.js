@@ -14,12 +14,12 @@ export default Ember.Controller.extend({
   }),
 
   imgurPostObj: Ember.computed("model", function() {
-    const email = this.get("model.email");
+    const id = this.get("model.id");
     const api = this.get('constants.baseApi') + "/account/upload";
     return {
       url: api,
       data: {
-        key: email
+        key: id
       }
     };
   }),
