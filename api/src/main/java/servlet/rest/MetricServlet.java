@@ -177,7 +177,7 @@ public class MetricServlet {
         float avgRPP = totalReviews / productList.size();
         SingleMetric avgReviewPerProduct = new SingleMetric()
                 .setMetricType(MetricType.AVG_REVIEW_PER_PRODUCT)
-                .setValue(String.format("%0.2f", avgRPP));
+                .setValue(String.format("%.2f", avgRPP));
         metricsList.add(avgReviewPerProduct);
 
         SingleMetric totalNumProducts = new SingleMetric()
@@ -198,12 +198,12 @@ public class MetricServlet {
         float avgLR = totalWordLength / totalReviews;
         SingleMetric averageLenReviews = new SingleMetric()
                 .setMetricType(MetricType.AVG_REVIEW_LENGTH)
-                .setValue(String.format("%0.2f", avgLR));
+                .setValue(String.format("%.2f", avgLR));
         metricsList.add(averageLenReviews);
 
         SingleMetric avgProductStars = new SingleMetric()
                 .setMetricType(MetricType.AVG_PRODUCT_STARS)
-                .setValue(String.format("%0.2f", averageStars / (float) productList.size()));
+                .setValue(String.format("%.2f", averageStars / (float) productList.size()));
         metricsList.add(avgProductStars);
 
         MultiValueMetric reviewsFromThisWeek = new MultiValueMetric()
