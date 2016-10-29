@@ -87,7 +87,7 @@ public class MetricsCollector {
         }
         TrackingContext[] tracker = m_trackingCache.get(Number160.ZERO);
         int denied = TrackingType.DENIED.ordinal();
-        if (tracker != null && tracker[denied] != null) {
+        if (tracker != null && tracker.length > 1 && tracker[denied] != null) {
             return tracker[denied].getValue();
         }
         return 0;
