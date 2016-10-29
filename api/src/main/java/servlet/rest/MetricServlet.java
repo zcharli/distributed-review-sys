@@ -195,7 +195,8 @@ public class MetricServlet {
 
         SingleMetric acceptanceRate = new SingleMetric()
                 .setMetricType(MetricType.ACCEPTANCE_RATE)
-                .setValue(Long.toString(DHTManager.instance().getNumDeniedKeys()));
+                .setValue(String.format("%.2f",
+                        (float)totalReviews/ (float)(totalReviews + DHTManager.instance().getNumDeniedKeys())));
         metricsList.add(acceptanceRate);
 
         float avgLR = totalWordLength / totalReviews;

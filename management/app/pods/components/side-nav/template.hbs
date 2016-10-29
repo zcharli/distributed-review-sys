@@ -1,10 +1,12 @@
 <div id="toc">
     <div class="ui vertical inverted sidebar menu left overlay visible">
         <div class="item">
-            <a class="ui logo icon image" href="/">
-                <img src="/images/logo.png">
-            </a>
-            <a href="/"><b>Management</b></a>
+          {{#link-to "index"  class="ui logo icon image"}}
+              <img src="/images/logo.png">
+          {{/link-to}}
+          {{#link-to "index"  class="ui logo icon image"}}
+              <b class="management-title">Management</b>
+          {{/link-to}}
         </div>
         <div class="item">
             <div class="header">Product Administration</div>
@@ -52,9 +54,9 @@
 
                 <div class="item">
                   {{#if userName}}
-                    <p>
-                      {{userName}}
-                    </p>
+                      <p>
+                        {{userName}}
+                      </p>
                   {{else}}
                       <p class="ui white">&lt; no name &gt;</p>
                   {{/if}}
@@ -64,7 +66,7 @@
         </div>
     </div>
 
-    <div class="ui container">
+    <div class="ui fluid container">
       {{yield}}
     </div>
 </div>

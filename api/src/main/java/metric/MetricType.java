@@ -32,7 +32,7 @@ public enum MetricType {
             return "Average Reviews";
         }
         public String getDescription() {
-            return "Per each product.";
+            return "Per each product";
         }
         public String getPagePosition() {
             return "top";
@@ -49,7 +49,7 @@ public enum MetricType {
             return "Total Products";
         }
         public String getDescription() {
-            return "Tracked by us.";
+            return "Tracked by this app";
         }
         public String getPagePosition() {
             return "top";
@@ -66,7 +66,7 @@ public enum MetricType {
             return "Total Reviews";
         }
         public String getDescription() {
-            return "Tracked by us.";
+            return "Tracked by this app";
         }
         public String getPagePosition() {
             return "top";
@@ -83,7 +83,7 @@ public enum MetricType {
             return "Reviews Acceptance";
         }
         public String getDescription() {
-            return "Accept vs Denied.";
+            return "Accept vs Denied";
         }
         public String getPagePosition() {
             return "top";
@@ -100,7 +100,7 @@ public enum MetricType {
             return "Review Length";
         }
         public String getDescription() {
-            return "Average amount of words";
+            return "Average words";
         }
         public String getPagePosition() {
             return "top";
@@ -117,7 +117,7 @@ public enum MetricType {
             return "Product Stars";
         }
         public String getDescription() {
-            return "Average stars on reviews";
+            return "Average stars";
         }
         public String getPagePosition() {
             return "top";
