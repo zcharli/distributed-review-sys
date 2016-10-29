@@ -180,7 +180,7 @@ public class MetricServlet {
         float avgRPP = totalReviews / productList.size();
         SingleMetric avgReviewPerProduct = new SingleMetric()
                 .setMetricType(MetricType.AVG_REVIEW_PER_PRODUCT)
-                .setValue(String.format("%.2f", avgRPP));
+                .setValue(String.format("%.1f", avgRPP));
         metricsList.add(avgReviewPerProduct);
 
         SingleMetric totalNumProducts = new SingleMetric()
@@ -195,19 +195,19 @@ public class MetricServlet {
 
         SingleMetric acceptanceRate = new SingleMetric()
                 .setMetricType(MetricType.ACCEPTANCE_RATE)
-                .setValue(String.format("%.2f",
-                        (float)totalReviews/ (float)(totalReviews + DHTManager.instance().getNumDeniedKeys())));
+                .setValue(String.format("%d\\%",
+                        ((float)totalReviews/ (float)(totalReviews + DHTManager.instance().getNumDeniedKeys()))*100));
         metricsList.add(acceptanceRate);
 
         float avgLR = totalWordLength / totalReviews;
         SingleMetric averageLenReviews = new SingleMetric()
                 .setMetricType(MetricType.AVG_REVIEW_LENGTH)
-                .setValue(String.format("%.2f", avgLR));
+                .setValue(String.format("%.1f", avgLR));
         metricsList.add(averageLenReviews);
 
         SingleMetric avgProductStars = new SingleMetric()
                 .setMetricType(MetricType.AVG_PRODUCT_STARS)
-                .setValue(String.format("%.2f", averageStars / (float) productList.size()));
+                .setValue(String.format("%.1f/5", averageStars / (float) productList.size()));
         metricsList.add(avgProductStars);
 
         MultiValueMetric reviewsFromThisWeek = new MultiValueMetric()
