@@ -78,6 +78,9 @@ public class DRSClient {
         } else {
             if (!Strings.isNullOrEmpty(floatingIP)) {
                 APIConfig.setDynamicResourcePath(floatingIP);
+                APIConfig.DEFAULT_HOST = floatingIP;
+            } else {
+                APIConfig.DEFAULT_HOST = host;
             }
         }
         if (port == -1) {

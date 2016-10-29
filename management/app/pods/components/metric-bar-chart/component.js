@@ -1,13 +1,13 @@
 import Ember from 'ember';
-import ColorGenerator from 'mixins/color-generator';
+import ColorGenerator from '../../../mixins/color-generator';
 
 export default Ember.Component.extend(ColorGenerator, {
-  classNames: ['metric-bar-chart'],
+  classNames: ['metric-bar-chart', "fullwidth"],
   baseBarColor: "#2c2c2c",
   colorStep: 0.05,
 
-  backgroundColors: Ember.computed('baseBarColor', 'model.values', function () {
-    const numColorsToGen = this.get("model.values").length;
+  backgroundColors: Ember.computed('baseBarColor', 'data.values', function () {
+    const numColorsToGen = this.get("data.values").length;
     const step = this.get("colorStep");
     const baseColor = this.get("baseBarColor");
     const colorCodes = [];
@@ -27,13 +27,13 @@ export default Ember.Component.extend(ColorGenerator, {
 
   chartData: function () {
     return {
-      data: this.get("model.values"),
+      labels: this.get("data.values"),
       datasets: [{
         // fillColor: "rgb(44, 44, 44)",
         backgroundColor: this.get('backgroundColors'),
         strokeColor: 'black',
-        data: this.get("model.labels"),
-        label: this.get("model.name"),
+        data: this.get("data.values"),
+        label: "Historical metric",
       }]
     };
   }.property('model')

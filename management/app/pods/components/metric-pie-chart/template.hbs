@@ -1,2 +1,17 @@
-hi
+<div class="ui basic segment">
+    <div class="ui center aligned grid pie-header">
+        <h3 class="ui center aligned header">
+            <i class="{{data.icon}}"></i>
+            <div class="content">
+              {{data.name}}
+                <div class="sub header">
+                  {{data.description}}
+                </div>
+            </div>
+        </h3>
+    </div>
+
+  {{ember-chart type='pie' data=chartData options=chartOptions height=200}}
+</div>
+
 {{yield}}

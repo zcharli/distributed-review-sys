@@ -1,2 +1,32 @@
-hi
+<h3 class="ui header">
+    <i class="{{data.icon}}"></i>
+    <div class="content">
+      {{data.name}}
+        <div class="sub header">
+          {{data.description}}
+        </div>
+    </div>
+</h3>
+<table class="ui very basic table">
+    <thead>
+    <tr>
+        <th>Review</th>
+        <th>Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Approved</td>
+        <td>None</td>
+    </tr>
+    <tr>
+        <td>Approved</td>
+        <td>Requires call</td>
+    </tr>
+    <tr>
+        <td>Denied</td>
+        <td>None</td>
+    </tr>
+    </tbody>
+</table>
 {{yield}}

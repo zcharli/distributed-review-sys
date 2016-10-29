@@ -17,7 +17,7 @@ public class APIConfig {
     private final static Logger LOGGER = LoggerFactory.getLogger(APIConfig.class);
 
     public static int API_PORT = 8080;
-    public static final String DEFAULT_HOST = "127.0.0.1";
+    public static String DEFAULT_HOST = "127.0.0.1";
     public static final APIConfig INSTANCE;
     public static final String WEB_RESOURCE_PATH;
     public static final String DEFAULT_STEP = "5";

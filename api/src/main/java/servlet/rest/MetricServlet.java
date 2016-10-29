@@ -121,7 +121,7 @@ public class MetricServlet {
                     TrackingContext usageTracking = trackingContexts[MetricsCollector.TrackingType.USAGE.ordinal()];
                     if (usageTracking != null) {
                         long views = usageTracking.getValue();
-                        topTenMostViewed.offer(new PreviewReviewMetric(product.identifier, product.name, views));
+                        topTenMostViewed.offer(new PreviewReviewMetric(product, views));
                     }
                 }
                 locationKey = null;
@@ -140,10 +140,10 @@ public class MetricServlet {
                 if (averageStarPerProductType.containsKey(review.getType())) {
                     averageStarPerProductType.put(review.getType(), averageStarPerProductType.get(review.getType()) + 1);
                 }
-                topTenMostRecent.offer(new PreviewReviewMetric(review.getIdentifier(), review.m_title, review.m_publishTime));
+                topTenMostRecent.offer(new PreviewReviewMetric(review, review.m_publishTime));
             }
 
-            topTenUpvoted.offer(new PreviewReviewMetric(product.identifier, product.name, productViews));
+            topTenUpvoted.offer(new PreviewReviewMetric(product, productViews));
             averageStars += starsPerProduct / (float) product.reviews.size();
         }
 
