@@ -23,7 +23,7 @@ public abstract class BaseMetric {
 
     public String icon;
 
-    public static final String type = "metric";
+    public final String type = "metric";
 
     public BaseMetric() { }
 

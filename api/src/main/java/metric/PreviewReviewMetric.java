@@ -10,6 +10,7 @@ public class PreviewReviewMetric {
     public String title;
     public String id;
     public long value;
+    public String type = "preview";
 
     public PreviewReviewMetric() {
         this("","",0);

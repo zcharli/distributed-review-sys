@@ -1,1 +1,29 @@
+
+<div class="ui equal width center aligned padded grid">
+    <div class="six column row">
+        {{#each topStats as |stat|}}
+            <div class="column">
+                {{component stat.component data=stat}}
+            </div>
+        {{/each}}
+    </div>
+    <div class="row">
+        {{component mainBarChart.component data=mainBarChart}}
+    </div>
+    <div class="three column row">
+        {{#each midTopTens as |stat| }}
+          <div class="column">
+              {{component stat.component data=stat}}
+          </div>
+        {{/each}}
+    </div>
+    <div class="three column row">
+      {{#each bottomStatistics as |stat| }}
+          <div class="column">
+            {{component stat.component data=stat}}
+          </div>
+      {{/each}}
+    </div>
+</div>
+
 {{outlet}}

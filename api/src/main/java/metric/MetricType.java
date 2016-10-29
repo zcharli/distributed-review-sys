@@ -137,7 +137,7 @@ public enum MetricType {
             return "An aggregate of published reviews in the last 7 days";
         }
         public String getPagePosition() {
-            return "middle";
+            return "center";
         }
         public String getIcon() {
             return "history icon";

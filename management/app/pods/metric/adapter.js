@@ -1,5 +1,9 @@
 import DS from 'ember-data';
 import Ember from 'ember';
+import Inflector from 'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.uncountable('metric');
 
 export default DS.RESTAdapter.extend({
   constants: Ember.inject.service('constants'),
