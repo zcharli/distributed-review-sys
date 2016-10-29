@@ -22,6 +22,7 @@ public class APIConfig {
     public static final String WEB_RESOURCE_PATH;
     public static final String DEFAULT_STEP = "5";
 
+    public static int PREVIEW_TITLE_LENGTH = 25;
     public static int TOP_X_METRIC = 10;
     public static int MAX_PREVIEW_LENGTH = 140;
     public static int SHOW_REVIEW_FOR_LAST_X_DAYS = 7;

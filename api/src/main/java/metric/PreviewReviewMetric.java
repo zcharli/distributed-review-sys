@@ -20,7 +20,8 @@ public class PreviewReviewMetric {
 
     public PreviewReviewMetric(ProductReviewWrapper product, long views) {
         this.identifier = product.identifier;
-        this.title = product.name;
+        this.title = product.name.length() > APIConfig.PREVIEW_TITLE_LENGTH
+                ? product.name.substring(0, APIConfig.PREVIEW_TITLE_LENGTH) + "..." : product.name;
         this.value = views;
         this.id = Number160.createHash(identifier + title).toString();
         this.url = new String[] {"product.show", product.id};
@@ -28,7 +29,8 @@ public class PreviewReviewMetric {
 
     public PreviewReviewMetric(BaseReview review, long views) {
         this.identifier = review.getIdentifier();
-        this.title = review.m_title;
+        this.title = review.m_title.length() > APIConfig.PREVIEW_TITLE_LENGTH
+                ? review.m_title.substring(0, APIConfig.PREVIEW_TITLE_LENGTH) + "..." : review.m_title;
         this.value = views;
         this.id = Number160.createHash(identifier + title).toString();
         this.url = new String[] {"product.review", review.m_dhtAbsoluteKey};

@@ -4,7 +4,7 @@ import ColorGenerator from '../../../mixins/color-generator';
 export default Ember.Component.extend(ColorGenerator, {
   classNames: ['metric-bar-chart', "fullwidth"],
   baseBarColor: "#2c2c2c",
-  colorStep: 0.05,
+  colorStep: 0.14,
 
   backgroundColors: Ember.computed('baseBarColor', 'data.values', function () {
     const numColorsToGen = this.get("data.values").length;
@@ -27,7 +27,7 @@ export default Ember.Component.extend(ColorGenerator, {
 
   chartData: function () {
     return {
-      labels: this.get("data.values"),
+      labels: this.get("data.labels"),
       datasets: [{
         // fillColor: "rgb(44, 44, 44)",
         backgroundColor: this.get('backgroundColors'),
@@ -36,5 +36,5 @@ export default Ember.Component.extend(ColorGenerator, {
         label: "Historical metric",
       }]
     };
-  }.property('model')
+  }.property('data')
 });
