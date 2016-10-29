@@ -1,5 +1,4 @@
 import { moduleForComponent, test } from 'ember-qunit';
-import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('metric-pie-chart', 'Integration | Component | metric pie chart', {
   integration: true
@@ -8,17 +7,6 @@ moduleForComponent('metric-pie-chart', 'Integration | Component | metric pie cha
 test('it renders', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
+  assert.equal(true, true);
 
-  this.render(hbs`{{metric-pie-chart}}`);
-
-  assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#metric-pie-chart}}
-      template block text
-    {{/metric-pie-chart}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });
