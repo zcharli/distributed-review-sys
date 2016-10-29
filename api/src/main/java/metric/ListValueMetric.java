@@ -8,19 +8,19 @@ import java.util.List;
  */
 public class ListValueMetric extends BaseMetric {
 
-    public List<PreviewReviewMetric> preview;
+    public List<PreviewReviewMetric> previews;
 
     public ListValueMetric() {
-        preview = new LinkedList<>();
+        previews = new LinkedList<>();
     }
 
     public ListValueMetric setReview(List<PreviewReviewMetric> in) {
-        this.preview = in;
+        this.previews = in;
         return this;
     }
 
     public ListValueMetric addReview(PreviewReviewMetric in) {
-        this.preview.add(in);
+        this.previews.add(in);
         return this;
     }
 

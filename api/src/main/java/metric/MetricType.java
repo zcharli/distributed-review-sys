@@ -148,7 +148,7 @@ public enum MetricType {
             return "metric-list";
         }
         public String getName() {
-            return "Top " + APIConfig.TOP_X_METRIC + " 10 Viewed Products";
+            return "Top " + APIConfig.TOP_X_METRIC + " Viewed Products";
         }
         public String getDescription() {
             return "Across all product categories";
@@ -165,7 +165,7 @@ public enum MetricType {
             return "metric-list";
         }
         public String getName() {
-            return "Top " + APIConfig.TOP_X_METRIC + " 10 Upvoted Products";
+            return "Top " + APIConfig.TOP_X_METRIC + " Upvoted Products";
         }
         public String getDescription() {
             return "Across all product categories";

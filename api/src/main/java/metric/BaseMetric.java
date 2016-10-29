@@ -1,6 +1,7 @@
 package metric;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.tomp2p.peers.Number160;
 
 /**
  * Created by cli on 10/28/2016.
@@ -10,7 +11,7 @@ public abstract class BaseMetric {
     @JsonIgnore
     protected MetricType metricType;
 
-    public String name;
+    public String name; // MUST be unique
 
     public String component;
 
@@ -42,6 +43,8 @@ public abstract class BaseMetric {
         icon = metricType.getIcon();
         name = metricType.getName();
         position = metricType.getPagePosition();
+        description = metricType.getDescription();
+        this.id = Number160.createHash(name).toString();
         return this;
     }
 

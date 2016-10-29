@@ -1,6 +1,8 @@
 package metric;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by cli on 10/28/2016.
  */
