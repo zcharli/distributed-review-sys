@@ -27,8 +27,8 @@ public class PreviewReviewMetric {
     }
 
     public PreviewReviewMetric(BaseReview review, long views) {
-        this.identifier = identifier;
-        this.title = title;
+        this.identifier = review.getIdentifier();
+        this.title = review.m_title;
         this.value = views;
         this.id = Number160.createHash(identifier + title).toString();
         this.url = new String[] {"product.review", review.m_dhtAbsoluteKey};

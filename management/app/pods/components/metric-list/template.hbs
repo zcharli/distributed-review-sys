@@ -15,18 +15,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>Approved</td>
-        <td>None</td>
-    </tr>
-    <tr>
-        <td>Approved</td>
-        <td>Requires call</td>
-    </tr>
-    <tr>
-        <td>Denied</td>
-        <td>None</td>
-    </tr>
+    {{#each previews as |preview|}}
+        <tr>
+            <td>{{#link-to preview.route preview.routeParam}}{{preview.title}}{{/link-to}} </td>
+            <td>{{preview.value}}</td>
+        </tr>
+    {{/each}}
     </tbody>
 </table>
 {{yield}}
