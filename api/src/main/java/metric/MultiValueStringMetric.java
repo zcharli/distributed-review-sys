@@ -6,7 +6,7 @@ package metric;
 public class MultiValueStringMetric extends BaseMetric {
 
     public String[] labels;
-    public String[] data;
+    public String[] values;
 
     public MultiValueStringMetric() { }
 
@@ -16,7 +16,7 @@ public class MultiValueStringMetric extends BaseMetric {
     }
 
     public MultiValueStringMetric setData(String[] in) {
-        this.data = in;
+        this.values = in;
         return this;
     }
 
