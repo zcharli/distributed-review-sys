@@ -1,5 +1,6 @@
 package metrics;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.ImmutableList;
 import key.DRSKey;
 import net.tomp2p.peers.Number160;
@@ -16,6 +17,7 @@ import java.util.Map;
  */
 public class MetricsCollector {
 
+    @JsonFormat(shape= JsonFormat.Shape.OBJECT)
     public static enum TrackingType {
         USAGE,
         DENIED,
