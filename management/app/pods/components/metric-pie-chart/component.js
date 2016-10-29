@@ -27,7 +27,7 @@ export default Ember.Component.extend(ColorGenerator, {
 
   valuesToNumber: function() {
     return this.get("data.values").map(function(number) {
-      return parseInt("number");
+      return parseInt(number);
     });
   }.property("data.values"),
 
