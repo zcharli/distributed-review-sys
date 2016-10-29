@@ -14,7 +14,7 @@ public class PreviewReviewMetric {
     public String id;
     public long value;
     public String type = "preview";
-    public String url;
+    public String[] url;
 
     public PreviewReviewMetric() { }
 
@@ -23,7 +23,7 @@ public class PreviewReviewMetric {
         this.title = product.name;
         this.value = views;
         this.id = Number160.createHash(identifier + title).toString();
-        this.url = getUrlBase() + "/product/show/" + product.id;
+        this.url = new String[] {"product.show", product.id};
     }
 
     public PreviewReviewMetric(BaseReview review, long views) {
@@ -31,7 +31,7 @@ public class PreviewReviewMetric {
         this.title = title;
         this.value = views;
         this.id = Number160.createHash(identifier + title).toString();
-        this.url = getUrlBase() + "/product/review/" + review.m_dhtAbsoluteKey;
+        this.url = new String[] {"product.review", review.m_dhtAbsoluteKey};
     }
 
     private String getUrlBase() {

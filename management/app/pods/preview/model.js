@@ -5,5 +5,5 @@ export default DS.Model.extend({
   title: DS.attr('string'),
   value: DS.attr('string'),
   type: DS.attr('string'),
-  url: DS.attr('string')
+  url: DS.attr('array')
 });
