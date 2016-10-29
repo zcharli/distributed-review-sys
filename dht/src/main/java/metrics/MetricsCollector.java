@@ -1,23 +1,18 @@
 package metrics;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.ImmutableList;
 import key.DRSKey;
 import net.tomp2p.peers.Number160;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by cli on 10/4/2016.
  */
 public class MetricsCollector {
 
-    @JsonFormat(shape= JsonFormat.Shape.OBJECT)
     public static enum TrackingType {
         USAGE,
         DENIED,
