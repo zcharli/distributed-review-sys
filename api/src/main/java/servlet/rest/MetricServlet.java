@@ -29,7 +29,6 @@ import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.text.NumberFormat;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -260,8 +259,7 @@ public class MetricServlet {
     }
 
     private DateTime getDate(final long currentTimeMillis) {
-        Instant instant = Instant.ofEpochMilli(currentTimeMillis);
         DateTimeZone dateTimeZone = DateTimeZone.forID(APIConfig.TIMESZONE);
-        return new DateTime(instant, dateTimeZone);
+        return new DateTime(currentTimeMillis, dateTimeZone);
     }
 }

@@ -29,10 +29,7 @@ export default Ember.Component.extend({
       const apprv = approve ? "accept" : "deny";
       Ember.$(".ui.modal." + apprv + "." + this.get("product.childLevel.id"))
         .modal({
-          closable: false,
-          onDeny: function () {
-            return false;
-          },
+          closable: true,
           onApprove: function () {
             const data = self.get('product.childLevel');
             const url = self.get("constants.baseApi") + "/review/" + apprv + "/" + data.locationId;
