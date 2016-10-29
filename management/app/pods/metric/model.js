@@ -8,6 +8,7 @@ export default DS.Model.extend({
   description: DS.attr("string"),
   icon: DS.attr("string"),
   value: DS.attr("string"),
+  type: DS.attr("string"),
 
   values: DS.attr("array"),
   labels: DS.attr("array"),
