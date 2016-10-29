@@ -1,5 +1,7 @@
 package metric;
 
+import config.APIConfig;
+
 /**
  * Created by cli on 10/28/2016.
  */
@@ -7,7 +9,7 @@ package metric;
 // Average review per product
 // Total number of products tracked
 // Total number of reviews tracked
-// Average reviews per product
+// Acceptance Rate
 // Average length of review
 // Average product stars
 
@@ -73,12 +75,12 @@ public enum MetricType {
             return "list icon";
         }
     },
-    AVG_REVIEWS_PER_PRODUCT {
+    ACCEPTANCE_RATE {
         public String getComponent() {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Average Reviews Per Product";
+            return "Review Acceptance Rate";
         }
         public String getDescription() {
             return "Since begining of time.";
@@ -87,7 +89,7 @@ public enum MetricType {
             return "top";
         }
         public String getIcon() {
-            return "comments outline icon";
+            return "checkmark box icon";
         }
     },
     AVG_REVIEW_LENGTH {
@@ -98,7 +100,7 @@ public enum MetricType {
             return "Average Review Length";
         }
         public String getDescription() {
-            return "Since begining of time.";
+            return "In terms of words";
         }
         public String getPagePosition() {
             return "top";
@@ -115,7 +117,7 @@ public enum MetricType {
             return "Average Product Stars";
         }
         public String getDescription() {
-            return "Since begining of time.";
+            return "Per average stars on reviews";
         }
         public String getPagePosition() {
             return "top";
@@ -146,7 +148,7 @@ public enum MetricType {
             return "metric-list";
         }
         public String getName() {
-            return "Top 10 Viewed Products";
+            return "Top " + APIConfig.TOP_X_METRIC + " 10 Viewed Products";
         }
         public String getDescription() {
             return "Across all product categories";
@@ -163,7 +165,7 @@ public enum MetricType {
             return "metric-list";
         }
         public String getName() {
-            return "Top 10 Upvoted Products";
+            return "Top " + APIConfig.TOP_X_METRIC + " 10 Upvoted Products";
         }
         public String getDescription() {
             return "Across all product categories";
@@ -180,7 +182,7 @@ public enum MetricType {
             return "metric-list";
         }
         public String getName() {
-            return "Top 10 Newest Reviews";
+            return "Top " + APIConfig.TOP_X_METRIC + " Newest Reviews";
         }
         public String getDescription() {
             return "Across all product categories";

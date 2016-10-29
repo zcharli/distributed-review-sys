@@ -29,8 +29,12 @@ public class TrackingContext implements TrackingContextView {
         return trackingType;
     }
 
-    public void incrementHits() {
+    public synchronized void incrementHits() {
         numberOfHits++;
         lastModified = System.currentTimeMillis();
+    }
+
+    public synchronized long getValue() {
+        return numberOfHits;
     }
 }

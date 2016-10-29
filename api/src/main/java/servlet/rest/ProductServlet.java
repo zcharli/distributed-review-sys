@@ -87,7 +87,7 @@ public class ProductServlet {
                         .setURL("/product?type=" + liveTypes));
             }
         }
-
+        // TODO: Try parrallelStream
         final CompletableFuture<?>[] searchAllProducts = collectorRef.stream()
                 .map(product -> CompletableFuture.runAsync(() -> {
                     for (String category : APIConfig.CURRENT_SEARCH_CATEGORIES) {
@@ -138,23 +138,26 @@ public class ProductServlet {
                                         .map(review -> CompletableFuture.runAsync(() -> {
                                             final String reviewURL = "product.review";
                                             if (!Strings.isNullOrEmpty(review.m_content) && StringUtils.containsIgnoreCase(review.m_content, query)) {
+                                                String shortenedString = review.m_content.length() > APIConfig.MAX_PREVIEW_LENGTH
+                                                        ? review.m_content.substring(0, APIConfig.MAX_PREVIEW_LENGTH) : review.m_content;
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Review")
-                                                        .setDescription(review.m_content)
+                                                        .setDescription(shortenedString)
                                                         .setURL(reviewURL)
                                                         .setModel("review")
                                                         .setParam(review.getAbsoluteId()));
                                             }
                                             if (!Strings.isNullOrEmpty(review.m_title) && StringUtils.containsIgnoreCase(review.m_title, query)) {
+                                                String shortenedString = review.m_title.length() > APIConfig.MAX_PREVIEW_LENGTH
+                                                        ? review.m_title.substring(0, APIConfig.MAX_PREVIEW_LENGTH) : review.m_title;
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Title")
-                                                        .setDescription(review.m_title)
+                                                        .setDescription(shortenedString)
                                                         .setURL(reviewURL)
                                                         .setModel("review")
                                                         .setParam(review.getAbsoluteId()));
                                             }
                                         }, m_queryWorker)).toArray(CompletableFuture[]::new);
-
                                 CompletableFuture.allOf(searchAllReviews).join();
                                 break;
                             case "Product":

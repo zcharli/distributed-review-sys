@@ -1,38 +1,23 @@
 package metric;
 
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by cli on 10/28/2016.
  */
 public class MultiValueMetric extends BaseMetric {
 
-    public List<String> categories;
-    public List<Integer> data;
+    public String[] labels;
+    public int[] data;
 
-    public MultiValueMetric() {
-        categories = new LinkedList<>();
-        data = new LinkedList<>();
-    }
+    public MultiValueMetric() { }
 
-    public MultiValueMetric setCategories(List<String> in) {
-        this.categories = in;
+    public MultiValueMetric setLabels(String[] in) {
+        this.labels = in;
         return this;
     }
 
-    public MultiValueMetric setData(List<Integer> in) {
+    public MultiValueMetric setData(int[] in) {
         this.data = in;
-        return this;
-    }
-
-    public MultiValueMetric addCategories(String in) {
-        this.categories.add(in);
-        return this;
-    }
-
-    public MultiValueMetric addData(Integer in) {
-        this.data.add(in);
         return this;
     }
 

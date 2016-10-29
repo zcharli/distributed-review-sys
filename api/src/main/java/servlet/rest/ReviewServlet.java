@@ -199,6 +199,7 @@ public class ReviewServlet {
 
         final DRSKey publishedKey = DefaultDHTKeyPair.builder().contentKey(fullKey.contentKey())
                 .domainKey(DHTConfig.PUBLISHED_DOMAIN).locationKey(fullKey.locationKey()).build();
+        request.m_publishTime = System.currentTimeMillis();
         DHTManager.instance().approveData(reviewKey, publishedKey, request, new AsyncComplete() {
             @Override
             public Integer call() {

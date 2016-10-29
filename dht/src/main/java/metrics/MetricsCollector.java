@@ -17,7 +17,8 @@ import java.util.Map;
 public class MetricsCollector {
 
     public static enum TrackingType {
-        USAGE
+        USAGE,
+        DENIED,
     }
 
     private final int NUM_TRACKING_TYPES;
@@ -55,19 +56,55 @@ public class MetricsCollector {
             m_trackingCache.save(key.getLocationKey(), trackingContexts);
         } else {
             TrackingContext[] currentTracker = m_trackingCache.get(key.getLocationKey());
-            if (currentTracker.length < NUM_TRACKING_TYPES) {
-                TrackingContext[] tempTracker = new TrackingContext[NUM_TRACKING_TYPES];
-                for (int i = 0; i< NUM_TRACKING_TYPES; i++) {
-                    tempTracker[i] = currentTracker[i];
-                }
-                currentTracker = tempTracker;
-            }
+            checkUpdate(currentTracker);
             if (currentTracker[TrackingType.USAGE.ordinal()] == null) {
                 currentTracker[TrackingType.USAGE.ordinal()] =  new TrackingContext(key.getLocationKey(), TrackingType.USAGE);
             }
             currentTracker[TrackingType.USAGE.ordinal()].incrementHits();
             m_trackingCache.save(key.getLocationKey(), currentTracker);
         }
+    }
+
+    public void collectDeniedMetric() {
+        if (!m_trackingCache.containsKey(Number160.ZERO)) {
+            TrackingContext[] trackingContexts = new TrackingContext[NUM_TRACKING_TYPES];
+            trackingContexts[TrackingType.DENIED.ordinal()] =  new TrackingContext(Number160.ZERO, TrackingType.DENIED);
+            m_trackingCache.save(Number160.ZERO, trackingContexts);
+        } else {
+            TrackingContext[] currentTracker = m_trackingCache.get(Number160.ZERO);
+            checkUpdate(currentTracker);
+            if (currentTracker[TrackingType.DENIED.ordinal()] == null) {
+                currentTracker[TrackingType.DENIED.ordinal()] =  new TrackingContext(Number160.ZERO, TrackingType.DENIED);
+            }
+            currentTracker[TrackingType.DENIED.ordinal()].incrementHits();
+            m_trackingCache.save(Number160.ZERO, currentTracker);
+        }
+    }
+
+    public long getNumDeniedKeys() {
+        if (!m_trackingCache.containsKey(Number160.ZERO)) {
+            return 0;
+        }
+        TrackingContext[] tracker = m_trackingCache.get(Number160.ZERO);
+        int denied = TrackingType.DENIED.ordinal();
+        if (tracker != null && tracker[denied] != null) {
+            return tracker[denied].getValue();
+        }
+        return 0;
+    }
+
+    private void checkUpdate(TrackingContext[] currentTracker) {
+        if (currentTracker.length < NUM_TRACKING_TYPES) {
+            TrackingContext[] tempTracker = new TrackingContext[NUM_TRACKING_TYPES];
+            for (int i = 0; i< NUM_TRACKING_TYPES; i++) {
+                tempTracker[i] = currentTracker[i];
+            }
+            currentTracker = tempTracker;
+        }
+    }
+
+    public TrackingContext[] getTrackingContext(Number160 key) {
+        return m_trackingCache.get(key);
     }
 
     public ImmutableList<Number160> getTrackedKeys() {

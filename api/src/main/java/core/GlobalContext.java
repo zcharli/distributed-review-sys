@@ -17,8 +17,8 @@ public class GlobalContext {
     private Queue<BaseMetric> m_metricCache;
     private static GlobalContext context;
     private static long TEN_SECONDS_IN_MILI = 10000;
-    private volatile long lastModifiedProduct = 0;
-    private volatile long lastModifiedMetric = 0;
+    private long lastModifiedProduct = 0;
+    private long lastModifiedMetric = 0;
 
     public static GlobalContext instance() {
         if (context == null) {
@@ -29,7 +29,7 @@ public class GlobalContext {
 
     private GlobalContext() {}
 
-    public void setMetricState(Queue<BaseMetric> state) {
+    public synchronized void setMetricState(Queue<BaseMetric> state) {
         long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - lastModifiedProduct < TEN_SECONDS_IN_MILI) {
             return;
@@ -38,7 +38,7 @@ public class GlobalContext {
         m_metricCache = state;
     }
 
-    public Queue<BaseMetric> getMetricState() {
+    public synchronized Queue<BaseMetric> getMetricState() {
         if (m_metricCache == null) {
             return new ConcurrentLinkedQueue<>();
         }
@@ -49,7 +49,7 @@ public class GlobalContext {
         return m_metricCache;
     }
 
-    public void setProductState(Queue<ProductReviewWrapper> state) {
+    public synchronized void setProductState(Queue<ProductReviewWrapper> state) {
         long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - lastModifiedProduct < TEN_SECONDS_IN_MILI) {
             return;
@@ -58,7 +58,7 @@ public class GlobalContext {
         m_productCache = state;
     }
 
-    public Queue<ProductReviewWrapper> getProductState() {
+    public synchronized Queue<ProductReviewWrapper> getProductState() {
         if (m_productCache == null) {
             return new ConcurrentLinkedQueue<>();
         }

@@ -96,6 +96,9 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     @JsonIgnore
     public Number640 m_dhtKey;
 
+    @JsonProperty("publish_time")
+    public long m_publishTime;
+
     /*
     Core class functionality
      */
