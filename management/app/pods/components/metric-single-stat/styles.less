@@ -1,0 +1,33 @@
+.metric-single-stat {
+  .stat-tile {
+    padding: 0 10px 0 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+
+    .stat-description {
+      font-size: 13px;
+    }
+
+    .stat-title {
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-size: 40px;
+      line-height: 47px;
+      font-weight: 600;
+    }
+  }
+  .stat-tile:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 65px;
+    border-left: 2px solid #ADB2B5;
+    margin-top: 10px;
+  }
+
+}
+

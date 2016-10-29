@@ -29,10 +29,10 @@ public enum MetricType {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Average Review per Product";
+            return "Average Reviews";
         }
         public String getDescription() {
-            return "Since begining of time.";
+            return "Per each product.";
         }
         public String getPagePosition() {
             return "top";
@@ -46,10 +46,10 @@ public enum MetricType {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Total Products Tracked";
+            return "Total Products";
         }
         public String getDescription() {
-            return "Since begining of time.";
+            return "Tracked by us.";
         }
         public String getPagePosition() {
             return "top";
@@ -63,10 +63,10 @@ public enum MetricType {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Total Reviews Tracked";
+            return "Total Reviews";
         }
         public String getDescription() {
-            return "Since begining of time.";
+            return "Tracked by us.";
         }
         public String getPagePosition() {
             return "top";
@@ -80,10 +80,10 @@ public enum MetricType {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Review Acceptance Rate";
+            return "Reviews Acceptance";
         }
         public String getDescription() {
-            return "Since begining of time.";
+            return "Accept vs Denied.";
         }
         public String getPagePosition() {
             return "top";
@@ -97,10 +97,10 @@ public enum MetricType {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Average Review Length";
+            return "Review Length";
         }
         public String getDescription() {
-            return "In terms of words";
+            return "Average amount of words";
         }
         public String getPagePosition() {
             return "top";
@@ -114,10 +114,10 @@ public enum MetricType {
             return "metric-single-stat";
         }
         public String getName() {
-            return "Average Product Stars";
+            return "Product Stars";
         }
         public String getDescription() {
-            return "Per average stars on reviews";
+            return "Average stars on reviews";
         }
         public String getPagePosition() {
             return "top";
