@@ -139,7 +139,7 @@ public class ProductServlet {
                                             final String reviewURL = "product.review";
                                             if (!Strings.isNullOrEmpty(review.m_content) && StringUtils.containsIgnoreCase(review.m_content, query)) {
                                                 String shortenedString = review.m_content.length() > APIConfig.MAX_PREVIEW_LENGTH
-                                                        ? review.m_content.substring(0, APIConfig.MAX_PREVIEW_LENGTH) : review.m_content;
+                                                        ? review.m_content.substring(0, APIConfig.MAX_PREVIEW_LENGTH) + "...": review.m_content;
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Review")
                                                         .setDescription(shortenedString)
@@ -149,7 +149,7 @@ public class ProductServlet {
                                             }
                                             if (!Strings.isNullOrEmpty(review.m_title) && StringUtils.containsIgnoreCase(review.m_title, query)) {
                                                 String shortenedString = review.m_title.length() > APIConfig.MAX_PREVIEW_LENGTH
-                                                        ? review.m_title.substring(0, APIConfig.MAX_PREVIEW_LENGTH) : review.m_title;
+                                                        ? review.m_title.substring(0, APIConfig.MAX_PREVIEW_LENGTH) + "...": review.m_title;
                                                 categoryResults.addCategory(new CategorySearchResultDescription()
                                                         .setTitle("Matched Title")
                                                         .setDescription(shortenedString)

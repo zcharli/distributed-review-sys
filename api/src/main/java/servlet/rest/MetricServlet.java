@@ -11,6 +11,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import review.BaseReview;
@@ -83,8 +85,9 @@ public class MetricServlet {
         final int showDays = APIConfig.SHOW_REVIEW_FOR_LAST_X_DAYS;
         int[] lastWeek = new int[showDays];
         String[] lastWeekLabels = new String[showDays];
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("EEEE, MMMM d, YYYY");
         for (int i = 0; i < lastWeek.length; ++i) {
-            lastWeekLabels[i] = now.minusDays(showDays - i - 1).toString();
+            lastWeekLabels[i] = now.minusDays(showDays - i - 1).toString(fmt);
         }
         PriorityQueue<PreviewReviewMetric> topTenMostViewed = new PriorityQueue<PreviewReviewMetric>(productList.size(),
                 (first, second) -> (int) (second.value - first.value));
