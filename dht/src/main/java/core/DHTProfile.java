@@ -147,7 +147,7 @@ public class DHTProfile {
                             Tuple<Number160, TrackingContext[]> entry = new Tuple<>(keyFromBuffer, fromBuffer);
                             fromDisk.get(StorageTypes.METRIC).add(entry);
                         } catch (Exception e) {
-                            LOGGER.error("Error reading in load tracked data");
+                            LOGGER.error("Error reading in load tracked data: " + e.getMessage());
                         }
                     }
                 } else if (key.equals(DHTConfig.KEYSTORE_ADDR)) {
