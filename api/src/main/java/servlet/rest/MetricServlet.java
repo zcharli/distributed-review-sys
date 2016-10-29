@@ -232,7 +232,7 @@ public class MetricServlet {
                 .setMetricType(MetricType.TOP_10_NEWEST_REVIEWS);
         top10Amount = topTenMostRecent.size() < APIConfig.TOP_X_METRIC ? topTenMostRecent.size() : APIConfig.TOP_X_METRIC;
         for (i = 0; i < top10Amount; ++i) {
-            mostRecentReviews.addReview(topTenMostViewed.poll());
+            mostRecentReviews.addReview(topTenMostRecent.poll());
         }
         metricsList.add(mostRecentReviews);
 
