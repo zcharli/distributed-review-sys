@@ -9,7 +9,7 @@ export default DS.Model.extend({
   icon: DS.attr("string"),
   value: DS.attr("string"),
 
-  data: DS.attr("array"),
+  values: DS.attr("array"),
   labels: DS.attr("array"),
 
   previews: DS.hasMany("preview")

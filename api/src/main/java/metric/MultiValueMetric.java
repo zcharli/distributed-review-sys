@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class MultiValueMetric extends BaseMetric {
 
     public String[] labels;
-    public int[] data;
+    public int[] values;
 
     public MultiValueMetric() { }
 
@@ -19,7 +19,7 @@ public class MultiValueMetric extends BaseMetric {
     }
 
     public MultiValueMetric setData(int[] in) {
-        this.data = in;
+        this.values = in;
         return this;
     }
 
