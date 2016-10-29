@@ -27,7 +27,7 @@ public class SPAErrorRedirectModule extends org.eclipse.jetty.server.handler.Err
     {
         logger.info("Handling request redirect for SPA application: " + target);
         // On 404 page we need to show index.html and let JS router do the work, otherwise show error page
-        String redirectRoute = APIConfig.WEB_RESOURCE_PATH + "/index.html";
+        String redirectRoute = "index.html";
         if ((response.getStatus() == HttpServletResponse.SC_NOT_FOUND) && _fistRequest) {
             RequestDispatcher dispatcher = request.getRequestDispatcher(redirectRoute);
             if (dispatcher != null) {
