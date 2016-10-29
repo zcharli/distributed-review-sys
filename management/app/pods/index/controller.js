@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
     return this.get("model").filterBy("position", "top");
   }),
   mainBarChart: Ember.computed("model", function() {
-    return this.get("model").filterBy("position", "center");
+    return this.get("model").filterBy("component", "center");
   }),
   midTopTens: Ember.computed("model", function() {
     return this.get("model").filterBy("position", "middle");
@@ -14,6 +14,4 @@ export default Ember.Controller.extend({
   bottomStatistics: Ember.computed("model", function() {
     return this.get("model").filterBy("position", "bottom");
   }),
-
-
 });

@@ -4,11 +4,21 @@
           <div class="column">
             {{component stat.component data=stat}}
           </div>
+      {{else}}
+          <h2 class="ui center aligned icon header">
+              <i class="hand spock icon"></i>
+              Oops, looks like there are no statistics you are tracking at the moment.
+          </h2>
       {{/each}}
     </div>
     <div class="row">
       {{#each mainBarChart as |stat|}}
         {{component stat.component data=stat}}
+      {{else}}
+          <h2 class="ui center aligned icon header">
+              <i class="hourglass empty icon"></i>
+              Oops, looks like there are no recent activity to display.
+          </h2>
       {{/each}}
     </div>
     <div class="three column row">
@@ -16,6 +26,11 @@
           <div class="column">
             {{component stat.component data=stat}}
           </div>
+      {{else}}
+          <h2 class="ui center aligned icon header">
+              <i class="find icon"></i>
+              Oops, looks like we could not find any reviews at the moment.
+          </h2>
       {{/each}}
     </div>
     <div class="three column row">
@@ -23,6 +38,11 @@
           <div class="column">
             {{component stat.component data=stat}}
           </div>
+      {{else}}
+          <h2 class="ui center aligned icon header">
+              <i class="shopping basket icon"></i>
+              Oops, there doesn't seem any reviews to display statistics
+          </h2>
       {{/each}}
     </div>
 </div>

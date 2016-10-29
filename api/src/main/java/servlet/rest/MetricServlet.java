@@ -79,6 +79,12 @@ public class MetricServlet {
             ProductServlet.getAllReviewsForProduct(locationKeys, productList, m_queryWorker);
         }
 
+        if (productList.size() == 0) {
+            // there was no elements...
+            response.resume(Response.ok().entity(new MetricPayloadRestWrapper().setMetrics(metricsList)).build());
+            return;
+        }
+
         final MetricsCollector metricsCollector = DHTManager.instance().getMetrics();
         DateTime today = new DateTime(System.currentTimeMillis());
         DateTime now = DateTime.now();

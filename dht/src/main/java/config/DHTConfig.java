@@ -38,7 +38,7 @@ public class DHTConfig {
 
     private DHTConfig() {
         try {
-            BOOTSRAP_ADDR = Inet4Address.getByName("192.158.101.19");
+            BOOTSRAP_ADDR = Inet4Address.getByName("192.168.101.19");
         } catch (Exception e) {
             LOGGER.error("Could not connect to default bootstrap node. Try changing the address with -bootstrap <hostname/ip>.");
         }
