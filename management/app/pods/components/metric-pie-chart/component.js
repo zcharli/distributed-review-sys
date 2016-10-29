@@ -25,6 +25,12 @@ export default Ember.Component.extend(ColorGenerator, {
     };
   },
 
+  valuesToNumber: function() {
+    return this.get("data.values").map(function(number) {
+      return parseInt("number");
+    });
+  }.property("data.values"),
+
   chartData: function () {
     return {
       labels: this.get("data.values"),

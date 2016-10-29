@@ -152,7 +152,7 @@ public class MetricServlet {
         String[] diskSpaceUsedLabel = new String[]{"Used space", "Free space"};
         int[] productPercentValues = new int[percentProductTypes.size()];
         int[] averageStarsProductValues = new int[averageStarPerProductType.size()];
-        String[] diskSpaceUsedValues = new String[diskSpaceUsedLabel.length];
+        long[] diskSpaceUsedValues = new long[diskSpaceUsedLabel.length];
         int i = 0;
         for (Map.Entry<String, Integer> entry : percentProductTypes.entrySet()) {
             productPercentLabels[i] = WordUtils.capitalize(entry.getKey());
@@ -170,8 +170,8 @@ public class MetricServlet {
             try {
                 FileStore store = Files.getFileStore(root);
                 String spaceUsed = nf.format(store.getTotalSpace() - store.getUsableSpace());
-                diskSpaceUsedValues[0] =  spaceUsed;
-                diskSpaceUsedValues[1] = nf.format(store.getUsableSpace());
+                diskSpaceUsedValues[0] =  store.getTotalSpace() - store.getUsableSpace();
+                diskSpaceUsedValues[1] = store.getUsableSpace();
             } catch (IOException e) {
                 LOGGER.error("Error querying space: " + e.toString());
             }
@@ -252,7 +252,7 @@ public class MetricServlet {
                 .setData(averageStarsProductValues);
         metricsList.add(averageStarsPerProductType);
 
-        MultiValueStringMetric diskSpaceLeft = new MultiValueStringMetric()
+        MultiValueLongMetric diskSpaceLeft = new MultiValueLongMetric()
                 .setMetricType(MetricType.AMOUNT_DISK_SPACE)
                 .setLabels(diskSpaceUsedLabel)
                 .setData(diskSpaceUsedValues);
