@@ -95,3 +95,11 @@ management/npm-debug.log
 management/testem.log
 management/build
 
+.gitignore
+.gitkeep
+app.js
+bin/
+package.json
+public/
+routes/
+views/

@@ -1,0 +1,1735 @@
+{>layout/}
+{<content}
+
+    <!-- GOOGLE TAG MANAGER -->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-PN26NN" height="0" width="0"
+                style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script type="text/javascript">
+        //<![CDATA[
+        dataLayer = typeof dataLayer != 'undefined' ? dataLayer : [];
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+            var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-PN26NN');
+
+        var dlCurrencyCode = 'USD';
+        //]]>
+    </script>
+    <!-- END GOOGLE TAG MANAGER -->
+
+    <div class="off-canvas-wrap">
+        <div class="inner-wrap">
+            <noscript>
+                <div class="global-site-notice noscript">
+                    <div class="notice-inner">
+                        <p>
+                            <strong>JavaScript seems to be disabled in your browser.</strong><br/>
+                            You must have JavaScript enabled in your browser to utilize the functionality of this
+                            website.
+                        </p>
+                    </div>
+                </div>
+            </noscript>
+            <div class="top-container">
+                <div class="widget widget-banner">
+                    <ul>
+                        <li id="banner-2">
+                            <div class="header-promo-banner newsletter-banner" data-identifier="subscribe save" hidden>
+                                <h6>Subscribe &amp; Save</h6>
+                                <p>Join our mailing list to get access to sales, special offers, and the latest
+                                    products.</p>
+                                <div class="close-button"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <header class="main-header">
+                <div class="row top-header">
+                    <div class="small-6 medium-3 medium-push-6 large-3 large-push-6 icons-for-small columns text-right">
+                        <div class="welcome-message show-for-medium-up"><span aria-hidden="true"
+                                                                              class="icon-phone"></span>Call
+                            +001 555 801
+                        </div>
+                        <a href="#" class="right-off-canvas-toggle show-for-small-only icon-main-menu"></a> <a
+                            href="http://www.nau.com/checkout/cart/" class="hide-for-large-up icon-cart"></a> <a
+                            href="https://www.nau.com/customer/account/" class="show-for-medium-only icon-user"></a>
+                    </div>
+                </div>
+
+                <div hidden id="minicart-contents">
+                    <ul class="dropdown cart-dropdown">
+                        <li class="arrow-box">
+                            <div class="dropdown-title">Your Bag (0)<a href="http://www.nau.com/checkout/cart/"
+                                                                       class="icon-edit" title="Edit your Bag"><span
+                                    class="hide">Edit Cart</span></a></div>
+                            <!--{CART_SIDEBAR_69f7e1dc073b1e68d6a235b3c8ddba71}-->
+
+                            <p class="small cart-empty">Your shopping bag is currently empty.</p>
+
+                            <div class="bg-box">
+                                <p class="subtotal">
+                                    Subtotal:&nbsp;
+                                    <span class="price">
+                                            <span class="price">$0.00</span>                                    </span>
+                                </p>
+                                <a href="https://www.nau.com/checkout/onepage/" class="button sign-in">Checkout</a>
+                            </div>
+                            <div class="sb-cart-dropdown">
+                            </div>
+
+                            <script type="text/javascript">
+                                var googleAnalyticsUniversalData = googleAnalyticsUniversalData || {};
+                                googleAnalyticsUniversalData['shoppingCartContent'] = [];
+                            </script>
+                            <!--/{CART_SIDEBAR_69f7e1dc073b1e68d6a235b3c8ddba71}-->    </li>
+                    </ul>
+                </div>
+
+
+                <script>
+                    var minicartContents = document.querySelector('#minicart-contents');
+                    document.fire('cart:count', {count: '0'});
+                    document.on('dom:loaded', function () {
+                        this.fire('cart:count', {count: '0'});
+                        $j(document.querySelector('[data-minicart-holder]')).append(minicartContents.innerHTML);
+                    });
+
+                </script>
+
+                <nav class="top-bar right-off-canvas-menu expanded main-nav horizontal" data-topbar>
+    <span class="a-menu-link">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+                    <div class="mobile-cart-bag-icon">
+                        <a href="http://www.nau.com/checkout/cart/">
+                            <img class="empty-cart-icon"
+                                 src="http://www.nau.com/skin/frontend/intenso/nau/images/header-bag-a-empty.png"
+                                 alt=""/>
+                            <p class="cart-icon-number">0</p>
+                            <img class="filled-cart-icon"
+                                 src="http://www.nau.com/skin/frontend/intenso/nau/images/header-bag-b-full.png"
+                                 alt=""/>
+                        </a>
+                    </div>
+                    <section class="top-bar-section clearfix">
+                        <!-- Right Nav Section -->
+                        <ul class="right show-for-large-up">
+                            <li class="hide-for-small-only">
+                                <a href="https://www.nau.com/customer/account/create/">Sign up</a>
+                            </li>
+                            <li class="hide-for-small-only">
+                                <a href="https://www.nau.com/customer/account/login/referer/aHR0cDovL3d3dy5uYXUuY29tL2NvY29vbi1kb3duLXRyZW5jaA,,/">Log
+                                    in</a>
+                            </li>
+                            <li class="has-dropdown hide-for-small-only" data-minicart-holder>
+                                <a href="http://www.nau.com/checkout/cart/"><span data-cart-status aria-hidden="true"
+                                                                                  class="icon-cart empty"></span>Bag
+                                    (<span
+                                            data-cart-count class="cart-total"></span>)</a>
+                            </li>
+                        </ul>
+
+                        <ul id="nav-logo">
+                            <li>
+                                <a href="http://www.nau.com/">
+                                    <img class="main-logo"
+                                         src="http://www.nau.com/skin/frontend/intenso/nau/images/nau-logo.svg"
+                                         alt="Nau"
+                                         title="Nau"/>
+                                    <img class="main-logo-small"
+                                         src="http://www.nau.com/skin/frontend/intenso/nau/images/nau-logo.svg"
+                                         alt="Nau"
+                                         title="Nau"/>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Left Nav Section -->
+                        <ul class="catalog-nav left">
+                            <li class="show-for-small-only group-title">Shop</li>
+                            <li class="level0 nav-1 first has-dropdown "><a href="http://www.nau.com/mens"
+                                                                            class="level0 has-children">Men</a><a
+                                    class="submenu-trigger">+</a>
+                                <ul class="level0 dropdown arrow-box">
+                                    <li class="level1 nav-1-1 first"><a href="http://www.nau.com/mens/fall-collection"
+                                                                        class="level1 ">Fall Collection</a></li>
+                                    <li class="level1 nav-1-2"><a href="http://www.nau.com/mens/travel-collection"
+                                                                  class="level1 ">Travel Collection</a></li>
+                                    <li class="level1 nav-1-3"><a href="http://www.nau.com/mens/jackets"
+                                                                  class="level1 ">Jackets</a>
+                                    </li>
+                                    <li class="level1 nav-1-4"><a href="http://www.nau.com/mens/hoodies-sweaters"
+                                                                  class="level1 ">Hoodies &amp; Sweaters</a></li>
+                                    <li class="level1 nav-1-5"><a href="http://www.nau.com/mens/shirts" class="level1 ">Shirts</a>
+                                    </li>
+                                    <li class="level1 nav-1-6"><a href="http://www.nau.com/mens/pants-shorts"
+                                                                  class="level1 ">Pants &amp; Shorts</a></li>
+                                    <li class="level1 nav-1-7 "><a href="http://www.nau.com/mens/last-chance"
+                                                                   class="level1 ">Clearance</a></li>
+                                    <li class="level1"><a class="level1" href="http://www.nau.com/mens">View All Men</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="level0 nav-2 active has-dropdown "><a href="http://www.nau.com/womens"
+                                                                             class="level0 has-children">Women</a><a
+                                    class="submenu-trigger">+</a>
+                                <ul class="level0 dropdown arrow-box">
+                                    <li class="level1 nav-2-1 first"><a href="http://www.nau.com/womens/fall-collection"
+                                                                        class="level1 ">Fall Collection</a></li>
+                                    <li class="level1 nav-2-2"><a href="http://www.nau.com/womens/travel-collection"
+                                                                  class="level1 ">Travel Collection</a></li>
+                                    <li class="level1 nav-2-3"><a href="http://www.nau.com/womens/jackets"
+                                                                  class="level1 ">Jackets</a>
+                                    </li>
+                                    <li class="level1 nav-2-4"><a href="http://www.nau.com/womens/shirts"
+                                                                  class="level1 ">Shirts</a>
+                                    </li>
+                                    <li class="level1 nav-2-5"><a href="http://www.nau.com/womens/dresses"
+                                                                  class="level1 ">Dresses</a>
+                                    </li>
+                                    <li class="level1 nav-2-6"><a href="http://www.nau.com/womens/bottoms"
+                                                                  class="level1 ">Pants
+                                        &amp; Skirts</a></li>
+                                    <li class="level1 nav-2-7"><a href="http://www.nau.com/womens/hoodies-sweaters"
+                                                                  class="level1 ">Hoodies &amp; Sweaters</a></li>
+                                    <li class="level1 nav-2-8 "><a href="http://www.nau.com/womens/womens-clearance"
+                                                                   class="level1 ">Clearance</a></li>
+                                    <li class="level1"><a class="level1" href="http://www.nau.com/womens">View All
+                                        Women</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="level0 nav-3  has-dropdown "><a href="http://www.nau.com/accessories"
+                                                                       class="level0 has-children">Accessories</a><a
+                                    class="submenu-trigger">+</a>
+                                <ul class="level0 dropdown arrow-box">
+                                    <li class="level1 nav-3-1 first"><a href="http://www.nau.com/accessories/bags-packs"
+                                                                        class="level1 ">Bags &amp; Packs</a></li>
+                                    <li class="level1 nav-3-2"><a href="http://www.nau.com/accessories/hats-scarves"
+                                                                  class="level1 ">Hats &amp; Scarves</a></li>
+                                    <li class="level1 nav-3-3 "><a href="http://www.nau.com/accessories/hardgoods"
+                                                                   class="level1 ">Hardgoods</a></li>
+                                    <li class="level1"><a class="level1" href="http://www.nau.com/accessories">View All
+                                        Accessories</a></li>
+                                </ul>
+                            </li>
+                            <li class="show-for-small-only group-title">Pages</li>
+                            <li class="show-for-small-only"><a href="http://www.nau.com/checkout/cart/">Bag</a></li>
+                            <li class="show-for-small-only"><a href="https://www.nau.com/customer/account/">Your
+                                Account</a>
+                            </li>
+                        </ul>
+                        <div id="nav-search">
+                            <form method="get" action="http://www.nau.com/catalogsearch/result/" id="search_mini_form">
+                                <div class="search-box">
+                                    <span aria-hidden="true" class="icon-search"></span>
+                                    <input type="text" class="input-text placeholder" value=""
+                                           name="q" id="search"
+                                           maxlength="128"/>
+                                    <label for="search">Search</label>
+                                    <div class="search-autocomplete" id="search_autocomplete"></div>
+                                    <script type="text/javascript">
+                                        //<![CDATA[
+                                        var searchForm = new Varien.searchForm('search_mini_form', 'search', '');
+                                        searchForm.initAutocomplete('http://www.nau.com/catalogsearch/ajax/suggest/', 'search_autocomplete');
+                                        //]]>
+                                    </script>
+                                    <button type="submit" style="display:none"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </nav>
+
+                <div class="mobile-side-nav">
+                    <div class="mobile-side-nav-search">
+                        <img src="http://www.nau.com/skin/frontend/intenso/nau/images/menu-x.png" alt="">
+                        <form method="get" action="http://www.nau.com/catalogsearch/result/" id="search_nav_form">
+                            <div class="form-search">
+                                <div class="action">
+                                    <button class="button" title="Search" type="submit"><span aria-hidden="true"
+                                                                                              class="icon-search"></span>
+                                    </button>
+                                </div>
+                                <div class="search-box">
+                                    <input type="text" class="input-text placeholder" value="" name="q" id="search2"
+                                           maxlength="128"/>
+                                    <label for="search2">Search</label>
+                                    <div class="left"></div>
+                                    <div class="right"></div>
+                                    <div class="bottom"></div>
+                                    <div class="search-autocomplete" id="search_autocomplete2"></div>
+                                    <script type="text/javascript">
+                                        //<![CDATA[
+                                        var searchForm = new Varien.searchForm('search_nav_form', 'search2', '');
+                                        searchForm.initAutocomplete('http://www.nau.com/catalogsearch/ajax/suggest/', 'search_autocomplete2');
+                                        //]]>
+                                    </script>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <ul class="mobile-side-nav-menu">
+                        <li class="level0 nav-1 first has-dropdown "><a href="http://www.nau.com/mens"
+                                                                        class="level0 has-children">Men</a><a
+                                class="submenu-trigger">+</a>
+                            <ul class="level0 dropdown arrow-box">
+                                <li class="level1 nav-1-1 first"><a href="http://www.nau.com/mens/fall-collection"
+                                                                    class="level1 ">Fall Collection</a></li>
+                                <li class="level1 nav-1-2"><a href="http://www.nau.com/mens/travel-collection"
+                                                              class="level1 ">Travel Collection</a></li>
+                                <li class="level1 nav-1-3"><a href="http://www.nau.com/mens/jackets"
+                                                              class="level1 ">Jackets</a></li>
+                                <li class="level1 nav-1-4"><a href="http://www.nau.com/mens/hoodies-sweaters"
+                                                              class="level1 ">Hoodies &amp; Sweaters</a></li>
+                                <li class="level1 nav-1-5"><a href="http://www.nau.com/mens/shirts"
+                                                              class="level1 ">Shirts</a></li>
+                                <li class="level1 nav-1-6"><a href="http://www.nau.com/mens/pants-shorts"
+                                                              class="level1 ">Pants
+                                    &amp; Shorts</a></li>
+                                <li class="level1 nav-1-7 "><a href="http://www.nau.com/mens/last-chance"
+                                                               class="level1 ">Clearance</a>
+                                </li>
+                                <li class="level1"><a class="level1" href="http://www.nau.com/mens">View All Men</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="level0 nav-2 active has-dropdown "><a href="http://www.nau.com/womens"
+                                                                         class="level0 has-children">Women</a><a
+                                class="submenu-trigger">+</a>
+                            <ul class="level0 dropdown arrow-box">
+                                <li class="level1 nav-2-1 first"><a href="http://www.nau.com/womens/fall-collection"
+                                                                    class="level1 ">Fall Collection</a></li>
+                                <li class="level1 nav-2-2"><a href="http://www.nau.com/womens/travel-collection"
+                                                              class="level1 ">Travel Collection</a></li>
+                                <li class="level1 nav-2-3"><a href="http://www.nau.com/womens/jackets" class="level1 ">Jackets</a>
+                                </li>
+                                <li class="level1 nav-2-4"><a href="http://www.nau.com/womens/shirts"
+                                                              class="level1 ">Shirts</a></li>
+                                <li class="level1 nav-2-5"><a href="http://www.nau.com/womens/dresses" class="level1 ">Dresses</a>
+                                </li>
+                                <li class="level1 nav-2-6"><a href="http://www.nau.com/womens/bottoms" class="level1 ">Pants
+                                    &amp; Skirts</a></li>
+                                <li class="level1 nav-2-7"><a href="http://www.nau.com/womens/hoodies-sweaters"
+                                                              class="level1 ">Hoodies &amp; Sweaters</a></li>
+                                <li class="level1 nav-2-8 "><a href="http://www.nau.com/womens/womens-clearance"
+                                                               class="level1 ">Clearance</a></li>
+                                <li class="level1"><a class="level1" href="http://www.nau.com/womens">View All Women</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="level0 nav-3  has-dropdown "><a href="http://www.nau.com/accessories"
+                                                                   class="level0 has-children">Accessories</a><a
+                                class="submenu-trigger">+</a>
+                            <ul class="level0 dropdown arrow-box">
+                                <li class="level1 nav-3-1 first"><a href="http://www.nau.com/accessories/bags-packs"
+                                                                    class="level1 ">Bags &amp; Packs</a></li>
+                                <li class="level1 nav-3-2"><a href="http://www.nau.com/accessories/hats-scarves"
+                                                              class="level1 ">Hats &amp; Scarves</a></li>
+                                <li class="level1 nav-3-3 "><a href="http://www.nau.com/accessories/hardgoods"
+                                                               class="level1 ">Hardgoods</a></li>
+                                <li class="level1"><a class="level1" href="http://www.nau.com/accessories">View All
+                                    Accessories</a></li>
+                            </ul>
+                        </li>
+                        <li class="level0"><a
+                                href="https://www.nau.com/customer/account/login/referer/aHR0cDovL3d3dy5uYXUuY29tL2NvY29vbi1kb3duLXRyZW5jaA,,/"
+                                class="side-nav-single">Log in</a></li>
+                        <li class="level0"><a href="http://www.nau.com/customer-care/" class="side-nav-single">Customer
+                            Service</a></li>
+                        <li class="level0"><a href="http://www.nau.com/storelocator/" class="side-nav-single">Find a
+                            Store</a></li>
+                        <li class="level0"><a href="http://www.nau.com/shipping/" class="side-nav-single">Shipping</a>
+                        </li>
+                        <li class="level0"><a href="http://www.nau.com/returns/" class="side-nav-single">Returns</a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <div class="row breadcrumbs-wrapper">
+                <div class="small-12 breadcrumbs hide-for-small-only columns">
+                    <ul>
+                        <li class="home">
+                            <a href="http://www.nau.com/" title="Go to Home Page">Home</a>
+                            <span>/ </span>
+                        </li>
+                        <li class="category20">
+                            <a href="http://www.nau.com/womens" title="">Women</a>
+                            <span>/ </span>
+                        </li>
+                        <li class="category263">
+                            <a href="http://www.nau.com/womens/travel-collection" title="">Travel Collection</a>
+                            <span>/ </span>
+                        </li>
+                        <li class="product">
+                            <strong>Millican Nick The Messenger Bag 17L</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="block-compare"></div>
+
+            <script type="text/javascript">
+                var optionsPrice = new Product.OptionsPrice({
+                    "productId": "5000",
+                    "priceFormat": {
+                        "pattern": "$%s",
+                        "precision": 2,
+                        "requiredPrecision": 2,
+                        "decimalSymbol": ".",
+                        "groupSymbol": ",",
+                        "groupLength": 3,
+                        "integerRequired": 1
+                    },
+                    "includeTax": "false",
+                    "showIncludeTax": false,
+                    "showBothPrices": false,
+                    "productPrice": 155,
+                    "productOldPrice": 155,
+                    "priceInclTax": 155,
+                    "priceExclTax": 155,
+                    "skipCalculate": 1,
+                    "defaultTax": 0,
+                    "currentTax": 0,
+                    "idSuffix": "_clone",
+                    "oldPlusDisposition": 0,
+                    "plusDisposition": 0,
+                    "plusDispositionTax": 0,
+                    "oldMinusDisposition": 0,
+                    "minusDisposition": 0,
+                    "tierPrices": [],
+                    "tierPricesInclTax": []
+                });
+            </script>
+            <div id="messages_product_view"></div>
+            <section role="main" itemtype="http://schema.org/Product" itemscope>
+                <div class="row product-view">
+                    <meta content="/nick-the-messenger-bag-17l" itemprop="url">
+                    <!-- Product Pic &amp; Info -->
+                    <div class="small-12 product-essential columns">
+                        <div class="row">
+                            <form action="http://www.nau.com/checkout/cart/add/uenc/aHR0cDovL3d3dy5uYXUuY29tL25pY2stdGhlLW1lc3Nlbmdlci1iYWctMTds/product/5000/form_key/dXkwfZwBxAnOHDOd/"
+                                  method="post" id="product_addtocart_form">
+                                <input name="form_key" type="hidden" value="dXkwfZwBxAnOHDOd"/>
+                                <div class="no-display">
+                                    <input type="hidden" name="product" value="5000"/>
+                                    <input type="hidden" name="related_product" id="related-products-field" value=""/>
+                                </div>
+                                <!-- First Column: Product Image -->
+                                <div class="small-12 medium-7 product-img-box hide-for-small-only columns"
+                                     aria-live="polite" aria-busy="false">
+                                    <figure>
+                                        <span role="button" class="previous featured-prev"><span></span></span>
+                                        <a class="lightbox product-image" id="gallery-image"
+                                           href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/5/0/5060199341372-front.1473355383.jpg">
+                                            <img itemprop="image"
+                                                 src="http://www.nau.com/media/catalog/product/cache/1/image/1560x1060/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-front.1473355383.jpg"
+                                                 alt="Millican Nick The Messenger Bag 17L"
+                                                 width="780"/>
+                                        </a>
+                                        <span role="button" class="next featured-next"><span></span></span>
+                                    </figure>
+                                    <ul class="more-views">
+                                        <li class="selected">
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/m/a/mav-nick-17l-506019934365-front.1473355384.jpg"
+                                               title="millican nick the messenger bag 17l-rust"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934365-front.1473355385.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934365-front.1473355385.jpg"
+                                                        alt="millican nick the messenger bag 17l-rust" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 1</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/m/a/mav-nick-17l-506019934358-front.1473355385.jpg"
+                                               title="millican nick the messenger bag 17l-moss"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934358-front.1473355386.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934358-front.1473355386.jpg"
+                                                        alt="millican nick the messenger bag 17l-moss" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 2</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/m/a/mav-nick-17l-506019934341-front.1473355387.jpg"
+                                               title="millican nick the messenger bag 17l-slate"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934341-front.1473355387.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934341-front.1473355387.jpg"
+                                                        alt="millican nick the messenger bag 17l-slate" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 3</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/5/0/5060199341372-front.1473355383.jpg"
+                                               title="millican nick the messenger bag 17l-gorse"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/5/0/5060199341372-front.1473355384.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/5/0/5060199341372-front.1473355384.jpg"
+                                                        alt="millican nick the messenger bag 17l-gorse" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 4</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/m/a/mav-nick-17l-506019934358-back.1473355390.jpg"
+                                               title="millican nick the messenger bag 17l-moss"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934358-back.1473355391.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934358-back.1473355391.jpg"
+                                                        alt="millican nick the messenger bag 17l-moss" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 5</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/5/0/5060199341372-back.1473355391.jpg"
+                                               title="millican nick the messenger bag 17l-gorse"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/5/0/5060199341372-back.1473355392.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/5/0/5060199341372-back.1473355392.jpg"
+                                                        alt="millican nick the messenger bag 17l-gorse" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 6</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/m/a/mav-nick-17l-506019934341-back.1473355388.jpg"
+                                               title="millican nick the messenger bag 17l-slate"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934341-back.1473355388.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934341-back.1473355389.jpg"
+                                                        alt="millican nick the messenger bag 17l-slate" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 7</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="lightbox" role="button"
+                                               href="http://www.nau.com/media/catalog/product/cache/1/image/bdb7959bce6f9aab4c4d6b21af06a5ff/m/a/mav-nick-17l-506019934365-back.1473355389.jpg"
+                                               title="millican nick the messenger bag 17l-rust"
+                                               data-url-medium="http://www.nau.com/media/catalog/product/cache/1/image/1560x/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934365-back.1473355390.jpg">
+                                                <img
+                                                        src="http://www.nau.com/media/catalog/product/cache/1/thumbnail/136x136/474e0035af5188e8424dd46d9020f617/m/a/mav-nick-17l-506019934365-back.1473355390.jpg"
+                                                        alt="millican nick the messenger bag 17l-rust" width="68"
+                                                        height="68">
+                                                <span class="a11y">Display Gallery Item 8</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <script type="text/javascript">
+                                    $j(document).ready(function () {
+                                        ConfigurableMediaImages.init('base_image');
+                                        ConfigurableMediaImages.setImageFallback(5000, $j.parseJSON({
+                                            "configurable_product": {
+                                                "small_image": null,
+                                                "base_image": null,
+                                                "additional_images": null
+                                            }, "products": ["5002"]
+                                            , "rust": {
+                                                "configurable_product": {
+                                                    "small_image": null,
+                                                    "base_image": null, "additional_images": null
+                                                }
+                                                ,
+                                                "products": ["5003"]
+                                            }, "slate": {
+                                                "configurable_product": {
+                                                    "small_image": null, "base_image": null, "additional_images": null
+                                                }
+                                                ,
+                                                "products": ["5004"]
+                                            }, "gorse": {
+                                                "configurable_product": {
+                                                    "small_image": null, "base_image": null, "additional_images": null
+                                                }
+                                                ,
+                                                "products": ["5050"]
+                                                ,
+                                                "small_image": [],
+                                                "medium_image": {
+                                                    "5002": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934358-front_1.jpg",
+                                                    "5003": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934365-front_1.jpg",
+                                                    "5004": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934341-front_1.jpg",
+                                                    "5050": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front_1.jpg",
+                                                    "5000": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front.jpg"
+                                                },
+                                                "base_image": {
+                                                    "5002": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934358-front_1.jpg",
+                                                    "5003": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934365-front_1.jpg",
+                                                    "5004": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934341-front_1.jpg",
+                                                    "5050": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front_1.jpg",
+                                                    "5000": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front.jpg"
+                                                },
+                                                "additional_images": []
+                                            }
+                                        }));
+                                        $j(document).trigger('configurable-media-images-init', ConfigurableMediaImages);
+                                    });
+                                </script>
+                                <!-- Central Column: Product info -->
+                                <div class="small-12 medium-4 medium-offset-1 large-3 product-shop columns">
+                                    <div class="mobile-gallery">
+                                        <ul class="orbit-container" id="gallery-image-mobile" data-orbit
+                                            data-options="animation:slide;animation_speed:300;timer:false;slide_number:false;variable_height:true;swipe:true;navigation_arrows:false;outside_bullets:true;">
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934365-front.1473355433.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934365-front.1473355433.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934365-front.1473355433.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934358-front.1473355434.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934358-front.1473355434.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934358-front.1473355434.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934341-front.1473355435.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934341-front.1473355435.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934341-front.1473355435.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-front.1473355432.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-front.1473355432.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-front.1473355383.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934358-back.1473357689.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934358-back.1473357689.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934358-back.1473357690.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-back.1473357690.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-back.1473357690.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/5/0/5060199341372-back.1473357691.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934341-back.1473357687.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934341-back.1473357687.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934341-back.1473357687.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                            <li class="item">
+                                                <a class="lightbox-mobile product-image"
+                                                   href="http://www.nau.com/media/catalog/product/cache/1/image/1200x/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934365-back.1473357688.jpg">
+                                                    <img src="http://www.nau.com/media/catalog/product/cache/1/image/1280x869.74358974359/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934365-back.1473357688.jpg"
+                                                         alt="" width="640>" height="434.87179487179">
+                                                    <noscript><img
+                                                            src="http://www.nau.com/media/catalog/product/cache/1/image/2c39cf24be8df571a1d845d8e1e1d24c/m/a/mav-nick-17l-506019934365-back.1473357688.jpg"
+                                                            alt=""></noscript>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <h1 itemprop="name" class="center">Millican Nick The Messenger Bag 17L</h1>
+
+
+                                    <div class="price-box">
+                                                                <span class="regular-price" id="product-price-5000">
+                                            <span class="price">$155</span>                                    </span>
+
+                                    </div>
+
+                                    <script type="text/javascript">
+                                        var gsf_associated_products = {
+                                            '5002': '5060199341358',
+                                            '5003': '5060199341365',
+                                            '5004': '5060199341341',
+                                            '5050': '5060199341372',
+                                        };
+                                    </script>
+                                    <div id="gsf_associated_products"></div>
+
+                                    <div class="ratings no-rating">
+                                        <a href="http://www.nau.com/review/product/list/id/5000/category/263/#post-review">Be
+                                            the first to review this product</a>
+                                    </div>
+
+
+                                    <fieldset class="product-options" id="product-options-wrapper">
+
+                                        <dl>
+                                            <dt class="swatch-attr">
+                                                <label id="color_label" class="required">
+                                                    <em>*</em>Color <span id="select_label_color"
+                                                                          class="select-label"></span>
+                                                </label>
+                                            </dt>
+                                            <dd class="clearfix swatch-attr color_attr last">
+                                                <div class="input-box">
+                                                    <select name="super_attribute[92]" id="attribute92"
+                                                            class="required-entry super-attribute-select no-display swatch-select">
+                                                        <option>Choose an Option...</option>
+                                                    </select>
+                                                    <ul id="configurable_swatch_color"
+                                                        class="configurable-swatch-list configurable-swatch-color clearfix">
+                                                        <li class="option-gorse" id="option236990">
+                                                            <a href="javascript:void(0)" id="swatch236990"
+                                                               class="swatch-link swatch-link-92 has-image"
+                                                               title="Gorse">
+                <span class="swatch-label" style="line-height: 21px;">
+                                    <img src="http://www.nau.com/media/catalog/swatches/1/21x21/product/g/o/gorse-swatch_1.1464923346.jpg"
+                                         alt="Gorse" width="21" height="21"/>
+                                 </span>
+                                                                <span class="x">X</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="option-moss" id="option912">
+                                                            <a href="javascript:void(0)" id="swatch912"
+                                                               class="swatch-link swatch-link-92 has-image"
+                                                               title="Moss">
+                <span class="swatch-label" style="line-height: 21px;">
+                                    <img src="http://www.nau.com/media/catalog/swatches/1/21x21/product/m/o/moss-swatch_1.1464923346.jpg"
+                                         alt="Moss" width="21" height="21"/>
+                                 </span>
+                                                                <span class="x">X</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="option-rust" id="option960">
+                                                            <a href="javascript:void(0)" id="swatch960"
+                                                               class="swatch-link swatch-link-92 has-image"
+                                                               title="Rust">
+                <span class="swatch-label" style="line-height: 21px;">
+                                    <img src="http://www.nau.com/media/catalog/swatches/1/21x21/product/r/u/rust-swatch_1.1464923346.jpg"
+                                         alt="Rust" width="21" height="21"/>
+                                 </span>
+                                                                <span class="x">X</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="option-slate" id="option236964">
+                                                            <a href="javascript:void(0)" id="swatch236964"
+                                                               class="swatch-link swatch-link-92 has-image"
+                                                               title="Slate">
+                <span class="swatch-label" style="line-height: 21px;">
+                                    <img src="http://www.nau.com/media/catalog/swatches/1/21x21/product/s/l/slate-swatch_1.1464923346.jpg"
+                                         alt="Slate" width="21" height="21"/>
+                                 </span>
+                                                                <span class="x">X</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                        <script type="text/javascript">
+                                            var spConfig = new Product.Config({
+                                                "attributes": {
+                                                    "92": {
+                                                        "id": "92",
+                                                        "code": "color",
+                                                        "label": "Color",
+                                                        "options": [{
+                                                            "id": "236990",
+                                                            "label": "Gorse",
+                                                            "price": "0",
+                                                            "oldPrice": "0",
+                                                            "products": ["5050"]
+                                                        }, {
+                                                            "id": "912",
+                                                            "label": "Moss",
+                                                            "price": "0",
+                                                            "oldPrice": "0",
+                                                            "products": ["5002"]
+                                                        }, {
+                                                            "id": "960",
+                                                            "label": "Rust",
+                                                            "price": "0",
+                                                            "oldPrice": "0",
+                                                            "products": ["5003"]
+                                                        }, {
+                                                            "id": "236964",
+                                                            "label": "Slate",
+                                                            "price": "0",
+                                                            "oldPrice": "0",
+                                                            "products": ["5004"]
+                                                        }]
+                                                    }
+                                                },
+                                                "template": "$#{price}",
+                                                "basePrice": "155",
+                                                "oldPrice": "155",
+                                                "productId": "5000",
+                                                "chooseText": "Choose an Option...",
+                                                "taxConfig": {
+                                                    "includeTax": false,
+                                                    "showIncludeTax": false,
+                                                    "showBothPrices": false,
+                                                    "defaultTax": 0,
+                                                    "currentTax": 0,
+                                                    "inclTaxTitle": "Incl. Tax"
+                                                }
+                                            });
+                                        </script>
+                                        <script>
+                                            $j(function () {
+                                                var swatchesConfig = new Product.ConfigurableSwatches(spConfig);
+                                            });
+                                        </script>
+                                        <script type="text/javascript">
+                                            //<![CDATA[
+                                            var DateOption = Class.create({
+
+                                                getDaysInMonth: function (month, year) {
+                                                    var curDate = new Date();
+                                                    if (!month) {
+                                                        month = curDate.getMonth();
+                                                    }
+                                                    if (2 == month && !year) { // leap year assumption for unknown year
+                                                        return 29;
+                                                    }
+                                                    if (!year) {
+                                                        year = curDate.getFullYear();
+                                                    }
+                                                    return 32 - new Date(year, month - 1, 32).getDate();
+                                                },
+
+                                                reloadMonth: function (event) {
+                                                    var selectEl = event.findElement();
+                                                    var idParts = selectEl.id.split("_");
+                                                    if (idParts.length != 3) {
+                                                        return false;
+                                                    }
+                                                    var optionIdPrefix = idParts[0] + "_" + idParts[1];
+                                                    var month = parseInt($(optionIdPrefix + "_month").value);
+                                                    var year = parseInt($(optionIdPrefix + "_year").value);
+                                                    var dayEl = $(optionIdPrefix + "_day");
+
+                                                    var days = this.getDaysInMonth(month, year);
+
+                                                    //remove days
+                                                    for (var i = dayEl.options.length - 1; i >= 0; i--) {
+                                                        if (dayEl.options[i].value > days) {
+                                                            dayEl.remove(dayEl.options[i].index);
+                                                        }
+                                                    }
+
+                                                    // add days
+                                                    var lastDay = parseInt(dayEl.options[dayEl.options.length - 1].value);
+                                                    for (i = lastDay + 1; i <= days; i++) {
+                                                        this.addOption(dayEl, i, i);
+                                                    }
+                                                },
+
+                                                addOption: function (select, text, value) {
+                                                    var option = document.createElement('OPTION');
+                                                    option.value = value;
+                                                    option.text = text;
+
+                                                    if (select.options.add) {
+                                                        select.options.add(option);
+                                                    } else {
+                                                        select.appendChild(option);
+                                                    }
+                                                }
+                                            });
+                                            dateOption = new DateOption();
+                                            //]]>
+                                        </script>
+
+
+                                        <script type="text/javascript">
+                                            //<![CDATA[
+                                            enUS = {
+                                                "m": {
+                                                    "wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                                                    "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                                }
+                                            }; // en_US locale reference
+                                            Calendar._DN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; // full day names
+                                            Calendar._SDN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // short day names
+                                            Calendar._FD = 0; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
+                                            Calendar._MN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; // full month names
+                                            Calendar._SMN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // short month names
+                                            Calendar._am = "AM"; // am/pm
+                                            Calendar._pm = "PM";
+
+                                            // tooltips
+                                            Calendar._TT = {};
+                                            Calendar._TT["INFO"] = 'About the calendar';
+
+                                            Calendar._TT["ABOUT"] =
+                                                    'DHTML Date/Time Selector\n' +
+                                                    "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
+                                                    'For latest version visit: http://www.dynarch.com/projects/calendar/\n' +
+                                                    'Distributed under GNU LGPL. See http://gnu.org/licenses/lgpl.html for details.' +
+                                                    '\n\n' +
+                                                    'Date selection:\n' +
+                                                    '- Use the \xab, \xbb buttons to select year\n' +
+                                                    '- Use the \u2039 buttons to select month\n' +
+                                                    '- Hold mouse button on any of the above buttons for faster selection.';
+                                            Calendar._TT["ABOUT_TIME"] = '\n\n' +
+                                                    'Time selection:\n' +
+                                                    '- Click on any of the time parts to increase it\n' +
+                                                    '- or Shift-click to decrease it\n' +
+                                                    '- or click and drag for faster selection.';
+
+                                            Calendar._TT["PREV_YEAR"] = 'Prev. year (hold for menu)';
+                                            Calendar._TT["PREV_MONTH"] = 'Prev. month (hold for menu)';
+                                            Calendar._TT["GO_TODAY"] = 'Go Today';
+                                            Calendar._TT["NEXT_MONTH"] = 'Next month (hold for menu)';
+                                            Calendar._TT["NEXT_YEAR"] = 'Next year (hold for menu)';
+                                            Calendar._TT["SEL_DATE"] = 'Select date';
+                                            Calendar._TT["DRAG_TO_MOVE"] = 'Drag to move';
+                                            Calendar._TT["PART_TODAY"] = ' (' + "today" + ')';
+
+                                            // the following is to inform that "%s" is to be the first day of week
+                                            Calendar._TT["DAY_FIRST"] = 'Display %s first';
+
+                                            // This may be locale-dependent. It specifies the week-end days, as an array
+                                            // of comma-separated numbers. The numbers are from 0 to 6: 0 means Sunday, 1
+                                            // means Monday, etc.
+                                            Calendar._TT["WEEKEND"] = "0,6";
+
+                                            Calendar._TT["CLOSE"] = 'Close';
+                                            Calendar._TT["TODAY"] = "today";
+                                            Calendar._TT["TIME_PART"] = '(Shift-)Click or drag to change value';
+
+                                            // date formats
+                                            Calendar._TT["DEF_DATE_FORMAT"] = "%b %e, %Y";
+                                            Calendar._TT["TT_DATE_FORMAT"] = "%B %e, %Y";
+
+                                            Calendar._TT["WK"] = "Week";
+                                            Calendar._TT["TIME"] = 'Time:';
+                                            //]]>
+                                        </script>
+                                    </fieldset>
+                                    <script type="text/javascript">decorateGeneric($$('#product-options-wrapper dl'), ['last']);</script>
+
+
+                                </div>
+                                <!-- Right column: Buy Box -->
+                                <div class="small-12 medium-4 medium-offset-1 large-3 end product-shop-side columns">
+                                    <div class="buybox">
+                                        <p>To buy, select <strong>Color</strong></p>
+                                        <p class="small">Choose from options to the left</p>
+                                        <div class="add-to-cart center row">
+                                            <div class="qty-wrapper small-12 columns">
+                                                <label for="qty">Quantity</label>
+                                                <span id="qty-wrapper">
+                                                    <select name="qty" id="qty" class="simulate-change center">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                            <option value="7">7</option>
+                                                            <option value="8">8</option>
+                                                            <option value="9">9</option>
+                                                            <option value="10">10+</option>
+                                                    </select>
+                                                            <script>
+                                                            $("qty").observe('change', function () {
+                                                                if ($(this).getValue() == 10) {
+                                                                    $("qty-wrapper").update('<input type="number" name="qty" id="qty" value="0" size="4" title="Qty" maxlength="10" class="qty-input-text" />');
+                                                                }
+                                                            });
+                                                            </script>
+                                            </span>
+                                            </div>
+
+                                            <div class="validation-messages small-12 columns">
+                                                <div style="display: none;" class="validation-error"
+                                                     id="advice-required-entry-attribute92">Please select a Color
+                                                </div>
+                                            </div>
+
+                                            <button type="button" title="Add to Bag" id="product-addtocart-button"
+                                                    class="button btn-cart" onclick="productAddToCartForm.submit(this)">
+                                                <span><span>Add to Bag</span></span></button>
+
+                                        </div>
+                                    </div>
+                                    <div class="add-to-bag-subtext">
+                                    </div>
+                                </div>
+
+                            </form>
+                            <script type="text/javascript">
+                                //<![CDATA[
+                                var productAddToCartForm = new VarienForm('product_addtocart_form');
+                                productAddToCartForm.submit = function (button, url) {
+                                    if (this.validator.validate()) {
+                                        var form = this.form;
+                                        var oldUrl = form.action;
+
+                                        if (url) {
+                                            form.action = url;
+                                        }
+                                        var e = null;
+                                        try {
+                                            this.form.submit();
+                                        } catch (e) {
+                                        }
+                                        this.form.action = oldUrl;
+                                        if (e) {
+                                            throw e;
+                                        }
+
+                                        if (button && button != 'undefined') {
+                                            button.disabled = true;
+                                        }
+                                    }
+                                }.bind(productAddToCartForm);
+
+                                productAddToCartForm.submitLight = function (button, url) {
+                                    if (this.validator) {
+                                        var nv = Validation.methods;
+                                        delete Validation.methods['required-entry'];
+                                        delete Validation.methods['validate-one-required'];
+                                        delete Validation.methods['validate-one-required-by-name'];
+                                        // Remove custom datetime validators
+                                        for (var methodName in Validation.methods) {
+                                            if (methodName.match(/^validate-datetime-.*/i)) {
+                                                delete Validation.methods[methodName];
+                                            }
+                                        }
+
+                                        if (this.validator.validate()) {
+                                            if (url) {
+                                                this.form.action = url;
+                                            }
+                                            this.form.submit();
+                                        }
+                                        Object.extend(Validation.methods, nv);
+                                    }
+                                }.bind(productAddToCartForm);
+                                //]]>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ch-product-details">
+                    <div class="ch-product-details-style-container">
+
+                        <p class="ch-product-subheader">Style #M130-A</p>
+
+                        <p class="ch-product-details-desc">Inspired by the life of a cycle-tourer, designed to meet your
+                            everyday needs. Nick the Messenger is a streamlined, weatherproof canvas messenger bag
+                            tailored
+                            for life on two wheels.<br/>
+                            <br/>
+                            Our easy access external laptop sleeve, makes life that little bit simpler. Inside you’ll
+                            find
+                            multiple pockets, outside you’ll find U-lock loops, light attachment, reflective strip and a
+                            zipped pocket.</p>
+
+                    </div>
+
+                    <div class="ch-product-details-list-container">
+
+
+                        <p class="ch-product-subheader">Product Details</p>
+
+                        <ul class="ch-product-details-list">
+                            <li>Weatherproof, secure lid with aluminum buckle fastenings</li>
+                            <li>Internal pockets for iPad, phone, documents and more</li>
+                            <li>2 internal and 1 external open pockets for bottle, cables, etc</li>
+                            <li>1 internal and 1 external zip pocket for valuables, phone, keys</li>
+                            <li>Internal sleeve for papers or laptop (up to 15.6")</li>
+                            <li>Fold-away reflective strip and clip-on light facility on front panel</li>
+                            <li>U-lock loops on front underneath lid</li>
+                            <li>Detachable 2nd strap to keep bag in place whilst cycling</li>
+                            <li>Chunky grab handle, reinforced with leather</li>
+                            <li>Simplicity is strength - minimum seams, maximum durability</li>
+                            <li>Made in Vietnam</li>
+                            <li>Bionic ® Canvas Outer Fabric: 38% cotton, 57% recycled polyester, 5% high-tenacity
+                                polyester, 100% paraffin wax impregnated
+                            </li>
+                            <li>Lining Fabric: 100% recycled polyester</li>
+                            <li>W40 x H34 x D13cm, 17LTR, 800gms</li>
+                        </ul>
+
+
+                    </div>
+
+                    <div class="ch-product-details-caring-container">
+
+                        <p class="ch-product-subheader">Caring for Your Product</p>
+
+
+                    </div>
+                </div>
+
+
+                <!-- Magellan Fixed Navigator -->
+                <div class="magellan-nav" data-options="destination_threshold:65;throttle_delay:0;"
+                     data-magellan-expedition="fixed">
+                    <dl class="sub-nav">
+                        <dt>&nbsp;</dt>
+                        <dd data-magellan-arrival="additional-info"><a href="#additional-info">Additional Info</a></dd>
+                        <dt>&nbsp;</dt>
+                        <dd data-magellan-arrival="ratings-reviews"><a href="#ratings-reviews">Ratings &amp; Reviews</a>
+                        </dd>
+                        <dt>&nbsp;</dt>
+                        <dd data-magellan-arrival="tags"><a href="#tags">Tags</a></dd>
+                    </dl>
+                </div>
+                <div class="product-collateral-wrapper">
+
+                    <div class="product-collateral additional clearfix row">
+                        <p data-magellan-destination="additional-info"><a id="additional-info"></a></p>
+                        <h3>Additional Information</h3>
+                        <div class="small-12 columns">
+                            <table class="data-table" id="product-attribute-specs-table">
+                                <col/>
+                                <col/>
+                                <tbody>
+                                <tr>
+                                    <th class="label">Violator Flags</th>
+                                    <td class="data">No</td>
+                                </tr>
+                                <tr>
+                                    <th class="label">Clearance</th>
+                                    <td class="data">No</td>
+                                </tr>
+                                <tr>
+                                    <th class="label">Special Price</th>
+                                    <td class="data">No</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <script type="text/javascript">decorateTable('product-attribute-specs-table')</script>
+                    </div>
+
+                    <div class="product-collateral ratings-reviews clearfix row">
+                        <p data-magellan-destination="ratings-reviews"><a id="ratings-reviews"></a></p>
+                        <div class="ratings-detail clearfix">
+                            <h3>Ratings &amp; Reviews</h3>
+                            <div class="rating-avg"><span>4.56</span></div>
+                            <div class="ratings">
+                                <div class="rating-box">
+                                    <div style="width:90%" class="rating"></div>
+                                </div>
+                                <span class="rating-links icon-user">
+                            <span>9reviews</span>
+                    </span>
+                            </div>
+                            <table id="histogram">
+                                <tbody>
+                                <tr>
+                                    <td class="stars">
+                                        <a class="small"
+                                           href="http://www.nau.com/review/product/list/id/373/?filter=five-stars"
+                                           title="66.67% of reviews have 5 stars">5 star</a>
+                                    </td>
+                                    <td class="meter-bar">
+                                        <a href="http://www.nau.com/review/product/list/id/373/?filter=five-stars"
+                                           title="66.67% of reviews have 5 stars">
+                                            <div class="progress large-12"><span style="width: 100%"
+                                                                                 class="meter meter-5"></span></div>
+                                        </a>
+                                    </td>
+                                    <td class="amount">
+                                        <span class="small">6</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="stars">
+                                        <a class="small"
+                                           href="http://www.nau.com/review/product/list/id/373/?filter=four-stars"
+                                           title="22.22% of reviews have 4 stars">4 star</a>
+                                    </td>
+                                    <td class="meter-bar">
+                                        <a href="http://www.nau.com/review/product/list/id/373/?filter=four-stars"
+                                           title="22.22% of reviews have 4 stars">
+                                            <div class="progress large-12"><span style="width: 33.333333333333%"
+                                                                                 class="meter meter-4"></span></div>
+                                        </a>
+                                    </td>
+                                    <td class="amount">
+                                        <span class="small">2</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="stars">
+                                        <a class="small"
+                                           href="http://www.nau.com/review/product/list/id/373/?filter=three-stars"
+                                           title="11.11% of reviews have 3 stars">3 star</a>
+                                    </td>
+                                    <td class="meter-bar">
+                                        <a href="http://www.nau.com/review/product/list/id/373/?filter=three-stars"
+                                           title="11.11% of reviews have 3 stars">
+                                            <div class="progress large-12"><span style="width: 16.666666666667%"
+                                                                                 class="meter meter-3"></span></div>
+                                        </a>
+                                    </td>
+                                    <td class="amount">
+                                        <span class="small">1</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="stars">
+                                        <a class="small"
+                                           href="http://www.nau.com/review/product/list/id/373/?filter=two-stars"
+                                           title="0% of reviews have 2 stars">2 star</a>
+                                    </td>
+                                    <td class="meter-bar">
+                                        <a href="http://www.nau.com/review/product/list/id/373/?filter=two-stars"
+                                           title="0% of reviews have 2 stars">
+                                            <div class="progress large-12"><span style="width: 0%"
+                                                                                 class="meter meter-2"></span></div>
+                                        </a>
+                                    </td>
+                                    <td class="amount">
+                                        <span class="small">0</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="stars">
+                                        <a class="small"
+                                           href="http://www.nau.com/review/product/list/id/373/?filter=one-star"
+                                           title="0% of reviews have 1 stars">1 star</a>
+                                    </td>
+                                    <td class="meter-bar">
+                                        <a href="http://www.nau.com/review/product/list/id/373/?filter=one-star"
+                                           title="0% of reviews have 1 stars">
+                                            <div class="progress large-12"><span style="width: 0%"
+                                                                                 class="meter meter-1"></span></div>
+                                        </a>
+                                    </td>
+                                    <td class="amount">
+                                        <span class="small">0</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <a href="http://www.nau.com/review/product/list/id/373/#post-review"
+                               class="small underline hide-for-small-only">Add your review</a>
+                        </div>
+                        <div class="reviews">
+                            <h5>Most Recent Customer Reviews</h5>
+                            <ul class="review-list most-helpful" aria-hidden="false" aria-expanded="true">
+                                <li itemprop="review" itemtype="http://schema.org/Review" itemscope="itemscope">
+                                    <p class="useful-count">1 of 1 people found the following review helpful</p>
+                                    <div class="rating-box" itemprop="reviewRating" itemtype="http://schema.org/Rating"
+                                         itemscope="itemscope">
+                                        <div class="rating" style="width:87%">
+                                            <meta content="87" itemprop="ratingValue">
+                                            <meta content="100" itemprop="bestRating">
+                                        </div>
+                                    </div>
+                                    <h6 itemprop="name">Excellent cut, very long sleeves</h6>
+                                    <p class="review-text review-9977" itemprop="description">
+                                        Love the fabric, style, and athletic trim cut. Very comfortable and doesn't chop
+                                        into your armpits even though it fits right. My only complaint (other than it
+                                        arrives very wrinkled from being shipped in a baggie) is that the sleeves are an
+                                        inch and a half too long. This is generally not a problem for me with blazers.
+                                        Are
+                                        Seattle guys tall and lean? I will have to pay for tailoring to make the sleeves
+                                        right. I also agree with a previous reviewer that the inside wallet pocket is on
+                                        the
+                                        wrong side for easy in/out. </p>
+                                    <p class="author">By <span itemprop="author">chris</span> on
+                                        <time datetime="2016-08-09 16:11:55" itemprop="datePublished">August 9, 2016
+                                        </time>
+                                    </p>
+                                    <a class="comments" href="#"
+                                       onclick="return ExtendedReviews.showAddCommentForm('http://www.nau.com/extended-reviews/product_comment/add/id/9977/', 9977)">Comment</a>
+                                    <div class="vote helpful-buttons-9977">
+                                        <span class="helpful-9977">Was this review helpful to you?</span>
+                                        <button class="tiny secondary helpful-button-9977" type="submit"
+                                                onclick="ExtendedReviews.vote('http://www.nau.com/extended-reviews/vote/',9977,1);">
+                                            Yes
+                                        </button>
+                                        <button class="tiny secondary helpful-button-9977" type="submit"
+                                                onclick="ExtendedReviews.vote('http://www.nau.com/extended-reviews/vote/',9977,0);">
+                                            No
+                                        </button>
+                                    </div>
+                                    <div class="comments-wrapper-9977"></div>
+                                </li>
+                            </ul>
+                            <div class="write-your-own-review">
+
+                                <h5>Write Your Own Review</h5>
+                                <form action="" method="post" id="review-form" class="review-form">
+                                    <h4>You're reviewing: <span>Nick The Messenger Bag 17L</span></h4>
+                                    <h6>How do you rate this product?</h6>
+                                    <span id="input-message-box"></span>
+                                    </table>
+                                    <div id="pretty-product-review-list">
+                                        <div id="code-ratings_1" class="pretty-rating-code">
+                                            <div class="label">Style</div>
+                                            <ul class="options" style="display: inline-flex;">
+                                                <li><a id="pretty-Style_1" class="option"></a></li>
+                                                <li><a id="pretty-Style_2" class="option"></a></li>
+                                                <li><a id="pretty-Style_3" class="option"></a></li>
+                                                <li><a id="pretty-Style_4" class="option"></a></li>
+                                                <li><a id="pretty-Style_5" class="option"></a></li>
+                                            </ul>
+                                            <div style="clear: both;"></div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="validate_rating" class="validate-rating" value="">
+                                    <ul class="form-list">
+                                        <li class="narrow">
+                                            <label for="summary_field" class="required"><em>*</em>Summary of Your
+                                                Review</label>
+                                            <div class="input-box">
+                                                <input type="text" name="title" id="summary_field"
+                                                       class="input-text required-entry" value="">
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <label for="review_field" class="required"><em>*</em>Review</label>
+                                            <div class="input-box">
+                                            <textarea name="detail" id="review_field" cols="5" rows="3"
+                                                      class="required-entry"></textarea>
+                                                <grammarly-btn>
+                                                    <div style="z-index: 2; opacity: 1; transform: translate(508px, 144px);"
+                                                         class="_9b5ef6-textarea_btn _9b5ef6-not_focused"
+                                                         data-grammarly-reactid=".0">
+                                                        <div class="_9b5ef6-transform_wrap"
+                                                             data-grammarly-reactid=".0.0">
+                                                            <div title="Protected by Grammarly" class="_9b5ef6-status"
+                                                                 data-grammarly-reactid=".0.0.0">&nbsp;</div>
+                                                        </div>
+                                                    </div>
+                                                </grammarly-btn>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="buttons-set">
+                                        <button type="submit" title="Submit Review" class="button">
+                                            <span><span>Submit Review</span></span></button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </section>
+
+            <footer class="main-footer">
+
+                <div class="mobile-footer show-for-medium-down">
+                    <div class="mobile-footer-first-row">
+                        <a class="mobile-footer-contact" href="tel:+855-628-8648">
+                            <h6>Contact Us</h6><h5>855-628-8648</h5>
+                        </a><a class="mobile-footer-store-finder" href="http://www.nau.com/storelocator/">
+                        <h5>Find a Store</h5>
+                    </a>
+                    </div>
+                    <div class="mobile-footer-connect-box">
+                        <div class="mobile-footer-connect-box-title">
+                            <h5>Stay in Touch</h5>
+                            <p>Join our mailing list to get access to sales, special offers, and the latest
+                                products.</p>
+                        </div>
+                        <form method="post" action="https://www.nau.com/newsletter/subscriber/new/"
+                              id="newsletter-validate-detail-footer-mobile">
+                            <div class="inline-email-signup input-box row collapse">
+                                <div class="columns small-8">
+                                    <input type="text" id="newsletter-footer-mobile"
+                                           class="input-text required-entry validate-email"
+                                           title="Subscribe to our Newsletter"
+                                           name="email"
+                                           placeholder="your@email.com"/></div>
+                                <div class="columns small-4">
+                                    <button class="email-submit-button postfix" title="Submit"
+                                            type="submit">Subscribe
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <script>
+                            var mobileFooterNewsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail-footer');
+                        </script>
+
+                        <div class="mobile-footer-social-media">
+                            <a href="https://www.facebook.com/nauclothing"><img
+                                    src="http://www.nau.com/skin/frontend/intenso/nau/images/footer-fb.1463505816.png"
+                                    alt="facebook"></a>
+                            <a href="https://twitter.com/nauclothing"><img
+                                    src="http://www.nau.com/skin/frontend/intenso/nau/images/footer-tw.1463505816.png"
+                                    alt="twitter"></a>
+                            <a href="https://www.pinterest.com/nauclothing"><img
+                                    src="http://www.nau.com/skin/frontend/intenso/nau/images/footer-pn.1463505816.png"
+                                    alt="pinterest"></a>
+                            <a href="https://www.instagram.com/nauclothing"><img
+                                    src="http://www.nau.com/skin/frontend/intenso/nau/images/footer-in.1463505816.png"
+                                    alt="instagram"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row footer-links show-for-large-up">
+                    <div class="small-1 men-product-footer-links">
+                        <div class="column">
+                            <h6>MEN</h6>
+                            <ul>
+                                <!-- <li><a href="/mens/sale">Sale</a></li> -->
+                                <li><a href="/mens/jackets">Jackets</a></li>
+                                <li><a href="/mens/jackets/rain-jackets">Rain Jackets</a></li>
+                                <li><a href="/mens/jackets/insulated-down">Insulated &amp; Recycled Down Jackets</a>
+                                </li>
+                                <li><a href="/mens/jackets/trenches-blazers">Trenches &amp; Blazers</a></li>
+                                <li><a href="/mens/jackets/wool-coats">Wool Coats</a></li>
+                                <li><a href="/mens/shirts">Shirts</a></li>
+                                <li><a href="/mens/last-chance">Clearance</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="small-1 women-product-footer-links">
+                        <div class="column">
+                            <h6>WOMEN</h6>
+                            <ul>
+                                <!--  <li><a href="/womens/sale">Sale</a></li> -->
+                                <li><a href="/womens/jackets">Jackets</a></li>
+                                <li><a href="/womens/jackets/rain-jackets">Rain Jackets</a></li>
+                                <li><a href="/womens/jackets/insulated-down">Insulated &amp; Recycled Down Jackets</a>
+                                </li>
+                                <li><a href="/womens/jackets/trenches-blazers">Trenches</a></li>
+                                <li><a href="/womens/dresses">Dresses</a></li>
+                                <li><a href="/womens/shirts">Shirts</a></li>
+                                <li><a href="/womens/bottoms">Pants &amp; Skirts</a></li>
+                                <li><a href="/womens/womens-clearance">Clearance</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="small-1 accessories-product-footer-links">
+                        <div class="column">
+                            <h6>ACCESSORIES</h6>
+                            <ul>
+                                <li><a href="/accessories/bags-packs">Bags &amp; Packs</a></li>
+                                <li><a href="/accessories/hats-scarves">Hats &amp; Scarves</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="small-1 discover-footer-links">
+                        <div class="column">
+                            <h6>DISCOVER NAU</h6>
+                            <ul>
+                                <li><a href="/about">About Us</a></li>
+                                <li><a href="/customer-care">Customer Care</a></li>
+                                <li><a href="/our-philosophy">Our Fabrics</a></li>
+                                <li><a href="/partners-for-change">Partners for Change</a></li>
+                                <li><a href="/storelocator">Find a Store</a></li>
+                                <li><a href="/customer-care">Become a Dealer</a></li>
+                                <li><a href="/jobs">Jobs</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="small-1 customer-info-footer-links">
+                        <div class="column">
+                            <ul>
+                                <li><a href="/warranty">Warranty</a></li>
+                                <li><a href="/customer-care">Customer Care</a></li>
+                                <li><a href="/shipping">Shipping</a></li>
+                                <li><a href="/returns">Returns</a></li>
+                                <li><a href="/FAQ">FAQ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="small-1 stay-in-touch-footer-links">
+                        <div class="column">
+                            <h6>STAY IN TOUCH</h6>
+                            <p>Receive news, the latest offers, and new arrivals</p>
+                            <form method="post" action="https://www.nau.com/newsletter/subscriber/new/"
+                                  id="newsletter-validate-detail-footer-default">
+                                <div class="inline-email-signup input-box row collapse">
+                                    <div class="columns small-8">
+                                        <input type="text" id="newsletter-footer-default"
+                                               class="input-text required-entry validate-email"
+                                               title="Subscribe to our Newsletter"
+                                               name="email"
+                                               placeholder="your@email.com"/></div>
+                                    <div class="columns small-4">
+                                        <button class="email-submit-button postfix" title="Submit"
+                                                type="submit">Subscribe
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <script>
+                                var defaultFooterNewsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail-footer');
+                            </script>
+
+
+                            <ul class="call-us">
+                                <li>
+                                    <a href="">CALL US 855-628-8648</a>
+                                </li>
+                            </ul>
+                            <ul class="social-media-links">
+                                <li><a href="http://www.facebook.com/nauclothing">Facebook</a></li>
+                                <li><a href="http://www.instagram.com/nauclothing">Instagram</a></li>
+                                <li><a href="https://twitter.com/nauclothing">Twitter</a></li>
+                                <li><a href="http://www.pinterest.com/nauclothing">Pinterest</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <ul class="mobile-footer-links show-for-medium-down">
+                </ul>
+                <div class="row footer-bottom">
+                    <div class="medium-6 columns">
+                        <p class="sosumi no-margin">&copy; 2016 Nau International Inc. <a href="/terms">Terms &
+                            Conditions</a> <a href="/privacy-policy">Privacy</a></p>
+                    </div>
+                    <div class="medium-6 show-for-large-up columns">
+                    </div>
+                </div>
+            </footer>
+            <!-- ClickTale Bottom part -->
+            <script type='text/javascript'>
+                // The ClickTale Balkan Tracking Code may be programmatically customized using hooks:
+                //
+                //   function ClickTalePreRecordingHook() { /* place your customized code here */  }
+                //
+                // For details about ClickTale hooks, please consult the wiki page http://wiki.clicktale.com/Article/Customizing_code_version_2
+
+                document.write(unescape("%3Cscript%20src='" +
+                        (document.location.protocol == 'https:' ?
+                                "https://cdnssl.clicktale.net/www02/ptc/dae8c041-e6ef-4c76-a568-c524e932207e.js" :
+                                "http://cdn.clicktale.net/www02/ptc/dae8c041-e6ef-4c76-a568-c524e932207e.js") + "'%20type='text/javascript'%3E%3C/script%3E"));
+            </script>
+
+            <!-- ClickTale end of Bottom part --> <a class="exit-off-canvas"></a>
+        </div><!-- /inner-wrap -->
+    </div><!-- /off-canvas-wrap -->
+
+
+    <script type="text/javascript">
+        var staticPromotions = staticPromotions || [];
+        staticPromotions = [
+            {
+                'id': '2',
+                'name': 'Subscribe &amp; Save',
+                'creative': '',
+                'position': 'catalog_product_view',
+                'activated': '1'
+            },
+
+        ];
+    </script>
+    <script type="text/javascript">
+        Listrak_Remarketing = new function () {
+            this.updateCart = function () {
+                new Ajax.Request('http://www.nau.com/remarketing/ajax/cart/');
+            };
+
+            this.track = function () {
+                new Ajax.Request('http://www.nau.com/remarketing/ajax/track/');
+            };
+        };
+    </script>
+    <script type="text/javascript">
+        (function (d) {
+            if (document.addEventListener) document.addEventListener('ltkAsyncListener', d);
+            else {
+                e = document.documentElement;
+                e.ltkAsyncProperty = 0;
+                e.attachEvent('onpropertychange', function (e) {
+                    if (e.propertyName == 'ltkAsyncProperty' && typeof _ltk !== 'undefined') {
+                        d();
+                    }
+                });
+            }
+        })(function () {
+            _ltk.Click.Submit();
+            _ltk.SCA.CaptureEmail('newsletter');
+            _ltk.SCA.CaptureEmail('ltkmodal-email');
+        });
+    </script>
+    <script type="text/javascript">
+        (function (d, s, id, url) {
+            var js, ljs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = url;
+            js.type = "text/javascript";
+            ljs.parentNode.insertBefore(js, ljs);
+        })(document, 'script', 'ltkSDK', 'http://cdn.listrakbi.com/scripts/script.js?m=oWC37Tz7Dhtv&v=1');
+    </script>
+
+    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/ouibounce.1463505816.js"></script>
+    <div id="exitintent-popup" class="exitintent-popup reveal-modal medium" data-reveal aria-hidden="true" role="dialog"
+         style="background-color: #ffffff; ">
+        <div class="close-reveal-modal" title="Close"></div>
+        <div class="block-content" style="width: 100%; margin: 0 auto;">
+            <div>
+                <form action="https://www.nau.com/newsletter/subscriber/new/"
+                      method="post"
+                      id="modal-newsletter-validate-detail">
+                    <div class="modal-subscribe-header">
+                        <h1 for="newsletter">Subscribe &amp; Save</h1>
+                        <hr/>
+                        <p>Join our mailing list to get access to sales, special offers, and the latest products.</p>
+                    </div>
+                    <div>
+                        <input name="email"
+                               placeholder="your@email.com"
+                               aria-label="Email"
+                               type="text"
+                               id="newsletter-modal"
+                               class="input-text required-entry validate-email"/>
+                        <button type="submit" class="button radius" title="Subscribe">
+                            <span><span>Subscribe</span></span>
+                        </button>
+                    </div>
+                </form>
+                <script type="text/javascript">
+                    //<![CDATA[
+                    var newsletterSubscriberFormDetail = new VarienForm('modal-newsletter-validate-detail');
+                    //]]>
+                </script>
+            </div>
+        </div>
+    </div>
+    <script>
+        $j(function () {
+            $j(document).foundation();
+            if (Intenso.libs.ui.readCookie('ExitIntentPopup') != 'true') {
+                setTimeout(function () {
+                    $j('#exitintent-popup').foundation('reveal', 'open');
+                }, 5000);
+                Intenso.libs.ui.createCookie('ExitIntentPopup', true, 30)
+            }
+        });
+    </script>
+    <script src="http://www.nau.com/skin/frontend/intenso/default/js/foundation.min.1463505816.js"></script>
+    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/chosen.jquery.min.1463505816.js"></script>
+    <script src="http://www.nau.com/skin/frontend/intenso/nau/js/intenso.1463505816.js"></script>
+    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/extendedreviews.1463505816.js"></script>
+    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/pinchzoom.1463505816.js"></script>
+    <script src="http://www.nau.com/skin/frontend/intenso/nau/js/lib/imagelightbox.1463505816.js"></script>
+    <script>
+        // Init Foundation framework
+        $j(document).foundation({
+            topbar: {
+                custom_back_text: true,
+                back_text: 'Back'
+            }
+        });
+        // Init Intenso Theme framework
+        $j(document).intenso({
+            productsGrid: {
+                min_item_width: 248
+            }
+        });
+        var lightboxInstance,
+                lightboxMobileInstance;
+        $j(function () {
+            lightboxInstance = $j('.lightbox').imageLightbox({
+                quit_on_doc_click: false
+            });
+            lightboxMobileInstance = $j('.lightbox-mobile').imageLightbox({
+                quit_on_doc_click: false
+            });
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        dataLayer.push({
+            'event': 'productDetail',
+            'ecommerce': {
+                'detail': {
+                    'products': [{
+                        'id': "M130-A",
+                        'name': "Millican Nick The Messenger Bag 17L",
+                        'category': "Travel Collection"
+                    }]
+                },
+                'impressions': []
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        //<![CDATA[
+        new ShipperHQ.JQueryLoader(
+                {
+                    "jquery": {"default": "1.11.2"},
+                    "ui": {
+                        "default": "1.11.2", // By default all use new version
+                        "1.5": "1.8.24",
+                        "1.4": "1.8.24",
+                        "1.3": "1.8.24"
+                    }
+                },
+                {
+                    "jquery": "//ajax.googleapis.com/ajax/libs/jquery/{version}/jquery.min.js",
+                    "ui": "//ajax.googleapis.com/ajax/libs/jqueryui/{version}/jquery-ui.min.js",
+                    "ui-style": "//ajax.googleapis.com/ajax/libs/jqueryui/{version}/themes/ui-lightness/jquery-ui.css"
+                }
+        );
+        //]]>
+    </script>
+    <div class="loading-bar"></div>
+    <script type="text/javascript">window.NREUM || (NREUM = {});
+    NREUM.info = {
+        "beacon": "bam.nr-data.net",
+        "licenseKey": "6889091569",
+        "applicationID": "5609629",
+        "transactionName": "M1NWMUJXCkYHAUdZWwoZYRdZGQ1bAgdLHkQMRg==",
+        "queueTime": 0,
+        "applicationTime": 25,
+        "atts": "HxRVRwpNGUg=",
+        "errorBeacon": "bam.nr-data.net",
+        "agent": ""
+    }</script>
+
+{/content}
