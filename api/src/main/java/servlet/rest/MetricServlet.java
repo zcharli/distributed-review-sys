@@ -86,7 +86,7 @@ public class MetricServlet {
         }
 
         final MetricsCollector metricsCollector = DHTManager.instance().getMetrics();
-        DateTime today = new DateTime(System.currentTimeMillis());
+        DateTime today = getDate(System.currentTimeMillis());
         DateTime now = DateTime.now();
         final int showDays = APIConfig.SHOW_REVIEW_FOR_LAST_X_DAYS;
         int[] lastWeek = new int[showDays];
@@ -138,7 +138,7 @@ public class MetricServlet {
                 starsPerProduct += review.m_stars;
                 productViews += review.m_upvotes;
                 DateTime reviewDate = getDate(review.m_publishTime);
-                int days = Days.daysBetween(today.toLocalDate(), reviewDate.toLocalDate()).getDays();
+                int days = Days.daysBetween(reviewDate.toLocalDate(), today.toLocalDate()).getDays();
                 if (days < showDays) {
                     int index = showDays - days - 1;
                     lastWeek[index]++;
