@@ -29,6 +29,11 @@ public class GlobalContext {
 
     private GlobalContext() {}
 
+    public synchronized void invalidateCache() {
+        lastModifiedProduct = 0;
+        lastModifiedMetric = 0;
+    }
+
     public synchronized void setMetricState(Queue<BaseMetric> state) {
         long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - lastModifiedProduct < TEN_SECONDS_IN_MILI) {

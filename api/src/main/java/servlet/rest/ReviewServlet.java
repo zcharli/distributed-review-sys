@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import config.DHTConfig;
 import core.DHTManager;
+import core.GlobalContext;
 import error.GenericReply;
 import key.DRSKey;
 import key.DefaultDHTKeyPair;
@@ -348,7 +349,7 @@ public class ReviewServlet {
                 .toArray(CompletableFuture[]::new);
         CompletableFuture.allOf(allAcceptanceReviews).join();
         response.resume(Response.ok().entity(new ReviewGetResponse(200, reviewsInAcceptance)).build());
-
+        GlobalContext.instance().invalidateCache();
     }
 
     @GET

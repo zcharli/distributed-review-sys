@@ -59,6 +59,14 @@ task(launchNormSlave2, dependsOn: 'classes', type: JavaExec) {
             '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8080'
 }
 
+task(launchNormSlave3, dependsOn: 'classes', type: JavaExec) {
+    main='client.DRSClient'
+    args '-port', '9090', '-host', '192.168.101.18', '-floatingip', 'http://134.117.26.137:9090'
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs '-Xdebug',
+            '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8080'
+}
+
 task(launchSlave, dependsOn: 'classes', type: JavaExec) {
     main='client.DRSClient'
     args '-bootstrap','192.168.101.16', '-port', '9090', '-host', '192.168.101.16', '-floatingip', 'http://134.117.26.135:9090'
