@@ -1,0 +1,766 @@
+/**
+ * Intenso Premium Theme
+ *
+ * @category    Itactica
+ * @package     Itactica_Intenso
+ * @copyright   Copyright (c) 2014 Itactica (http://www.itactica.com)
+ * @license     http://getintenso.com/license
+ *
+ * WARNING
+ *
+ * Do not edit or add to this file since it was generated programmatically
+ * according to configuration settings from the theme. Any change to this file
+ * will be overwritten and lost.
+ *
+ * If you wish to add your own CSS styles please use the following file:
+ * skin/frontend/intenso/default/css/custom.css
+ *
+ * To activate your custom CSS file, log in to your Admin panel and navigate to: 
+ * System > Configuration > Theme Setup > Custom CSS
+ */
+/**
+ * Created: 10/20/16, 8:20 AM 
+ */
+
+
+html { 
+	font-size: 18px;
+}
+
+body {
+	background: #ffffff;
+}
+
+.off-canvas-wrap {
+	background: #ffffff;
+}
+
+/* default text color */
+p,
+table tr th, table tr td,
+.product-collateral li,
+.review-list .review-text,
+.cms-wrapper .column,
+.cms-wrapper .columns,
+.cms-wrapper p,
+.cms-wrapper ul li { 
+	color: #333333;
+}
+
+/* font family */
+body,
+h1,h2,h3,h4,h5,h6,p,
+.top-bar-section,
+.top-bar-section ul li > a,
+.side-nav,
+.side-nav li.active > a:first-child:not(.button),
+button,
+.button,
+.label,
+.sub-nav dt,
+.sub-nav dd,
+.sub-nav li,
+.chosen-container,
+.rating-links.icon-user > span,
+.newsletter-ribbon .icon-email,
+.footer-links li[class^="icon-"],
+.footer-links li[class*=" icon-"],
+.layered-nav-container ol li,
+a.previous,
+a.next {
+	font-family: "Karla", sans-serif;
+}
+
+.links-list {
+	font-family: "Karla", sans-serif !important;
+}
+
+/* max width of the page */
+.row,
+.off-canvas-wrap { 
+	max-width: 1440px;
+}
+
+/* main color */
+a,
+span.view-more,
+.form-box .buttons-set a:hover,
+.icon-highlighted,
+.text-box-with-icon section.box-1 .icon-highlighted,
+.top-bar-section li.active:not(.has-form) a:not(.button),
+.has-tip:hover, .has-tip:focus,
+.sub-nav dt a:hover, .sub-nav dd a:hover, .sub-nav li a:hover,
+.form-search .button:hover span,
+.form-search .sec-menu:hover,
+.main-header .icon-main-menu,
+.main-header .icon-main-menu:hover,
+.main-header .icon-cart:hover,
+.main-header .icon-user:hover,
+.main-header .top-bar li:hover .icon-cart,
+.cart-dropdown .mini-products-list .view-more-attr,
+section.featured-slider .item-title a:hover,
+section.featured-slider .category-title a:hover,
+.category-products .item-title a:hover,
+.ratings.no-rating a:hover,
+.rating-links a:hover,
+.footer-links ul li a:hover,
+.products-grid .link-rss:hover,
+.filter-reset,
+.layered-nav-container ol li.checked a:before,
+.layered-nav .currently li .value,
+.product-options dt label,
+#add-tag,
+.cms-no-route h1,
+.no-results h1,
+.block-compare .product-name a:hover,
+.block-compare .actions a:hover,
+.catalog-product-compare-index .link-wishlist:hover,
+.cart #shopping-cart-totals-table tfoot tr td:nth-child(2),
+.cart .data-table.cart-table .price,
+.checkout-progress li.active span,
+.my-account .checkout-multishipping .buttons-set a,
+.review-popover #histogram .stars a:hover,
+#search_mini_form .form-search .button:hover span,
+#search_mini_form .form-search .sec-menu:hover,
+.catalog-list-empty h1,
+.side-nav li a:not(.button),
+.select-list > label { 
+	color: #333333;
+}
+
+.main-color,
+.links-list li:active > a,
+.account-dropdown .bg-box p.small a,
+.cart-dropdown .dropdown-title .icon-edit:hover,
+.cart-dropdown .mini-products-list .item-details .item-name a:hover,
+.special-price .price,
+.link-compare.compared:before,
+.link-compare.compared:hover:before,
+.product-shop-side .add-to-links .link-wishlist:hover, 
+.product-shop-side .add-to-links .link-compare:hover,
+.email-friend a:hover,
+.review-toolbar a.next:before, 
+.review-toolbar a.next:after, 
+.review-toolbar a.previous:before, 
+.review-toolbar a.previous:after,
+.review-toolbar a.previous, 
+.review-toolbar a.next,
+.my-account a.next:before,
+.my-account a.next:after,
+.my-account a.previous:before,
+.my-account a.previous:after,
+.my-account a.previous,
+.my-account a.next,
+.top-bar-section .left .mega-menu > ul > li.mega-menu-top-block a:hover, 
+.top-bar-section .left ul li.mega-menu-bottom-block a:hover,
+.top-bar-section .left ul li a.link:hover,
+.link:hover { 
+	color: #333333 !important;
+}
+
+.links-list li:hover > a:before,
+a.previous, a.next,
+.product-collateral li:after,
+.loading-bar,
+.block-compare .block-title,
+.opc-block-progress .block-content dt.complete:before,
+.checkout-progress li.active span:before {
+	background: #333333;
+}
+
+.chosen-container-active .chosen-single:before,
+.chosen-container-active .chosen-single:after {
+	background: #333333 !important;
+}
+
+.icon-highlighted,
+.text-box-with-icon section.box-1 .icon-highlighted,
+.chosen-container .chosen-results li.highlighted,
+.product-collateral li:before,
+.cart-collaterals .shipping h2:hover:before,
+.cart-collaterals .discount h2:hover:before,
+.cart-collaterals .shipping h2:hover:after,
+.cart-collaterals .discount h2:hover:after,
+.cart .qty-wrapper .input-text:focus,
+.chosen-container-active .chosen-choices,
+.buybox .qty-input-text:focus,
+.category-products .configurable-swatch-list li.selected .swatch-link {
+	border-color: #333333;
+}
+.input-box.focus,
+.input-box textarea:focus,
+.product-img-box .more-views li.selected,
+.color-swatches input[type="radio"]:checked + label,
+.chosen-container-active .chosen-single,
+.product-options .configurable-swatch-list li.selected {
+	border-color: #333333 !important;
+}
+
+button.disabled:hover, button.disabled:focus, button[disabled]:hover, button[disabled]:focus, .button.disabled:hover, .button.disabled:focus, .button[disabled]:hover, .button[disabled]:focus,
+.chosen-container .chosen-results li.highlighted {
+	background-color: #333333;
+}
+
+.mdformfields .form-search .input-text:focus ~ div {
+	background-color: #333333 !important;
+}
+
+.chosen-container-active .chosen-single {
+	border-bottom-color: #333333 !important;
+}
+
+/* main hover color */
+a:hover,
+a:focus,
+.side-nav li a:hover:not(.button), 
+.side-nav li a:focus:not(.button) {
+	color: #777777;
+}
+
+a.previous:hover, a.previous:focus, a.next:hover, a.next:focus {
+	background: #777777;
+}
+
+/* all buttons border radius */
+button, .button {
+	border-radius: 0px;
+}
+/* featured products category nav border radius */
+.category-nav li:first-child {
+	border-bottom-left-radius: 0px;
+	border-top-left-radius: 0px;
+}
+.category-nav li:last-child {
+	border-bottom-right-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+/* primary buttons */
+button, .button,
+button.disabled, button[disabled], .button.disabled, .button[disabled],
+.account-dropdown li a.button.sign-in,
+.cart-dropdown li a.button.sign-in,
+.category-nav li.active,
+.products-grid .toolbar .button.active,
+.products-grid .toolbar .button.active:hover {
+	background: #333333;
+	color: #ffffff;
+}
+.category-nav li.active:after {
+	border-top-color: #333333;
+}
+
+/* primary buttons hover */
+button:hover, button:focus, .button:hover, .button:focus {
+	background: #333333;
+	color: #ffffff;
+}
+.main-nav .button:hover {
+	background: #333333 !important;
+	color: #ffffff !important;
+}
+
+/* secondary buttons */
+button.secondary, .button.secondary,
+.wishlist-index-index .buttons-set2 .btn-share,
+.wishlist-index-index .buttons-set2 .btn-add {
+	background: #333333;
+	color: #ffffff;
+}
+
+/* secondary buttons hover */
+button.secondary:hover, button.secondary:focus, 
+.button.secondary:hover, .button.secondary:focus,
+.wishlist-index-index .buttons-set2 .btn-share:hover,
+.wishlist-index-index .buttons-set2 .btn-share:focus,
+.wishlist-index-index .buttons-set2 .btn-add:hover,
+.wishlist-index-index .buttons-set2 .btn-add:focus {
+	background: #333333;
+	color: #ffffff;
+}
+
+/* ghost button */
+button.ghost, .button.ghost {
+	border-color: #333333 !important;
+	color: #333333 !important;
+}
+button.ghost:hover, .button.ghost:hover, button.ghost:focus, .button.ghost:focus {
+	border-color: #333333 !important;
+	color: #333333 !important;
+}
+
+/* ghost button (for dark backgrounds) */
+button.ghost.light, .button.ghost.light {
+	border-color: #ffffff !important;
+	color: #ffffff !important;
+}
+button.ghost.light:hover, .button.ghost.light:hover, button.ghost.light:focus, .button.ghost.light:focus {
+	border-color: #ffffff !important;
+	color: #ffffff !important;
+}
+
+/* header background */
+.main-header {
+	background: transparent;
+}
+/* main menu background */
+.right-off-canvas-menu.main-nav {
+	background: transparent !important;
+}
+.main-nav .top-bar-section li:not(.has-form) a:not(.button), .main-nav .top-bar-section > ul {
+	background: transparent;
+}
+/* color of line separator below header */
+.main-header {
+	border-bottom-color: transparent !important;
+		border-bottom-width: 0px !important;
+	}
+
+/* main menu text color */
+.main-nav .top-bar-section ul li a:not(.button) {
+	color: #333333;
+}
+/* main menu dropdown arrow color */
+.top-bar-section .has-dropdown > a:after, .top-bar-section .has-dropdown-for-large > a:after {
+	border-color: transparent transparent #cecece;
+}
+
+/* main menu secondary text color */
+.top-bar .sup,
+.welcome-message {
+	color: #999999;
+}
+
+/* search box text color */
+#search_mini_form .form-search label {
+	color: #aeaeae;
+}
+/* search box text color on focus */
+#search_mini_form .form-search .input-text {
+	color: #000000;
+}
+
+#search_mini_form .form-search .input-text {
+	border-color: #d3d3d3;
+}
+/* search box border color on hover */
+#search_mini_form .form-search .input-text:hover {
+	border-color: #afafaf;
+}
+/* search box icon's color */
+#search_mini_form .form-search .button span,
+#search_mini_form .form-search .sec-menu {
+	color: #999999;
+}
+/* search box icon's divider color */
+#search_mini_form .form-search .sec-menu {
+	border-color: #efefef;
+}
+
+
+/* footer's top background */
+.newsletter-ribbon {
+	background: #ffffff;
+}
+/* footer's top text and icons color */
+.newsletter-ribbon .icon-email,
+.newsletter-ribbon .social a {
+	color: #333333;
+}
+/* footer's top text and icons hover color */
+.newsletter-ribbon a:hover,
+.exitintent-popup a:hover,
+.newsletter-ribbon .social a:hover,
+.exitintent-popup .social a:hover,
+.newsletter-ribbon .icon-email:hover:before {
+	color: #777777;
+}
+/* footer newsletter box placeholder's text color */
+.newsletter-subscribe-form .field label {
+	color: #777777;
+}
+/* footer newsletter box input text color */
+.newsletter-subscribe-form .input-text {
+	color: #333333;
+}
+/* footer newsletter box input border color */
+.newsletter-subscribe-form .input-box {
+	border-color: #d3d3d3;
+}
+/* footer newsletter box input border color on hover */
+.newsletter-subscribe-form .input-box:hover {
+	border-color: #afafaf !important;
+}
+/* footer newsletter box input border color on focus */
+.newsletter-subscribe-form .input-box.focus {
+	border-color: #333333 !important;
+}
+/* footer newsletter submit button colors */
+.newsletter-ribbon button {
+	color: #ffffff;
+	background-color: #333333;
+}
+/* footer newsletter submit button background color on hover */
+.newsletter-ribbon button:hover,
+.newsletter-ribbon button:focus {
+	color: #ffffff;
+	background-color: #333333;
+}
+
+/* footer's middle background */
+.footer-links {
+	background: #f0f0f0;
+}
+/* footer label color */
+.footer-links ul li.title {
+	color: #000000;
+}
+/* footer vertical links color */
+.footer-links ul li a {
+	color: #666666;
+}
+/* footer vertical links hover color */
+.footer-links ul li a:hover {
+	color: #333333;
+}
+/* footer horizontal links color */
+.h-links-list li a {
+	color: #888888 !important;
+}
+/* footer horizontal links hover color */
+.h-links-list li a:hover {
+	color: #444444 !important;
+}
+/* footer horizontal links separator color */
+.h-links-list li {
+	border-color: #a5a5a5;
+}
+/* footer plain text color */
+.footer-links ul li {
+	color: #222222;
+}
+/* footer bottom background color */
+.footer-bottom {
+	background-color: #ffffff;
+}
+/* footer bottom text color */
+.sosumi {
+	color: #333333;
+}
+/* footer "Back to Top" text color */
+.back-to-top {
+	color: #777777;
+}
+/* footer "Back to Top" text hover color */
+.back-to-top:hover {
+	color: #333333;
+}
+
+/* mobile footer background color */
+.mobile-footer-links {
+	background-color:  #e5e5e5;
+}
+/* mobile footer background color on hover */
+.mobile-footer-links li:hover {
+	background-color:  #c6c6c6;
+}
+/* mobile footer text color */
+.mobile-footer-links li a {
+	color: #000000 !important;
+}
+
+/* catalog item-info min height */
+.item-info {
+	min-height: 10rem;
+}
+
+/* catalog view background color */
+.products-grid,
+.advanced-search-amount,
+.catalog-category-view .breadcrumbs-wrapper,
+.catalogsearch-result-index .breadcrumbs-wrapper,
+.catalogsearch-advanced-result .breadcrumbs-wrapper {
+	background-color: transparent;
+}
+/* catalog view: category title color */
+#category-name {
+	color: #222222;
+}
+/* price color */
+.minimal-price .price, .price-box .price {
+	color: #666666;
+}
+
+/* product view - background color */	
+.product-view {
+	background-color: #ffffff;
+}
+/* product view - background color */	
+.breadcrumbs-wrapper {
+	background-color: #ffffff;
+}
+/* product view - add to cart box - background color */	
+.bg-box {
+	background-color: #f4f4f4;
+}
+/* product name text color */	
+.product-shop h1 {
+	color: #333333;
+}
+/* product's sticky nav background color */	
+.catalog-product-view .magellan-nav {
+	background-color: #ffffff;
+}
+/* product's sticky nav links color */	
+.catalog-product-view .magellan-nav .sub-nav dd a {
+	color: #333333;
+}
+/* product's sticky nav links color on hover */	
+.catalog-product-view .magellan-nav .sub-nav dd:hover a {
+	color: #27ccc0;
+}
+/* product's sticky nav links background on active */	
+.catalog-product-view .magellan-nav .sub-nav dd.active a {
+	background-color: #bbbbbb;
+}
+.catalog-product-view .magellan-nav.magellan-fixed {
+    min-width: auto;
+    width: 1440px;
+}
+/* product's sticky nav background color when fixed */	
+.catalog-product-view .magellan-nav.magellan-fixed {
+	background-color: #ffffff;
+}
+/* product's sticky nav links color when fixed */	
+.catalog-product-view .magellan-nav.magellan-fixed .sub-nav dd a {
+	color: #333333;
+}
+/* product's sticky nav links color on hover when fixed */	
+.catalog-product-view .magellan-nav.magellan-fixed .sub-nav dd:hover a {
+	color: #27ccc0;
+}
+/* product info - color of the subtitles */	
+.product-collateral-wrapper .product-description h3,
+.product-collateral-wrapper .additional h3,
+.product-collateral-wrapper .custom-info h3,
+.product-collateral-wrapper .ratings-reviews h3,
+.product-collateral-wrapper .tags h3 {
+	color: #222222;
+}
+/* additional info table - background color */	
+.product-collateral-wrapper .product-collateral.additional {
+	background-color: #f4f4f4;
+}
+/* product info sections - separator line color */	
+.product-collateral-wrapper .product-collateral {
+	border-color: #f4f4f4;
+}
+/* upsell products - background color */	
+.featured-slider.up-sell {
+	background-color: transparent;
+}
+/* upsell products - label color */	
+.featured-slider.up-sell h3 {
+	color: #222222;
+}
+/* related products - background color */	
+.featured-slider.related {
+	background-color: #f4f4f4;
+}
+/* related products - label color */	
+.featured-slider.related h3 {
+	color: #222222;
+}
+
+/* featured products background color */	
+.featured-slider.featured-slider-section {
+	background-color: #ffffff;
+}
+/* featured products label color */	
+.featured-slider.featured-slider-section h3 {
+	color: #222222;
+}
+
+/* featured categories background color */	
+.featured-slider.featured-categories-section {
+	background-color: #f4f4f4;
+}
+/* featured categories label color */	
+.featured-slider.featured-categories-section h3 {
+	color: #222222;
+}
+
+/* logo slider label color */	
+.brand-slider h3 {
+	color: #222222;
+}
+
+/* star rating color */	
+.rating, .product-collateral .review-list .rating, .product-collateral .rating, 
+.review-product-list .ratings-detail .rating,
+#pretty-product-review-list .pretty-rating-code .options li .option.hover, 
+#pretty-product-review-list .pretty-rating-code .options li .option.selected {
+	background-image: url(data:image/svg+xml;utf8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Capa_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%22200px%22%20height%3D%2238.167px%22%20viewBox%3D%220%200%20200%2038.167%22%20enable-background%3D%22new%200%200%20200%2038.167%22%20xml%3Aspace%3D%22preserve%22%3E%3Cg%3E%3Cpath%20d%3D%22M18.52%2C1.129c3.219%2C0%2C2.409%2C10.807%2C5.013%2C12.789c2.606%2C1.982%2C12.44-1.953%2C13.435%2C1.255c0.995%2C3.208-8.915%2C5.523-9.91%2C8.735c-0.996%2C3.208%2C5.469%2C12.004%2C2.863%2C13.99c-2.606%2C1.982-8.181-7.653-11.4-7.653c-3.221%2C0-8.798%2C9.635-11.402%2C7.653c-2.606-1.986%2C3.857-10.782%2C2.863-13.99c-0.995-3.211-10.905-5.526-9.91-8.735c0.997-3.208%2C10.829%2C0.727%2C13.435-1.255C16.109%2C11.937%2C15.299%2C1.129%2C18.52%2C1.129z%22%20fill%3D%22%23333%22%2F%3E%3Cpath%20d%3D%22M59.26%2C1.129c3.219%2C0%2C2.409%2C10.807%2C5.013%2C12.789c2.606%2C1.982%2C12.44-1.953%2C13.435%2C1.255c0.995%2C3.208-8.916%2C5.523-9.91%2C8.735c-0.997%2C3.208%2C5.469%2C12.004%2C2.863%2C13.99c-2.606%2C1.982-8.182-7.653-11.4-7.653c-3.221%2C0-8.798%2C9.635-11.402%2C7.653c-2.606-1.986%2C3.857-10.782%2C2.863-13.99c-0.995-3.211-10.905-5.526-9.911-8.735c0.997-3.208%2C10.829%2C0.727%2C13.435-1.255C56.85%2C11.937%2C56.039%2C1.129%2C59.26%2C1.129z%22%20fill%3D%22%23333%22%2F%3E%3Cpath%20d%3D%22M100%2C1.129c3.219%2C0%2C2.409%2C10.807%2C5.011%2C12.789c2.608%2C1.982%2C12.442-1.953%2C13.437%2C1.255c0.995%2C3.208-8.916%2C5.523-9.91%2C8.735c-0.995%2C3.208%2C5.469%2C12.004%2C2.861%2C13.99c-2.604%2C1.982-8.18-7.653-11.399-7.653c-3.221%2C0-8.798%2C9.635-11.402%2C7.653c-2.605-1.986%2C3.858-10.782%2C2.863-13.99c-0.995-3.211-10.905-5.526-9.911-8.735c0.997-3.208%2C10.829%2C0.727%2C13.435-1.255C97.59%2C11.937%2C96.78%2C1.129%2C100%2C1.129z%22%20fill%3D%22%23333%22%2F%3E%3Cpath%20d%3D%22M140.74%2C1.129c3.219%2C0%2C2.409%2C10.807%2C5.013%2C12.789c2.608%2C1.982%2C12.442-1.953%2C13.437%2C1.255c0.994%2C3.208-8.916%2C5.523-9.91%2C8.735c-0.995%2C3.208%2C5.469%2C12.004%2C2.86%2C13.99c-2.604%2C1.982-8.181-7.653-11.4-7.653c-3.219%2C0-8.797%2C9.635-11.401%2C7.653c-2.604-1.986%2C3.855-10.782%2C2.865-13.99c-0.998-3.211-10.908-5.526-9.91-8.735c0.995-3.208%2C10.829%2C0.727%2C13.433-1.255S137.521%2C1.129%2C140.74%2C1.129z%22%20fill%3D%22%23333%22%2F%3E%3Cpath%20d%3D%22M181.48%2C1.129c3.219%2C0%2C2.409%2C10.807%2C5.012%2C12.789c2.608%2C1.982%2C12.442-1.953%2C13.438%2C1.255c0.994%2C3.208-8.916%2C5.523-9.91%2C8.735c-0.995%2C3.208%2C5.469%2C12.004%2C2.86%2C13.99c-2.604%2C1.982-8.181-7.653-11.4-7.653c-3.22%2C0-8.797%2C9.635-11.401%2C7.653c-2.604-1.986%2C3.855-10.782%2C2.865-13.99c-0.999-3.211-10.909-5.526-9.91-8.735c0.994-3.208%2C10.829%2C0.727%2C13.433-1.255C179.071%2C11.937%2C178.261%2C1.129%2C181.48%2C1.129z%22%20fill%3D%22%23333%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+}
+/* login, forgot password, register, reset password, logout success - background color */
+.customer-account-login .off-canvas-wrap,
+.customer-account-forgotpassword .off-canvas-wrap,
+.customer-account-create .off-canvas-wrap,
+.customer-account-logoutsuccess .off-canvas-wrap,
+.customer-account-resetpassword .off-canvas-wrap,
+.paypal-express-review .off-canvas-wrap {
+	background: transparent;
+}
+/* customer account - background color */
+.account-wrapper {
+	background-color: #f4f4f4;
+}
+/* one page checkout and multishipping checkout - background color */
+.checkout-onepage-index .off-canvas-wrap,
+.checkout-multishipping-login .off-canvas-wrap,
+.checkout-multishipping-register .off-canvas-wrap,
+.checkout-multishipping-addresses .off-canvas-wrap,
+.checkout-multishipping-address-newshipping .off-canvas-wrap,
+.checkout-multishipping-shipping .off-canvas-wrap,
+.checkout-multishipping-address-editshipping .off-canvas-wrap,
+.checkout-multishipping-billing .off-canvas-wrap,
+.checkout-multishipping-overview .off-canvas-wrap,
+.checkout-onepage-failure .off-canvas-wrap,
+.checkout-multishipping-success .off-canvas-wrap,
+.checkout-onepage-success .off-canvas-wrap {
+	background: transparent;
+}
+
+
+ul:not(.list) .item-title .truncate,
+.featured-slider-section .item-title .truncate {
+	max-height: 2.5rem;
+	white-space: initial;
+}
+ul:not(.list) .item-info,
+.featured-slider-section .item-info {
+	min-height: 7rem;
+}
+@media only screen and (max-width: 40em) {
+	.category-products.list .configurable-swatch-list-wrapper > p {
+		display: none;
+	}
+}
+@media only screen and (max-width: 25em) {
+	.category-products.list .item-title {
+		font-size: 0.8125rem;
+		top: 0.3rem;
+	}
+	.category-products.list .configurable-swatch-list-wrapper {
+		bottom: 1.8rem;
+	}
+}
+
+/* Small screens */
+@media only screen and (max-width: 40em) {
+	.top-bar-section ul li:hover > a,
+	.top-bar-section ul li ul li:hover a {
+    	background: #272727 !important;
+   	}
+   	.main-nav .top-bar-section ul li a {
+   		color: #ffffff !important;
+	}
+	.main-nav .top-bar-section ul li:hover a,
+	.main-nav .top-bar-section ul.left li ul li:hover > a:not(.button) {
+		color: #ffffff !important;
+	}
+		.layered-nav-container ol li.checked:hover a:before,
+	.layered-nav-container ol li.checked:hover a {
+		color: #333333;
+	}
+	}
+	.main-logo-small {
+		max-width: 110px;
+	}
+/* Medium and Big screens */
+@media only screen and (min-width: 40.063em) {
+		/* main menu icon's color */
+	.main-header .top-bar .icon-cart,
+	.welcome-message span,
+	.main-header .icon-user,
+	.main-header .icon-cart {
+		color: #cecece;
+	}
+		.top-bar-section .has-dropdown:hover > a:after,
+	.top-bar-section .has-dropdown-for-large:hover > a:after {
+		border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #333333 !important;	
+	}
+
+		.main-nav .top-bar-section > ul > li:hover > a:not(.button) {
+		color: #333333 !important;
+	}
+	.top-bar-section > ul > li > a {
+		text-transform: uppercase !important;
+	}
+			.top-bar-section > ul > li > a {
+				font-size: 0.667rem !important;
+						font-weight: normal !important;
+			}
+	
+		.main-logo {
+		max-width: 110px; 
+	}
+			.main-logo,
+	.main-logo-small {
+		margin-top: 33px; 
+	}
+			#search_mini_form {
+		margin-bottom: 0px; 
+	}
+			.form-search {
+				margin-top: 24px; 
+						margin-bottom: 16px; 
+			}
+		
+			.main-header .top-header,
+		.cms-index-index .main-header .header-ribbon, 
+		.cms-home .main-header .header-ribbon,
+		.header-ribbon {
+			background: transparent !important;
+		}
+	
+	/* dropdown menu hover color */
+	.main-nav .top-bar-section ul.left li ul li:hover:not(.mega-menu-top-block):not(.mega-menu-bottom-block) > a:not(.button),
+	.main-nav .top-bar-section ul.right .links-list li:hover > a {
+		color: #000000 !important;
+	}
+	.top-bar-section .left ul,
+	.top-bar-section .left .arrow-box {
+			font-family: "Karla", sans-serif !important;
+		}
+
+		.top-bar-section .left ul li:active > a {
+		color: #333333 !important;
+	}
+	.top-bar-section .left ul li:hover > a:before,
+	.category-products.list .actions .btn-cart {
+		background: #333333;
+	}
+	.top-bar-section .has-dropdown .dropdown li.has-dropdown:hover > a:after {
+		border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #333333 !important;
+	}
+	
+		.category-products.list .actions .btn-cart:hover {
+		background: #777777;
+	}
+	
+		.main-nav .top-bar-section ul.left li.mega-menu > ul > li:not(.mega-menu-top-block):not(.mega-menu-bottom-block):hover > a:not(.button) { 
+		color: #333333 !important;
+	}
+	
+	}
+
+		@media only screen and (max-width: 48.888888888889em) {
+		.mega-menu > ul > li.mega-menu-right-block {
+			display: none !important;
+		}
+		.top-bar-section .has-dropdown.mega-menu > .dropdown {
+			padding-right: 0 !important;
+		}
+	}
+

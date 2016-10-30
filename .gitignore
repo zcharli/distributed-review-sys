@@ -95,6 +95,9 @@ management/npm-debug.log
 management/testem.log
 management/build
 
+demo/server-side-rendering/node_modules
+demo/client-side-rendering/node_modules
+
 .gitignore
 .gitkeep
 app.js
