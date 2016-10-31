@@ -24,12 +24,19 @@ import review.response.OperationCompleteResponse;
 import review.response.ReviewGetResponse;
 import validator.ExternalReview;
 
+import javax.script.*;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.FileReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -42,6 +49,17 @@ import java.util.concurrent.Executors;
 public class ReviewServlet {
     private final static Logger LOGGER = LoggerFactory.getLogger(ReviewServlet.class);
     private final ExecutorService m_queryWorker = Executors.newFixedThreadPool(4);
+
+    public static final String renderScript = ("{dust.render(name, " +
+            "JSON.parse(json), "
+            + "function(err,data) { "
+            + "if(err) { "
+            + "throw new Error(err);"
+            + "} "
+            + "else { "
+            + "writer.write( data, 0, data.length );"
+            + "}  "
+            + "});}");
 
     public ReviewServlet() {
     }
@@ -131,12 +149,137 @@ public class ReviewServlet {
         }
     }
 
+    @GET
+    @Path("/embed/{barcode}")
+    @Produces(MediaType.TEXT_HTML)
+    public void getReviewIFrame(final @Suspended AsyncResponse response,
+                                final @PathParam("barcode") String barcode) {
+        if (Strings.isNullOrEmpty(barcode)) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity("Missing barcode parameter").build());
+            return;
+        }
+        ScriptEngineManager engineManager = new ScriptEngineManager();
+        ScriptEngine engine = engineManager.getEngineByName("nashorn");
+
+        String dustJSPath = this.getClass().getClassLoader().getResource("embed/dust-full.min.js").getPath();
+        try {
+            engine.eval(new FileReader(dustJSPath));
+        } catch (Exception e) {
+            LOGGER.error("Dust JS path could not be reached by file reader");
+            response.resume(Response.serverError().entity("Oops and error occurred").build());
+            return;
+        }
+        Invocable invocable = (Invocable) engine;
+        Object dustjs = null;
+        try {
+            dustjs = engine.eval("dust");
+        } catch (Exception e) {
+            LOGGER.error("Dust JS evaluation error.");
+            response.resume(Response.serverError().entity("Oops and error occurred during eval").build());
+            return;
+        }
+
+        String embedTemplatePath = this.getClass().getClassLoader().getResource("embed/embed.dust").getPath();
+        String dustTemplate = "";
+        try {
+            byte[] encoded = Files.readAllBytes(Paths.get(embedTemplatePath));
+            dustTemplate = new String(encoded, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            LOGGER.error("Embed path could not be reached by file reader");
+            response.resume(Response.serverError().entity("Oops and error occurred").build());
+            return;
+        }
+
+        Object compileTemplate = null;
+        try {
+            compileTemplate = invocable.invokeMethod(dustjs, "compile", dustTemplate, "embededDrs");
+        } catch (Exception e) {
+            LOGGER.error("Compilation failed to comple dust template");
+            response.resume(Response.serverError().entity("Oops and error occurred during template Compilation").build());
+            return;
+        }
+        Object loadedSource = null;
+
+        try {
+            loadedSource = invocable.invokeMethod(dustjs, "loadSource", compileTemplate);
+        } catch (Exception e) {
+            LOGGER.error("Compilation failed to loadSource on dust template");
+            response.resume(Response.serverError().entity("Oops and error occurred during template loading").build());
+            return;
+        }
+        getReviewByBarcode(barcode, new AsyncResult() {
+            @Override
+            public Integer call() throws Exception {
+                if (!isSuccessful() || payload() == null) {
+                    response.resume(Response.serverError()
+                            .entity(new GenericReply<String>(
+                                    "DHT-GET", "An error occurred when trying to get id " + barcode))
+                            .build());
+                    return 0;
+                }
+
+                Writer writer = new StringWriter();
+
+
+
+                Bindings bindings = new SimpleBindings();
+
+                Set<Map.Entry<Number640, Data>> allResults = payload().entrySet();
+                if (allResults.size() == 0) {
+                    String noResultsJson = "{\"results\": \"[]\"}";
+
+                    bindings.put("name", "embededDrs");
+                    bindings.put("json", noResultsJson);
+                    bindings.put("writer", writer);
+                    engine.getContext().setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
+                    System.out.println(writer);
+                    response.resume(Response.ok(new OperationCompleteResponse<String>("404", "No results were found.")).build());
+                    return 0;
+                }
+
+
+
+                try {
+                    engine.eval(renderScript, engine.getContext());
+                } catch (Exception e) {
+                    LOGGER.error("Compilation failed during execution");
+                    response.resume(Response.serverError().entity("Oops and error occurred during template execution").build());
+                    return 0;
+                }
+
+                List<BaseReview> allReviews = new ArrayList<BaseReview>();
+                List<BaseReview> limitedReviews = new LinkedList<BaseReview>();
+
+                for (Map.Entry<Number640, Data> results : allResults) {
+                    allReviews.add(((ReviewIdentity) (results.getValue().object())).identity());
+                }
+
+                Collections.sort(allReviews, new ReviewTimestampComparator());
+
+                int max = limit.page * limit.step;
+                int start = (limit.page - 1) * limit.step;
+                if (max > allReviews.size()) {
+                    max = allReviews.size();
+                }
+                for (int i = start; i < max; i++) {
+                    limitedReviews.add(allReviews.get(i));
+                }
+                response.resume(Response.ok(new ReviewGetResponse(200, limitedReviews)).build());
+                return 0;
+            }
+        });
+
+
+        System.out.println(writer);
+        response.resume(Response.status(Response.Status.BAD_REQUEST).entity("Hello world").build());
+    }
+
     @PUT
     @Path("/downvote/{locationId}/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
     public void downvoteReview(final @Suspended AsyncResponse response,
-                             final @PathParam("locationId") String locationId,
-                             final @PathParam("contentId") String contentId) {
+                               final @PathParam("locationId") String locationId,
+                               final @PathParam("contentId") String contentId) {
         if (Strings.isNullOrEmpty(locationId) || Strings.isNullOrEmpty(contentId)) {
             response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Missing essential identifiers")));
             return;
@@ -314,12 +457,15 @@ public class ReviewServlet {
     public void getReview(final @PathParam("identifier") String identifier,
                           final @BeanParam LimitQueryParam limit,
                           final @Suspended AsyncResponse response) {
+        if (Strings.isNullOrEmpty(identifier)) {
 
-        DRSKey reviewKey = DefaultDHTKeyPair.builder()
-                .locationKey(Number160.createHash(identifier))
-                .domainKey(DHTConfig.PUBLISHED_DOMAIN)
-                .build();
-        DHTManager.instance().getAllFromStorage(reviewKey, new AsyncResult() {
+            response.resume(Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new GenericReply<String>(
+                            "400", "Request is missing barcode/identifier"))
+                    .build());
+            return;
+        }
+        getReviewByBarcode(identifier, new AsyncResult() {
             @Override
             public Integer call() throws Exception {
 
@@ -357,6 +503,7 @@ public class ReviewServlet {
                 return 0;
             }
         });
+
     }
 
     @GET
@@ -432,5 +579,13 @@ public class ReviewServlet {
                 return 0;
             }
         });
+    }
+
+    private void getReviewByBarcode(final String identifier, final AsyncResult callback) {
+        DRSKey reviewKey = DefaultDHTKeyPair.builder()
+                .locationKey(Number160.createHash(identifier))
+                .domainKey(DHTConfig.PUBLISHED_DOMAIN)
+                .build();
+        DHTManager.instance().getAllFromStorage(reviewKey, callback);
     }
 }

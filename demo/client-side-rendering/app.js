@@ -4,15 +4,30 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var dust = require('express-dustjs')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// Dustjs settings
+dust._.optimizers.format = function (ctx, node) {
+  return node
+};
+
+// Define custom Dustjs helper
+dust._.helpers.demo = function (chk, ctx, bodies, params) {
+  return chk.w('demo')
+};
+
+// Use Dustjs as Express view engine
+app.engine('dust', dust.engine({
+  // Use dustjs-helpers
+  useHelpers: true
+}));
+app.set('view engine', 'dust')
+app.set('views', path.resolve(__dirname, './views'))
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
