@@ -45,7 +45,11 @@ public class DRSClient {
     @Parameter(names = "-dht_interface", description = "DHT listen interface")
     private String dhtInterface;
 
+    @Parameter(names = "--help", help = true)
+    private boolean help = false;
+
     public void run() {
+
 
         DHTConfig.instance().isBootstrap = !Strings.isNullOrEmpty(bootstrap);
         if (DHTConfig.instance().isBootstrap) {
@@ -102,7 +106,11 @@ public class DRSClient {
 
     public static void main(String[] args) {
         DRSClient client = new DRSClient();
-        new JCommander(client, args);
+        JCommander cli = new JCommander(client, args);
+        if (client.help) {
+            cli.usage();
+            return;
+        }
         client.run();
     }
 }
