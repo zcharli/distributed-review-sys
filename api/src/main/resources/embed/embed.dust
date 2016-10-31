@@ -4,25 +4,84 @@
     <title>Embed Review</title>
     <meta name="description" content="Distributed review system results straight to your browser.">
     <meta charset="UTF-8">
-        <meta name="author" content="Charlie Li">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="apple-mobile-web-app-title" content="DRS">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width,minimal-ui">
-        <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,minimal-ui" media="(device-height: 568px)">
-        <link href="/assets/semantic.min.css" media="screen" rel="stylesheet">
+    <meta name="author" content="Charlie Li">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="apple-mobile-web-app-title" content="DRS">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" id="vp"
+          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width,minimal-ui">
+    <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,minimal-ui"
+          media="(device-height: 568px)">
+    <link href="/assets/semantic.min.css" media="screen" rel="stylesheet">
+    <script href="/assets/jquery.min.js"></script>
+    <script href="/assets/semantic.min.js"></script>
 </head>
 
 <body>
+<div class="ui fluid container">
+    <div class="ui divided items">
+        {#results}
+            <div class="item">
+                <div class="content">
+                    <a class="header">{title}</a>
+                    <div class="meta">
+                        <span class="">Users have rated this review </span>
+                        <div class="ui rating" data-rating="{stars}" data-max-rating="5"></div>
+                    </div>
+                    <div class="description">
+                        <p>{review_content}</p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui label"><i class="shopping basket icon"></i>{description}</div>
+                        <div class="ui label"><i class="history icon"></i>
+                            <span class="date" data-epoch="{publish_time}"></span>
+                        </div>
+                        <div class="ui label"><i class="thumbs outline up icon"></i>
+                            <p><span class="helpful" data-upvotes="{upvotes}" data-downvotes="{downvotes}"></span>
+                            found this review helpful</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {:else}
+            <div class="item">
+                <div class="ui icon message">
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            No reviews have been generated for this product with barcode {barcode}.
+                        </div>
+                        <p>Join our community of reviewer by hosting your own DRS (distributed review system).</p>
+                    </div>
+                </div>
+            </div>
+        {/results}}
+    </div>
+</div>
 
-    {#results}
+<script>
+    $(document).ready(function () {
+        $(".ui.rating").forEach(function (item) {
+            item.rating();
+        });
 
+        $(".date").forEach(function (item) {
+            var epoch = parseInt(item.data("epoch"));
+            item.text(new Date(epoch).toLocaleTimeString("en-us", {
+                weekday: "long", year: "numeric", month: "short", timezone: "America/New_York",
+                day: "numeric", hour: "2-digit", minute: "2-digit"
+            }));
+        });
 
-    {:else}
-
-    {/results}}
-
+        $(".helpful").forEach(function (item) {
+            var upvote = item.data("upvotes");
+            var downvote = item.data("downvotes");
+            var totalVote = upvote + downvote;
+            item.text(upvote + " out of " + totalVote);
+        });
+    });
+</script>
 </body>
 
 </html>

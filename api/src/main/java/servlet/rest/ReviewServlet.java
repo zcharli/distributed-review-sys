@@ -1,7 +1,9 @@
 package servlet.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import config.APIConfig;
 import config.DHTConfig;
 import core.DHTManager;
 import core.GlobalContext;
@@ -30,13 +32,9 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileReader;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -49,6 +47,7 @@ import java.util.concurrent.Executors;
 public class ReviewServlet {
     private final static Logger LOGGER = LoggerFactory.getLogger(ReviewServlet.class);
     private final ExecutorService m_queryWorker = Executors.newFixedThreadPool(4);
+    private final ObjectMapper objectMapper;
 
     public static final String renderScript = ("{dust.render(name, " +
             "JSON.parse(json), "
@@ -62,6 +61,7 @@ public class ReviewServlet {
             + "});}");
 
     public ReviewServlet() {
+        objectMapper = new ObjectMapper();
     }
 
     @PUT
@@ -161,9 +161,11 @@ public class ReviewServlet {
         ScriptEngineManager engineManager = new ScriptEngineManager();
         ScriptEngine engine = engineManager.getEngineByName("nashorn");
 
-        String dustJSPath = this.getClass().getClassLoader().getResource("embed/dust-full.min.js").getPath();
+
         try {
-            engine.eval(new FileReader(dustJSPath));
+            InputStream in = getClass().getClassLoader().getResourceAsStream("embed/dust-full.min.js");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            engine.eval(reader);
         } catch (Exception e) {
             LOGGER.error("Dust JS path could not be reached by file reader");
             response.resume(Response.serverError().entity("Oops and error occurred").build());
@@ -179,11 +181,15 @@ public class ReviewServlet {
             return;
         }
 
-        String embedTemplatePath = this.getClass().getClassLoader().getResource("embed/embed.dust").getPath();
         String dustTemplate = "";
         try {
-            byte[] encoded = Files.readAllBytes(Paths.get(embedTemplatePath));
-            dustTemplate = new String(encoded, StandardCharsets.UTF_8);
+            InputStream in = getClass().getClassLoader().getResourceAsStream("embed/embed.dust");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder sb = new StringBuilder();
+            while ((dustTemplate = reader.readLine()) != null) {
+                sb.append(dustTemplate);
+            }
+            dustTemplate = sb.toString();
         } catch (Exception e) {
             LOGGER.error("Embed path could not be reached by file reader");
             response.resume(Response.serverError().entity("Oops and error occurred").build());
@@ -220,25 +226,39 @@ public class ReviewServlet {
 
                 Writer writer = new StringWriter();
 
-
-
                 Bindings bindings = new SimpleBindings();
-
+                bindings.put("name", "embededDrs");
                 Set<Map.Entry<Number640, Data>> allResults = payload().entrySet();
                 if (allResults.size() == 0) {
-                    String noResultsJson = "{\"results\": \"[]\"}";
-
-                    bindings.put("name", "embededDrs");
+                    String noResultsJson = "{\"results\": \"[]\",\"barcode\": "+barcode+"}";
                     bindings.put("json", noResultsJson);
                     bindings.put("writer", writer);
                     engine.getContext().setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
-                    System.out.println(writer);
-                    response.resume(Response.ok(new OperationCompleteResponse<String>("404", "No results were found.")).build());
+                    try {
+                        engine.eval(renderScript, engine.getContext());
+                    } catch (Exception e) {
+                        LOGGER.error("Compilation failed on no results");
+                        response.resume(Response.serverError().entity("Oops and error occurred during template execution").build());
+                        return 0;
+                    }
+                    response.resume(Response.ok(writer.toString()).build());
                     return 0;
                 }
 
-
-
+                List<BaseReview> allReviews = new ArrayList<BaseReview>();
+                int count = 0; // TODO: enabled paging on embeded results
+                for (Map.Entry<Number640, Data> results : allResults) {
+                    allReviews.add(((ReviewIdentity) (results.getValue().object())).identity());
+                    if (count++ > APIConfig.MAX_RESULTS_PER_CATEGORY) {
+                        break;
+                    }
+                }
+                
+                Collections.sort(allReviews, new ReviewTimestampComparator());
+                String resultsJson = objectMapper.writeValueAsString(new ReviewGetResponse(200, allReviews));
+                bindings.put("json", resultsJson);
+                bindings.put("writer", writer);
+                engine.getContext().setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
                 try {
                     engine.eval(renderScript, engine.getContext());
                 } catch (Exception e) {
@@ -247,31 +267,10 @@ public class ReviewServlet {
                     return 0;
                 }
 
-                List<BaseReview> allReviews = new ArrayList<BaseReview>();
-                List<BaseReview> limitedReviews = new LinkedList<BaseReview>();
-
-                for (Map.Entry<Number640, Data> results : allResults) {
-                    allReviews.add(((ReviewIdentity) (results.getValue().object())).identity());
-                }
-
-                Collections.sort(allReviews, new ReviewTimestampComparator());
-
-                int max = limit.page * limit.step;
-                int start = (limit.page - 1) * limit.step;
-                if (max > allReviews.size()) {
-                    max = allReviews.size();
-                }
-                for (int i = start; i < max; i++) {
-                    limitedReviews.add(allReviews.get(i));
-                }
-                response.resume(Response.ok(new ReviewGetResponse(200, limitedReviews)).build());
+                response.resume(Response.ok(writer.toString()).build());
                 return 0;
             }
         });
-
-
-        System.out.println(writer);
-        response.resume(Response.status(Response.Status.BAD_REQUEST).entity("Hello world").build());
     }
 
     @PUT
