@@ -1,27 +1,6 @@
 {>layout/}
 {<content}
 
-    <!-- GOOGLE TAG MANAGER -->
-    <noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-PN26NN" height="0" width="0"
-                style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script type="text/javascript">
-        //<![CDATA[
-        dataLayer = typeof dataLayer != 'undefined' ? dataLayer : [];
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
-            var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-PN26NN');
-
-        var dlCurrencyCode = 'USD';
-        //]]>
-    </script>
-    <!-- END GOOGLE TAG MANAGER -->
 
     <div class="off-canvas-wrap">
         <div class="inner-wrap">
@@ -84,11 +63,7 @@
                             <div class="sb-cart-dropdown">
                             </div>
 
-                            <script type="text/javascript">
-                                var googleAnalyticsUniversalData = googleAnalyticsUniversalData || {};
-                                googleAnalyticsUniversalData['shoppingCartContent'] = [];
-                            </script>
-                            <!--/{CART_SIDEBAR_69f7e1dc073b1e68d6a235b3c8ddba71}-->    </li>
+                              </li>
                     </ul>
                 </div>
 
@@ -237,12 +212,7 @@
                                            maxlength="128"/>
                                     <label for="search">Search</label>
                                     <div class="search-autocomplete" id="search_autocomplete"></div>
-                                    <script type="text/javascript">
-                                        //<![CDATA[
-                                        var searchForm = new Varien.searchForm('search_mini_form', 'search', '');
-                                        searchForm.initAutocomplete('http://www.nau.com/catalogsearch/ajax/suggest/', 'search_autocomplete');
-                                        //]]>
-                                    </script>
+
                                     <button type="submit" style="display:none"></button>
                                 </div>
                             </form>
@@ -268,12 +238,7 @@
                                     <div class="right"></div>
                                     <div class="bottom"></div>
                                     <div class="search-autocomplete" id="search_autocomplete2"></div>
-                                    <script type="text/javascript">
-                                        //<![CDATA[
-                                        var searchForm = new Varien.searchForm('search_nav_form', 'search2', '');
-                                        searchForm.initAutocomplete('http://www.nau.com/catalogsearch/ajax/suggest/', 'search_autocomplete2');
-                                        //]]>
-                                    </script>
+
                                 </div>
                             </div>
                         </form>
@@ -378,38 +343,6 @@
             </div>
             <div class="block-compare"></div>
 
-            <script type="text/javascript">
-                var optionsPrice = new Product.OptionsPrice({
-                    "productId": "5000",
-                    "priceFormat": {
-                        "pattern": "$%s",
-                        "precision": 2,
-                        "requiredPrecision": 2,
-                        "decimalSymbol": ".",
-                        "groupSymbol": ",",
-                        "groupLength": 3,
-                        "integerRequired": 1
-                    },
-                    "includeTax": "false",
-                    "showIncludeTax": false,
-                    "showBothPrices": false,
-                    "productPrice": 155,
-                    "productOldPrice": 155,
-                    "priceInclTax": 155,
-                    "priceExclTax": 155,
-                    "skipCalculate": 1,
-                    "defaultTax": 0,
-                    "currentTax": 0,
-                    "idSuffix": "_clone",
-                    "oldPlusDisposition": 0,
-                    "plusDisposition": 0,
-                    "plusDispositionTax": 0,
-                    "oldMinusDisposition": 0,
-                    "minusDisposition": 0,
-                    "tierPrices": [],
-                    "tierPricesInclTax": []
-                });
-            </script>
             <div id="messages_product_view"></div>
             <section role="main" itemtype="http://schema.org/Product" itemscope>
                 <div class="row product-view">
@@ -538,56 +471,6 @@
                                     </ul>
                                 </div>
 
-                                <script type="text/javascript">
-                                    $j(document).ready(function () {
-                                        ConfigurableMediaImages.init('base_image');
-                                        ConfigurableMediaImages.setImageFallback(5000, $j.parseJSON({
-                                            "configurable_product": {
-                                                "small_image": null,
-                                                "base_image": null,
-                                                "additional_images": null
-                                            }, "products": ["5002"]
-                                            , "rust": {
-                                                "configurable_product": {
-                                                    "small_image": null,
-                                                    "base_image": null, "additional_images": null
-                                                }
-                                                ,
-                                                "products": ["5003"]
-                                            }, "slate": {
-                                                "configurable_product": {
-                                                    "small_image": null, "base_image": null, "additional_images": null
-                                                }
-                                                ,
-                                                "products": ["5004"]
-                                            }, "gorse": {
-                                                "configurable_product": {
-                                                    "small_image": null, "base_image": null, "additional_images": null
-                                                }
-                                                ,
-                                                "products": ["5050"]
-                                                ,
-                                                "small_image": [],
-                                                "medium_image": {
-                                                    "5002": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934358-front_1.jpg",
-                                                    "5003": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934365-front_1.jpg",
-                                                    "5004": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934341-front_1.jpg",
-                                                    "5050": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front_1.jpg",
-                                                    "5000": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/1600x\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front.jpg"
-                                                },
-                                                "base_image": {
-                                                    "5002": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934358-front_1.jpg",
-                                                    "5003": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934365-front_1.jpg",
-                                                    "5004": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/m\/a\/mav-nick-17l-506019934341-front_1.jpg",
-                                                    "5050": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front_1.jpg",
-                                                    "5000": "http:\/\/www.nau.com\/media\/catalog\/product\/cache\/1\/image\/x1200\/474e0035af5188e8424dd46d9020f617\/5\/0\/5060199341372-front.jpg"
-                                                },
-                                                "additional_images": []
-                                            }
-                                        }));
-                                        $j(document).trigger('configurable-media-images-init', ConfigurableMediaImages);
-                                    });
-                                </script>
                                 <!-- Central Column: Product info -->
                                 <div class="small-12 medium-4 medium-offset-1 large-3 product-shop columns">
                                     <div class="mobile-gallery">
@@ -765,187 +648,9 @@
                                                 </div>
                                             </dd>
                                         </dl>
-                                        <script type="text/javascript">
-                                            var spConfig = new Product.Config({
-                                                "attributes": {
-                                                    "92": {
-                                                        "id": "92",
-                                                        "code": "color",
-                                                        "label": "Color",
-                                                        "options": [{
-                                                            "id": "236990",
-                                                            "label": "Gorse",
-                                                            "price": "0",
-                                                            "oldPrice": "0",
-                                                            "products": ["5050"]
-                                                        }, {
-                                                            "id": "912",
-                                                            "label": "Moss",
-                                                            "price": "0",
-                                                            "oldPrice": "0",
-                                                            "products": ["5002"]
-                                                        }, {
-                                                            "id": "960",
-                                                            "label": "Rust",
-                                                            "price": "0",
-                                                            "oldPrice": "0",
-                                                            "products": ["5003"]
-                                                        }, {
-                                                            "id": "236964",
-                                                            "label": "Slate",
-                                                            "price": "0",
-                                                            "oldPrice": "0",
-                                                            "products": ["5004"]
-                                                        }]
-                                                    }
-                                                },
-                                                "template": "$#{price}",
-                                                "basePrice": "155",
-                                                "oldPrice": "155",
-                                                "productId": "5000",
-                                                "chooseText": "Choose an Option...",
-                                                "taxConfig": {
-                                                    "includeTax": false,
-                                                    "showIncludeTax": false,
-                                                    "showBothPrices": false,
-                                                    "defaultTax": 0,
-                                                    "currentTax": 0,
-                                                    "inclTaxTitle": "Incl. Tax"
-                                                }
-                                            });
-                                        </script>
-                                        <script>
-                                            $j(function () {
-                                                var swatchesConfig = new Product.ConfigurableSwatches(spConfig);
-                                            });
-                                        </script>
-                                        <script type="text/javascript">
-                                            //<![CDATA[
-                                            var DateOption = Class.create({
-
-                                                getDaysInMonth: function (month, year) {
-                                                    var curDate = new Date();
-                                                    if (!month) {
-                                                        month = curDate.getMonth();
-                                                    }
-                                                    if (2 == month && !year) { // leap year assumption for unknown year
-                                                        return 29;
-                                                    }
-                                                    if (!year) {
-                                                        year = curDate.getFullYear();
-                                                    }
-                                                    return 32 - new Date(year, month - 1, 32).getDate();
-                                                },
-
-                                                reloadMonth: function (event) {
-                                                    var selectEl = event.findElement();
-                                                    var idParts = selectEl.id.split("_");
-                                                    if (idParts.length != 3) {
-                                                        return false;
-                                                    }
-                                                    var optionIdPrefix = idParts[0] + "_" + idParts[1];
-                                                    var month = parseInt($(optionIdPrefix + "_month").value);
-                                                    var year = parseInt($(optionIdPrefix + "_year").value);
-                                                    var dayEl = $(optionIdPrefix + "_day");
-
-                                                    var days = this.getDaysInMonth(month, year);
-
-                                                    //remove days
-                                                    for (var i = dayEl.options.length - 1; i >= 0; i--) {
-                                                        if (dayEl.options[i].value > days) {
-                                                            dayEl.remove(dayEl.options[i].index);
-                                                        }
-                                                    }
-
-                                                    // add days
-                                                    var lastDay = parseInt(dayEl.options[dayEl.options.length - 1].value);
-                                                    for (i = lastDay + 1; i <= days; i++) {
-                                                        this.addOption(dayEl, i, i);
-                                                    }
-                                                },
-
-                                                addOption: function (select, text, value) {
-                                                    var option = document.createElement('OPTION');
-                                                    option.value = value;
-                                                    option.text = text;
-
-                                                    if (select.options.add) {
-                                                        select.options.add(option);
-                                                    } else {
-                                                        select.appendChild(option);
-                                                    }
-                                                }
-                                            });
-                                            dateOption = new DateOption();
-                                            //]]>
-                                        </script>
 
 
-                                        <script type="text/javascript">
-                                            //<![CDATA[
-                                            enUS = {
-                                                "m": {
-                                                    "wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-                                                    "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-                                                }
-                                            }; // en_US locale reference
-                                            Calendar._DN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; // full day names
-                                            Calendar._SDN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // short day names
-                                            Calendar._FD = 0; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
-                                            Calendar._MN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; // full month names
-                                            Calendar._SMN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // short month names
-                                            Calendar._am = "AM"; // am/pm
-                                            Calendar._pm = "PM";
 
-                                            // tooltips
-                                            Calendar._TT = {};
-                                            Calendar._TT["INFO"] = 'About the calendar';
-
-                                            Calendar._TT["ABOUT"] =
-                                                    'DHTML Date/Time Selector\n' +
-                                                    "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
-                                                    'For latest version visit: http://www.dynarch.com/projects/calendar/\n' +
-                                                    'Distributed under GNU LGPL. See http://gnu.org/licenses/lgpl.html for details.' +
-                                                    '\n\n' +
-                                                    'Date selection:\n' +
-                                                    '- Use the \xab, \xbb buttons to select year\n' +
-                                                    '- Use the \u2039 buttons to select month\n' +
-                                                    '- Hold mouse button on any of the above buttons for faster selection.';
-                                            Calendar._TT["ABOUT_TIME"] = '\n\n' +
-                                                    'Time selection:\n' +
-                                                    '- Click on any of the time parts to increase it\n' +
-                                                    '- or Shift-click to decrease it\n' +
-                                                    '- or click and drag for faster selection.';
-
-                                            Calendar._TT["PREV_YEAR"] = 'Prev. year (hold for menu)';
-                                            Calendar._TT["PREV_MONTH"] = 'Prev. month (hold for menu)';
-                                            Calendar._TT["GO_TODAY"] = 'Go Today';
-                                            Calendar._TT["NEXT_MONTH"] = 'Next month (hold for menu)';
-                                            Calendar._TT["NEXT_YEAR"] = 'Next year (hold for menu)';
-                                            Calendar._TT["SEL_DATE"] = 'Select date';
-                                            Calendar._TT["DRAG_TO_MOVE"] = 'Drag to move';
-                                            Calendar._TT["PART_TODAY"] = ' (' + "today" + ')';
-
-                                            // the following is to inform that "%s" is to be the first day of week
-                                            Calendar._TT["DAY_FIRST"] = 'Display %s first';
-
-                                            // This may be locale-dependent. It specifies the week-end days, as an array
-                                            // of comma-separated numbers. The numbers are from 0 to 6: 0 means Sunday, 1
-                                            // means Monday, etc.
-                                            Calendar._TT["WEEKEND"] = "0,6";
-
-                                            Calendar._TT["CLOSE"] = 'Close';
-                                            Calendar._TT["TODAY"] = "today";
-                                            Calendar._TT["TIME_PART"] = '(Shift-)Click or drag to change value';
-
-                                            // date formats
-                                            Calendar._TT["DEF_DATE_FORMAT"] = "%b %e, %Y";
-                                            Calendar._TT["TT_DATE_FORMAT"] = "%B %e, %Y";
-
-                                            Calendar._TT["WK"] = "Week";
-                                            Calendar._TT["TIME"] = 'Time:';
-                                            //]]>
-                                        </script>
                                     </fieldset>
                                     <script type="text/javascript">decorateGeneric($$('#product-options-wrapper dl'), ['last']);</script>
 
@@ -972,13 +677,7 @@
                                                             <option value="9">9</option>
                                                             <option value="10">10+</option>
                                                     </select>
-                                                            <script>
-                                                            $("qty").observe('change', function () {
-                                                                if ($(this).getValue() == 10) {
-                                                                    $("qty-wrapper").update('<input type="number" name="qty" id="qty" value="0" size="4" title="Qty" maxlength="10" class="qty-input-text" />');
-                                                                }
-                                                            });
-                                                            </script>
+
                                             </span>
                                             </div>
 
@@ -999,57 +698,6 @@
                                 </div>
 
                             </form>
-                            <script type="text/javascript">
-                                //<![CDATA[
-                                var productAddToCartForm = new VarienForm('product_addtocart_form');
-                                productAddToCartForm.submit = function (button, url) {
-                                    if (this.validator.validate()) {
-                                        var form = this.form;
-                                        var oldUrl = form.action;
-
-                                        if (url) {
-                                            form.action = url;
-                                        }
-                                        var e = null;
-                                        try {
-                                            this.form.submit();
-                                        } catch (e) {
-                                        }
-                                        this.form.action = oldUrl;
-                                        if (e) {
-                                            throw e;
-                                        }
-
-                                        if (button && button != 'undefined') {
-                                            button.disabled = true;
-                                        }
-                                    }
-                                }.bind(productAddToCartForm);
-
-                                productAddToCartForm.submitLight = function (button, url) {
-                                    if (this.validator) {
-                                        var nv = Validation.methods;
-                                        delete Validation.methods['required-entry'];
-                                        delete Validation.methods['validate-one-required'];
-                                        delete Validation.methods['validate-one-required-by-name'];
-                                        // Remove custom datetime validators
-                                        for (var methodName in Validation.methods) {
-                                            if (methodName.match(/^validate-datetime-.*/i)) {
-                                                delete Validation.methods[methodName];
-                                            }
-                                        }
-
-                                        if (this.validator.validate()) {
-                                            if (url) {
-                                                this.form.action = url;
-                                            }
-                                            this.form.submit();
-                                        }
-                                        Object.extend(Validation.methods, nv);
-                                    }
-                                }.bind(productAddToCartForm);
-                                //]]>
-                            </script>
                         </div>
                     </div>
                 </div>
@@ -1145,9 +793,50 @@
                                 </tbody>
                             </table>
                         </div>
-                        <script type="text/javascript">decorateTable('product-attribute-specs-table')</script>
                     </div>
+                    <script>
+                        var voting = false;
+                        var alreadyVoted = false;
+                        var registerVote = function(helpful, locationId, contentId) {
+                            if (alreadyVoted || voting) {
+                                return;
+                            }
+                            voting = true;
+                            window.jQuery.ajax({
+                                url: "/review/vote",
+                                method: "POST",
+                                contentType: "application/json",
+                                dataType: "json",
+                                data: JSON.stringify({
+                                    locationId: locationId,
+                                    contentId: contentId,
+                                    vote: helpful || 0
+                                })
+                            }).then(function(res) {
+                                if (res.status === 200) {
+                                    voting = false;
+                                    alreadyVoted = true;
+                                    if (helpful) {
+                                        var amount = window.jQuery(".numUpVotes-"+contentId).text();
+                                        window.jQuery(".numUpVotes-"+contentId).text(parseInt(amount)+1);
+                                    }
+                                    var amount = window.jQuery(".totalVote-"+contentId).text();
+                                    window.jQuery(".totalVote-"+contentId).text(parseInt(amount)+1);
+                                } else {
+                                    console.log(res);
+                                    voting = false;
+                                }
+                            }, function(xhr) {
+                                console.log('issue');
+                                console.log(xhr);
+                                voting = false;
+                            });
+                        }
 
+                        var outputUpdate = function(vol) {
+                            document.querySelector('#rating').value = vol;
+                        }
+                    </script>
                     <div class="product-collateral ratings-reviews clearfix row">
                         <p data-magellan-destination="ratings-reviews"><a id="ratings-reviews"></a></p>
                         <div class="ratings-detail clearfix">
@@ -1158,8 +847,8 @@
                                     <div style="width:90%" class="rating"></div>
                                 </div>
                                 <span class="rating-links icon-user">
-                            <span>9reviews</span>
-                    </span>
+                                        <span>9reviews</span>
+                                </span>
                             </div>
                             <table id="histogram">
                                 <tbody>
@@ -1256,68 +945,90 @@
                         <div class="reviews">
                             <h5>Most Recent Customer Reviews</h5>
                             <ul class="review-list most-helpful" aria-hidden="false" aria-expanded="true">
-                                <li itemprop="review" itemtype="http://schema.org/Review" itemscope="itemscope">
-                                    <p class="useful-count">1 of 1 people found the following review helpful</p>
-                                    <div class="rating-box" itemprop="reviewRating" itemtype="http://schema.org/Rating"
-                                         itemscope="itemscope">
-                                        <div class="rating" style="width:87%">
-                                            <meta content="87" itemprop="ratingValue">
-                                            <meta content="100" itemprop="bestRating">
+                                {#reviews}
+
+                                    <li itemprop="review" itemtype="http://schema.org/Review" itemscope="itemscope">
+                                        <p class="useful-count">
+                                            <span class="numUpVotes-{contentId}">{upvotes}</span> of
+                                            <span class="totalVote-{contentId}">{totalVotes}</span> people found the following review helpful</p>
+                                        <div class="rating-box" itemprop="reviewRating" itemtype="http://schema.org/Rating"
+                                             itemscope="itemscope">
+                                            <div class="rating" style="width:{starWidth}%">
+                                                <meta content="{stars}" itemprop="ratingValue">
+                                                <meta content="5" itemprop="bestRating">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <h6 itemprop="name">Excellent cut, very long sleeves</h6>
-                                    <p class="review-text review-9977" itemprop="description">
-                                        Love the fabric, style, and athletic trim cut. Very comfortable and doesn't chop
-                                        into your armpits even though it fits right. My only complaint (other than it
-                                        arrives very wrinkled from being shipped in a baggie) is that the sleeves are an
-                                        inch and a half too long. This is generally not a problem for me with blazers.
-                                        Are
-                                        Seattle guys tall and lean? I will have to pay for tailoring to make the sleeves
-                                        right. I also agree with a previous reviewer that the inside wallet pocket is on
-                                        the
-                                        wrong side for easy in/out. </p>
-                                    <p class="author">By <span itemprop="author">chris</span> on
-                                        <time datetime="2016-08-09 16:11:55" itemprop="datePublished">August 9, 2016
-                                        </time>
-                                    </p>
-                                    <a class="comments" href="#"
-                                       onclick="return ExtendedReviews.showAddCommentForm('http://www.nau.com/extended-reviews/product_comment/add/id/9977/', 9977)">Comment</a>
-                                    <div class="vote helpful-buttons-9977">
-                                        <span class="helpful-9977">Was this review helpful to you?</span>
-                                        <button class="tiny secondary helpful-button-9977" type="submit"
-                                                onclick="ExtendedReviews.vote('http://www.nau.com/extended-reviews/vote/',9977,1);">
-                                            Yes
-                                        </button>
-                                        <button class="tiny secondary helpful-button-9977" type="submit"
-                                                onclick="ExtendedReviews.vote('http://www.nau.com/extended-reviews/vote/',9977,0);">
-                                            No
-                                        </button>
-                                    </div>
-                                    <div class="comments-wrapper-9977"></div>
-                                </li>
+                                        <h6 itemprop="name">{title}</h6>
+                                        <p class="review-text review-9977" itemprop="description">
+                                            {review_content}
+                                        </p>
+                                        <p class="author">Published on
+                                            <time datetime="2016-08-09 16:11:55" itemprop="datePublished">
+                                                {published_time}
+                                            </time>
+                                        </p>
+                                        <div class="vote helpful-buttons-9977">
+                                            <span class="helpful-9977">Was this review helpful to you?</span>
+                                            <button class="tiny secondary helpful-button-9977" type="submit"
+                                                    onclick="registerVote(true,'{locationId}', '{contentId}'); return false;">
+                                                Yes
+                                            </button>
+                                            <button class="tiny secondary helpful-button-9977" type="submit"
+                                                    onclick="registerVote(false,'{locationId}', '{contentId}'); return false;">
+                                                No
+                                            </button>
+                                        </div>
+                                        <div class="comments-wrapper-9977"></div>
+                                    </li>
+
+                                {:else}
+                                    <li itemprop="review" itemtype="http://schema.org/Review" itemscope="itemscope">
+                                        <p class="useful-count">There is no reviews for this product yet.</p>
+                                    </li>
+                                {/reviews}
                             </ul>
+
+                            <script>
+
+                                window.jQuery( document ).ready(function() {
+                                    var submitBtn = window.jQuery("#review-submission").on("click", function() {
+                                        var datastring = $("#review-form").serialize();
+                                        console.log(datastring);
+                                        window.jQuery.ajax({
+                                            url: "review/new",
+                                            method: "POST",
+                                            contentType: "application/x-www-form-urlencoded",
+                                            dataType: "json",
+                                            data: datastring
+                                        }).then(function(res){
+                                            console.log(res);
+                                            location.reload();
+                                        },function(eh){
+                                            console.log(eh);
+                                        });
+
+                                    });
+                                    console.log("loaded");
+                                    console.log(window.jQuery("#review-submission"));
+                                });
+
+
+                            </script>
                             <div class="write-your-own-review">
 
                                 <h5>Write Your Own Review</h5>
-                                <form action="" method="post" id="review-form" class="review-form">
+                                <form id="review-form" class="review-form">
                                     <h4>You're reviewing: <span>Nick The Messenger Bag 17L</span></h4>
+                                    <input type="hidden" name="name" value="Nick The Messenger Bag 17L" />
                                     <h6>How do you rate this product?</h6>
-                                    <span id="input-message-box"></span>
-                                    </table>
                                     <div id="pretty-product-review-list">
                                         <div id="code-ratings_1" class="pretty-rating-code">
-                                            <div class="label">Style</div>
-                                            <ul class="options" style="display: inline-flex;">
-                                                <li><a id="pretty-Style_1" class="option"></a></li>
-                                                <li><a id="pretty-Style_2" class="option"></a></li>
-                                                <li><a id="pretty-Style_3" class="option"></a></li>
-                                                <li><a id="pretty-Style_4" class="option"></a></li>
-                                                <li><a id="pretty-Style_5" class="option"></a></li>
-                                            </ul>
+                                            <div class="label">Rating</div>
+                                            <input id="rate" type="range" name="stars" min="0" max="5" style="margin-top: 12px;" oninput="outputUpdate(value)">
+                                            <output for="rate" id="rating">3</output>
                                             <div style="clear: both;"></div>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="validate_rating" class="validate-rating" value="">
                                     <ul class="form-list">
                                         <li class="narrow">
                                             <label for="summary_field" class="required"><em>*</em>Summary of Your
@@ -1332,25 +1043,16 @@
                                             <div class="input-box">
                                             <textarea name="detail" id="review_field" cols="5" rows="3"
                                                       class="required-entry"></textarea>
-                                                <grammarly-btn>
-                                                    <div style="z-index: 2; opacity: 1; transform: translate(508px, 144px);"
-                                                         class="_9b5ef6-textarea_btn _9b5ef6-not_focused"
-                                                         data-grammarly-reactid=".0">
-                                                        <div class="_9b5ef6-transform_wrap"
-                                                             data-grammarly-reactid=".0.0">
-                                                            <div title="Protected by Grammarly" class="_9b5ef6-status"
-                                                                 data-grammarly-reactid=".0.0.0">&nbsp;</div>
-                                                        </div>
-                                                    </div>
-                                                </grammarly-btn>
                                             </div>
                                         </li>
                                     </ul>
-                                    <div class="buttons-set">
-                                        <button type="submit" title="Submit Review" class="button">
-                                            <span><span>Submit Review</span></span></button>
-                                    </div>
+
                                 </form>
+                                <div class="buttons-set">
+                                    <button id="review-submission" title="Submit Review" class="button">
+                                        Submit Review
+                                    </button>
+                                </div>
                             </div>
 
                         </div>
@@ -1393,9 +1095,7 @@
                                 </div>
                             </div>
                         </form>
-                        <script>
-                            var mobileFooterNewsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail-footer');
-                        </script>
+
 
                         <div class="mobile-footer-social-media">
                             <a href="https://www.facebook.com/nauclothing"><img
@@ -1502,9 +1202,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <script>
-                                var defaultFooterNewsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail-footer');
-                            </script>
+
 
 
                             <ul class="call-us">
@@ -1532,20 +1230,6 @@
                     </div>
                 </div>
             </footer>
-            <!-- ClickTale Bottom part -->
-            <script type='text/javascript'>
-                // The ClickTale Balkan Tracking Code may be programmatically customized using hooks:
-                //
-                //   function ClickTalePreRecordingHook() { /* place your customized code here */  }
-                //
-                // For details about ClickTale hooks, please consult the wiki page http://wiki.clicktale.com/Article/Customizing_code_version_2
-
-                document.write(unescape("%3Cscript%20src='" +
-                        (document.location.protocol == 'https:' ?
-                                "https://cdnssl.clicktale.net/www02/ptc/dae8c041-e6ef-4c76-a568-c524e932207e.js" :
-                                "http://cdn.clicktale.net/www02/ptc/dae8c041-e6ef-4c76-a568-c524e932207e.js") + "'%20type='text/javascript'%3E%3C/script%3E"));
-            </script>
-
             <!-- ClickTale end of Bottom part --> <a class="exit-off-canvas"></a>
         </div><!-- /inner-wrap -->
     </div><!-- /off-canvas-wrap -->
@@ -1564,35 +1248,7 @@
 
         ];
     </script>
-    <script type="text/javascript">
-        Listrak_Remarketing = new function () {
-            this.updateCart = function () {
-                new Ajax.Request('http://www.nau.com/remarketing/ajax/cart/');
-            };
 
-            this.track = function () {
-                new Ajax.Request('http://www.nau.com/remarketing/ajax/track/');
-            };
-        };
-    </script>
-    <script type="text/javascript">
-        (function (d) {
-            if (document.addEventListener) document.addEventListener('ltkAsyncListener', d);
-            else {
-                e = document.documentElement;
-                e.ltkAsyncProperty = 0;
-                e.attachEvent('onpropertychange', function (e) {
-                    if (e.propertyName == 'ltkAsyncProperty' && typeof _ltk !== 'undefined') {
-                        d();
-                    }
-                });
-            }
-        })(function () {
-            _ltk.Click.Submit();
-            _ltk.SCA.CaptureEmail('newsletter');
-            _ltk.SCA.CaptureEmail('ltkmodal-email');
-        });
-    </script>
     <script type="text/javascript">
         (function (d, s, id, url) {
             var js, ljs = d.getElementsByTagName(s)[0];
@@ -1631,105 +1287,11 @@
                         </button>
                     </div>
                 </form>
-                <script type="text/javascript">
-                    //<![CDATA[
-                    var newsletterSubscriberFormDetail = new VarienForm('modal-newsletter-validate-detail');
-                    //]]>
-                </script>
+
             </div>
         </div>
     </div>
-    <script>
-        $j(function () {
-            $j(document).foundation();
-            if (Intenso.libs.ui.readCookie('ExitIntentPopup') != 'true') {
-                setTimeout(function () {
-                    $j('#exitintent-popup').foundation('reveal', 'open');
-                }, 5000);
-                Intenso.libs.ui.createCookie('ExitIntentPopup', true, 30)
-            }
-        });
-    </script>
-    <script src="http://www.nau.com/skin/frontend/intenso/default/js/foundation.min.1463505816.js"></script>
-    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/chosen.jquery.min.1463505816.js"></script>
-    <script src="http://www.nau.com/skin/frontend/intenso/nau/js/intenso.1463505816.js"></script>
-    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/extendedreviews.1463505816.js"></script>
-    <script src="http://www.nau.com/skin/frontend/intenso/default/js/lib/pinchzoom.1463505816.js"></script>
-    <script src="http://www.nau.com/skin/frontend/intenso/nau/js/lib/imagelightbox.1463505816.js"></script>
-    <script>
-        // Init Foundation framework
-        $j(document).foundation({
-            topbar: {
-                custom_back_text: true,
-                back_text: 'Back'
-            }
-        });
-        // Init Intenso Theme framework
-        $j(document).intenso({
-            productsGrid: {
-                min_item_width: 248
-            }
-        });
-        var lightboxInstance,
-                lightboxMobileInstance;
-        $j(function () {
-            lightboxInstance = $j('.lightbox').imageLightbox({
-                quit_on_doc_click: false
-            });
-            lightboxMobileInstance = $j('.lightbox-mobile').imageLightbox({
-                quit_on_doc_click: false
-            });
-        });
-    </script>
 
 
-    <script type="text/javascript">
-        dataLayer.push({
-            'event': 'productDetail',
-            'ecommerce': {
-                'detail': {
-                    'products': [{
-                        'id': "M130-A",
-                        'name': "Millican Nick The Messenger Bag 17L",
-                        'category': "Travel Collection"
-                    }]
-                },
-                'impressions': []
-            }
-        });
-    </script>
-    <script type="text/javascript">
-        //<![CDATA[
-        new ShipperHQ.JQueryLoader(
-                {
-                    "jquery": {"default": "1.11.2"},
-                    "ui": {
-                        "default": "1.11.2", // By default all use new version
-                        "1.5": "1.8.24",
-                        "1.4": "1.8.24",
-                        "1.3": "1.8.24"
-                    }
-                },
-                {
-                    "jquery": "//ajax.googleapis.com/ajax/libs/jquery/{version}/jquery.min.js",
-                    "ui": "//ajax.googleapis.com/ajax/libs/jqueryui/{version}/jquery-ui.min.js",
-                    "ui-style": "//ajax.googleapis.com/ajax/libs/jqueryui/{version}/themes/ui-lightness/jquery-ui.css"
-                }
-        );
-        //]]>
-    </script>
     <div class="loading-bar"></div>
-    <script type="text/javascript">window.NREUM || (NREUM = {});
-    NREUM.info = {
-        "beacon": "bam.nr-data.net",
-        "licenseKey": "6889091569",
-        "applicationID": "5609629",
-        "transactionName": "M1NWMUJXCkYHAUdZWwoZYRdZGQ1bAgdLHkQMRg==",
-        "queueTime": 0,
-        "applicationTime": 25,
-        "atts": "HxRVRwpNGUg=",
-        "errorBeacon": "bam.nr-data.net",
-        "agent": ""
-    }</script>
-
 {/content}

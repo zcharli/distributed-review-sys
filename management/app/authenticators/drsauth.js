@@ -4,9 +4,8 @@ import Ember from 'ember';
 const {RSVP, isEmpty, run} = Ember;
 
 export default BaseAuthenticator.extend({
-  endpoint: 'http://134.117.26.135:9090',
-  serverLoginEndpoint: 'http://134.117.26.135:9090' + '/api/account/login',
-  serverLogoutEndpoint: 'http://134.117.26.135:9090' + '/api/account/logout',
+  serverLoginEndpoint: '/api/account/login',
+  serverLogoutEndpoint: '/api/account/logout',
   loggedIn: false,
   account: null,
 

@@ -16,7 +16,7 @@ public class ReviewGetResponse {
         this(status, new LinkedList<>());
     }
 
-    public ReviewGetResponse(int statuts, List<BaseReview> list) {
+    public ReviewGetResponse(int status, List<BaseReview> list) {
         this.status = status;
         this.results = list;
     }

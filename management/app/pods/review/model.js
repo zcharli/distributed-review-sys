@@ -7,6 +7,7 @@ export default DS.Model.extend({
   review_content: DS.attr('string'),
   stars: DS.attr('number'),
   upvotes: DS.attr('number'),
+  downvotes: DS.attr('number'),
   description: DS.attr('string'),
   barcode: DS.attr('string'),
   type: DS.attr("string"),

@@ -54,7 +54,7 @@ export default Ember.Component.extend({
     if (!this.get('product.parentLevel.identifier')) {
       return false;
     }
-    return `${this.get('product.parentLevel.identifier')} ${this.get("product.parentLevel.name")}`;
+    return `Barcode: ${this.get('product.parentLevel.identifier')} Product Name: ${this.get("product.parentLevel.name")}`;
   }),
 
   actions: {

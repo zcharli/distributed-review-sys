@@ -82,7 +82,7 @@ public class ReviewServlet {
     @Path("/upvote/{locationId}/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
     public void upvoteReview(final @Suspended AsyncResponse response,
-                             final @PathParam("locationgId") String locationId,
+                             final @PathParam("locationId") String locationId,
                              final @PathParam("contentId") String contentId) {
         if (Strings.isNullOrEmpty(locationId) || Strings.isNullOrEmpty(contentId)) {
             response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Missing essential identifiers")));
@@ -111,6 +111,59 @@ public class ReviewServlet {
                             if (entry.getKey().contentKey().equals(content)) {
                                 review = ((ReviewIdentity) entry.getValue().object()).identity();
                                 review.m_upvotes++;
+                                putReview(reviewKey, review, response);
+                                break;
+                            }
+                        }
+                        if (review == null) {
+                            response.resume(Response.status(Response.Status.NOT_FOUND)
+                                    .entity(new GenericReply<String>("500", "Could not find the respective review to upvote")).build());
+                        }
+                    } else {
+                        response.resume(Response.ok(new GenericReply<String>("500", "Could not find the respective review to update")).build());
+                    }
+                    return 0;
+                }
+            });
+        } catch (Exception e) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Malformatted identifiers")));
+            return;
+        }
+    }
+
+    @PUT
+    @Path("/downvote/{locationId}/{contentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void downvoteReview(final @Suspended AsyncResponse response,
+                             final @PathParam("locationId") String locationId,
+                             final @PathParam("contentId") String contentId) {
+        if (Strings.isNullOrEmpty(locationId) || Strings.isNullOrEmpty(contentId)) {
+            response.resume(Response.status(Response.Status.BAD_REQUEST).entity(new GenericReply<String>("400", "Missing essential identifiers")));
+            return;
+        }
+
+        try {
+            final Number160 location = new Number160(locationId);
+            final Number160 content = new Number160(contentId);
+
+            final DRSKey reviewKey = DefaultDHTKeyPair.builder().contentKey(content)
+                    .domainKey(DHTConfig.PUBLISHED_DOMAIN).locationKey(location).build();
+            DHTManager.instance().getAllFromStorage(reviewKey, new AsyncResult() {
+                @Override
+                public Integer call() throws Exception {
+                    if (!isSuccessful()) {
+                        response.resume(Response.serverError()
+                                .entity(new GenericReply<String>(
+                                        "DHT-GET", "An error occurred when trying to handle the upload request"))
+                                .build());
+                        return 0;
+                    }
+                    if (payload().size() > 0) {
+                        BaseReview review = null;
+                        for (Map.Entry<Number640, Data> entry : payload().entrySet()) {
+                            if (entry.getKey().contentKey().equals(content)) {
+                                review = ((ReviewIdentity) entry.getValue().object()).identity();
+                                review.m_downvotes++;
                                 putReview(reviewKey, review, response);
                                 break;
                             }
@@ -270,17 +323,23 @@ public class ReviewServlet {
             @Override
             public Integer call() throws Exception {
 
-                if (!isSuccessful()) {
+                if (!isSuccessful() || payload() == null) {
                     response.resume(Response.serverError()
                             .entity(new GenericReply<String>(
                                     "DHT-GET", "An error occurred when trying to get id " + identifier))
                             .build());
                     return 0;
                 }
+                Set<Map.Entry<Number640, Data>> allResults = payload().entrySet();
+                if (allResults.size() == 0) {
+                    response.resume(Response.ok(new OperationCompleteResponse<String>("404", "No results were found.")).build());
+                    return 0;
+                }
 
                 List<BaseReview> allReviews = new ArrayList<BaseReview>();
                 List<BaseReview> limitedReviews = new LinkedList<BaseReview>();
-                for (Map.Entry<Number640, Data> results : payload().entrySet()) {
+
+                for (Map.Entry<Number640, Data> results : allResults) {
                     allReviews.add(((ReviewIdentity) (results.getValue().object())).identity());
                 }
 

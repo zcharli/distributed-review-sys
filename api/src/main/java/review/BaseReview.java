@@ -57,6 +57,9 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
     @JsonProperty("upvotes")
     public int m_upvotes;
 
+    @JsonProperty("downvotes")
+    public int m_downvotes;
+
     /*
     Content Keys below
      */
@@ -119,6 +122,7 @@ public abstract class BaseReview implements Serializable, ReviewIdentity, Valida
         m_content = content;
         m_stars = stars;
         m_upvotes = votes;
+        m_downvotes = 0;
         m_title = title;
     }
 

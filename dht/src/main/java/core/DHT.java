@@ -165,9 +165,7 @@ public class DHT<KEY extends DRSKey> {
                 }
                 callback.isSuccessful(futureGet.isSuccess());
                 Map<Number640, Data> dataMap = future.dataMap();
-                if (dataMap.size() != 0) {
-                    callback.payload(dataMap);
-                }
+                callback.payload(dataMap);
                 callback.call();
                 addToKeyStore(key.getLocationKey(), r -> recordMetric());
             }
