@@ -107,6 +107,7 @@ public class DRSClient {
     public static void main(String[] args) {
         DRSClient client = new DRSClient();
         JCommander cli = new JCommander(client, args);
+        cli.setProgramName("Distributed Review System");
         if (client.help) {
             cli.usage();
             return;
