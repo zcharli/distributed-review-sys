@@ -16,12 +16,17 @@ import net.tomp2p.peers.Number160;
 import net.tomp2p.peers.Number640;
 import net.tomp2p.storage.Data;
 import org.apache.commons.lang3.text.WordUtils;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import review.BaseReview;
 import review.ReviewIdentity;
+import review.comparator.EmbededReviewTimestampComparator;
 import review.comparator.ReviewTimestampComparator;
 import review.request.LimitQueryParam;
+import review.response.EmbededContainer;
+import review.response.EmbededResultsContainer;
 import review.response.OperationCompleteResponse;
 import review.response.ReviewGetResponse;
 import validator.ExternalReview;
@@ -244,18 +249,21 @@ public class ReviewServlet {
                     response.resume(Response.ok(writer.toString()).build());
                     return 0;
                 }
-
-                List<BaseReview> allReviews = new ArrayList<BaseReview>();
+                List<EmbededContainer> allReviews = new ArrayList<EmbededContainer>();
                 int count = 0; // TODO: enabled paging on embeded results
                 for (Map.Entry<Number640, Data> results : allResults) {
-                    allReviews.add(((ReviewIdentity) (results.getValue().object())).identity());
+                    BaseReview review = ((ReviewIdentity) (results.getValue().object())).identity();
+                    if (review == null) {
+                        continue;
+                    }
+                    allReviews.add(new EmbededContainer(review));
                     if (count++ > APIConfig.MAX_RESULTS_PER_CATEGORY) {
                         break;
                     }
                 }
                 
-                Collections.sort(allReviews, new ReviewTimestampComparator());
-                String resultsJson = objectMapper.writeValueAsString(new ReviewGetResponse(200, allReviews));
+                Collections.sort(allReviews, new EmbededReviewTimestampComparator());
+                String resultsJson = objectMapper.writeValueAsString(new EmbededResultsContainer(200, allReviews));
                 bindings.put("json", resultsJson);
                 bindings.put("writer", writer);
                 engine.getContext().setBindings(bindings, ScriptContext.GLOBAL_SCOPE);

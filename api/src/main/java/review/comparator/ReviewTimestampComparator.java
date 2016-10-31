@@ -10,6 +10,6 @@ import java.util.Comparator;
 public class ReviewTimestampComparator implements Comparator<BaseReview> {
 
     public int compare(BaseReview d, BaseReview d1) {
-        return (int)(d.m_createTime - d1.m_createTime);
+        return (int)(d.m_publishTime - d1.m_publishTime);
     }
 }

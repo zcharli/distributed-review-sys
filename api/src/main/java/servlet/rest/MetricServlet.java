@@ -268,7 +268,7 @@ public class MetricServlet {
         GlobalContext.instance().setMetricState(metricsList);
     }
 
-    private DateTime getDate(final long currentTimeMillis) {
+    public static DateTime getDate(final long currentTimeMillis) {
         DateTimeZone dateTimeZone = DateTimeZone.forID(APIConfig.TIMESZONE);
         return new DateTime(currentTimeMillis, dateTimeZone);
     }

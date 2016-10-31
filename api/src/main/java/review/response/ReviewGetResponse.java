@@ -1,9 +1,9 @@
 package review.response;
 
-import review.BaseReview;
+        import review.BaseReview;
 
-import java.util.LinkedList;
-import java.util.List;
+        import java.util.LinkedList;
+        import java.util.List;
 
 /**
  * Created by cli on 10/9/2016.
